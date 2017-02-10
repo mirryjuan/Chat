@@ -1,13 +1,16 @@
 package com.example.mirry.chat.activity;
 
 import android.app.Activity;
+import android.content.Intent;
 import android.os.Bundle;
+import android.view.View;
 import android.view.Window;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.example.mirry.chat.R;
 
@@ -16,8 +19,6 @@ import butterknife.InjectView;
 
 public class InfoSetActivity extends Activity {
 
-    @InjectView(R.id.back)
-    TextView back;
     @InjectView(R.id.nickname)
     EditText nickname;
     @InjectView(R.id.age)
@@ -41,5 +42,17 @@ public class InfoSetActivity extends Activity {
         requestWindowFeature(Window.FEATURE_NO_TITLE);
         setContentView(R.layout.activity_info_set);
         ButterKnife.inject(this);
+
+        accomplish.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                InfoSetActivity.this.finish();
+            }
+        });
+    }
+
+    @Override
+    public void onBackPressed() {
+        Toast.makeText(this, "按下Back键", Toast.LENGTH_SHORT).show();
     }
 }

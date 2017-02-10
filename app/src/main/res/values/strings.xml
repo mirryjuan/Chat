@@ -23,4 +23,5 @@
     <string name="female">女</string>
     <string name="confirmPwd">确认密码</string>
     <string name="accomplish">完成</string>
+    <string name="setTip">为了您的账号安全，请设置密码并完善个人信息</string>
 </resources>

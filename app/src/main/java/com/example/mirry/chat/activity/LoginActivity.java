@@ -9,7 +9,6 @@ import android.widget.Button;
 import android.widget.EditText;
 
 import com.example.mirry.chat.R;
-import com.example.mirry.chat.view.CircleImageView;
 
 import butterknife.ButterKnife;
 import butterknife.InjectView;
@@ -48,7 +47,6 @@ public class LoginActivity extends Activity implements View.OnClickListener {
                 break;
             case R.id.register:
                 startActivity(new Intent(LoginActivity.this,RegisterActivity.class));
-                this.finish();
                 break;
         }
     }

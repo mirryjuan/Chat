@@ -49,7 +49,7 @@ public class RegisterActivity extends Activity implements View.OnClickListener {
                 break;
             case R.id.register:
                 Toast.makeText(RegisterActivity.this, "注册成功", Toast.LENGTH_SHORT).show();
-                startActivity(new Intent(RegisterActivity.this,InfoSetActivity.class));
+                startActivity(new Intent(this,InfoSetActivity.class));
                 this.finish();
                 break;
         }
