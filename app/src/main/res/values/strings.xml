@@ -34,4 +34,12 @@
     <string name="contact">联系人</string>
     <string name="miniApps">小应用</string>
     <string name="add">添加</string>
+    
+    <!--小应用界面-->
+    <string name="robot">聊天机器人</string>
+    <string name="record">心情日志</string>
+    <string name="news">新闻</string>
+    <string name="weather">天气</string>
+    <string name="scan">扫一扫</string>
+    <string name="share">应用分享</string>
 </resources>
