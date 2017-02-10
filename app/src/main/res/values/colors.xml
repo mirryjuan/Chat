@@ -6,6 +6,7 @@
 
     <color name="darkBlue">#18F</color>
     <color name="lightBlue">#A39F</color>
+    <color name="bgBlue">#adef</color>
     <color name="white">#FFF</color>
     <color name="black">#000</color>
     <color name="lightGray">#EEE</color>

@@ -33,11 +33,11 @@
             android:layout_below="@+id/username"/>
 
         <Button
-            android:id="@+id/login"
-            style="@style/BtnTheme"
-            android:layout_marginTop="20dp"
-            android:text="@string/login"
-            android:layout_below="@id/password"/>
+        android:id="@+id/login"
+        style="@style/BtnTheme"
+        android:layout_marginTop="20dp"
+        android:text="@string/login"
+        android:layout_below="@id/password"/>
 
         <Button
             android:id="@+id/register"

@@ -28,4 +28,10 @@
     <string name="female">女</string>
     <string name="accomplish">完成</string>
     <string name="next">跳过</string>
+
+    <!--Fragment界面-->
+    <string name="message">消息</string>
+    <string name="contact">联系人</string>
+    <string name="miniApps">小应用</string>
+    <string name="add">添加</string>
 </resources>

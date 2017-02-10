@@ -10,16 +10,28 @@
 
 
     <style name="UserInfoTheme">
-        <item name="android:padding">10dp</item>
+        <item name="android:paddingLeft">10dp</item>
         <item name="android:gravity">center_vertical</item>
         <item name="android:textColorHint">@color/darkGray</item>
+        <item name="android:textSize">14sp</item>
     </style>
 
     <style name="BtnTheme">
         <item name="android:layout_width">match_parent</item>
         <item name="android:layout_height">40dp</item>
         <item name="android:background">@drawable/bg_btn_login</item>
-        <item name="android:textColor">@drawable/color_text_login</item>
+        <item name="android:textColor">@drawable/color_login</item>
+    </style>
+
+    <style name="TabRadioButtonTheme">
+        <item name="android:gravity">center_horizontal</item>
+        <item name="android:layout_weight">1</item>
+        <item name="android:button">@null</item>
+        <item name="android:textColor">@drawable/color_tab</item>
+        <item name="android:paddingBottom">4dp</item>
+        <item name="android:paddingTop">4dp</item>
+        <item name="android:textSize">12sp</item>
+        <item name="android:drawablePadding">4dp</item>
     </style>
 
 

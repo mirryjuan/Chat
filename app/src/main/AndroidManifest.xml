@@ -18,7 +18,7 @@
         </activity>
         <activity android:name=".activity.RegisterActivity" />
         <activity android:name=".activity.InfoSetActivity" />
-        <activity android:name=".activity.CodeLoginActivity"></activity>
+        <activity android:name=".activity.CodeLoginActivity"/>
     </application>
 
 </manifest>

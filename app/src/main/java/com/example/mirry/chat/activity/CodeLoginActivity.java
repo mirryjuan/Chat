@@ -1,6 +1,7 @@
 package com.example.mirry.chat.activity;
 
 import android.app.Activity;
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.view.Window;
@@ -20,7 +21,7 @@ public class CodeLoginActivity extends Activity implements View.OnClickListener 
     @InjectView(R.id.code)
     EditText code;
     @InjectView(R.id.getCode)
-    Button sendSms;
+    TextView sendSms;
     @InjectView(R.id.login)
     Button login;
     @InjectView(R.id.back)
@@ -47,6 +48,7 @@ public class CodeLoginActivity extends Activity implements View.OnClickListener 
             case R.id.getCode:
                 break;
             case R.id.login:
+                startActivity(new Intent(CodeLoginActivity.this,MainActivity.class));
                 break;
         }
     }
