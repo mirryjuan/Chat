@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/activity_register"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context="com.example.mirry.chat.activity.RegisterActivity"
+    android:orientation="vertical"
+    android:gravity="center_horizontal"
+    android:padding="10dp"
+    android:background="@drawable/bg">
+
+    <com.example.mirry.chat.view.CircleImageView
+        android:id="@+id/head"
+        android:layout_width="120dp"
+        android:layout_height="120dp"
+        android:src="@drawable/head"
+        android:scaleType="centerCrop"
+        android:layout_margin="40dp"/>
+
+    <EditText
+        android:id="@+id/phoneNum"
+        android:layout_width="match_parent"
+        android:layout_height="40dp"
+        style="@style/UserInfoTheme"
+        android:background="@drawable/bg_et_user"
+        android:hint="@string/phoneNum"/>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="40dp"
+        android:layout_marginTop="0.8dp"
+        android:orientation="horizontal">
+
+        <EditText
+            android:id="@+id/code"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            style="@style/UserInfoTheme"
+            android:background="@drawable/bg_et_code"
+            android:hint="@string/code"
+            android:layout_weight="2"/>
+        <Button
+            android:id="@+id/getCode"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:padding="10dp"
+            android:layout_marginLeft="0.8dp"
+            android:background="@drawable/bg_et_send"
+            android:text="@string/getCode"
+            android:textColor="@color/darkBlue"
+            android:layout_weight="1"/>
+    </LinearLayout>
+
+    <Button
+        android:id="@+id/register"
+        style="@style/BtnTheme"
+        android:layout_marginTop="20dp"
+        android:text="@string/register"/>
+
+</LinearLayout>
