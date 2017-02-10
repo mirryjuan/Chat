@@ -8,15 +8,31 @@
     android:orientation="vertical"
     android:background="@color/lightGray">
 
-    <TextView
+    <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="48dp"
-        android:text="@string/info"
-        android:textColor="@color/white"
+        android:background="@color/darkBlue"
         android:gravity="center_vertical"
-        android:paddingLeft="10dp"
-        android:paddingStart="10dp"
-        android:background="@color/darkBlue"/>
+        android:padding="10dp">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:text="@string/info"
+            android:textColor="@color/white"
+            android:gravity="center_vertical" />
+
+        <TextView
+            android:id="@+id/next"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:text="@string/next"
+            android:textColor="@color/white"
+            android:gravity="center_vertical"
+            android:layout_alignParentRight="true"
+            android:layout_alignParentEnd="true"/>
+
+    </RelativeLayout>
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -25,6 +41,15 @@
         android:gravity="center_vertical"
         android:padding="10dp"
         android:layout_weight="1">
+
+        <com.example.mirry.chat.view.CircleImageView
+            android:id="@+id/head"
+            android:layout_width="120dp"
+            android:layout_height="120dp"
+            android:src="@drawable/head"
+            android:scaleType="centerCrop"
+            android:layout_margin="10dp"
+            android:layout_gravity="center_horizontal"/>
 
         <TextView
             android:layout_width="wrap_content"
@@ -101,55 +126,12 @@
             </RadioGroup>
         </RelativeLayout>
 
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="@string/password"
-            android:textColor="@color/darkBlue"
-            android:layout_marginTop="10dp"/>
-
-        <EditText
-            android:id="@+id/password"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:background="@drawable/bg_info"
-            android:textSize="20sp"
-            android:layout_marginTop="8dp"
-            android:inputType="textPassword"
-            android:padding="5dp"/>
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="@string/confirmPwd"
-            android:textColor="@color/darkBlue"
-            android:layout_marginTop="10dp"/>
-
-        <EditText
-            android:id="@+id/confirmPwd"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:background="@drawable/bg_info"
-            android:textSize="20sp"
-            android:layout_marginTop="8dp"
-            android:inputType="textPassword"
-            android:padding="5dp"/>
-
         <Button
             android:id="@+id/accomplish"
             style="@style/BtnTheme"
-            android:layout_marginTop="40dp"
+            android:layout_marginTop="20dp"
             android:text="@string/accomplish"/>
 
     </LinearLayout>
-
-    <TextView
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:gravity="center_horizontal"
-        android:text="@string/setTip"
-        android:textSize="12sp"
-        android:textColor="@color/darkGray"
-        android:layout_marginBottom="5dp"/>
 
 </LinearLayout>

@@ -21,10 +21,12 @@ public class LoginActivity extends Activity implements View.OnClickListener {
     EditText password;
     @InjectView(R.id.login)
     Button login;
-    @InjectView(R.id.forget)
-    Button forget;
     @InjectView(R.id.register)
     Button register;
+    @InjectView(R.id.codeLogin)
+    Button codeLogin;
+    @InjectView(R.id.forget)
+    Button forget;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -34,19 +36,23 @@ public class LoginActivity extends Activity implements View.OnClickListener {
         ButterKnife.inject(this);
 
         login.setOnClickListener(this);
+        codeLogin.setOnClickListener(this);
         forget.setOnClickListener(this);
         register.setOnClickListener(this);
     }
 
     @Override
     public void onClick(View v) {
-        switch (v.getId()){
+        switch (v.getId()) {
             case R.id.login:
+                break;
+            case R.id.codeLogin:
+                startActivity(new Intent(LoginActivity.this, CodeLoginActivity.class));
                 break;
             case R.id.forget:
                 break;
             case R.id.register:
-                startActivity(new Intent(LoginActivity.this,RegisterActivity.class));
+                startActivity(new Intent(LoginActivity.this, RegisterActivity.class));
                 break;
         }
     }

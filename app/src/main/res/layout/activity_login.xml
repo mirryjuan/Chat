@@ -1,50 +1,43 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/activity_login"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context="com.example.mirry.chat.activity.LoginActivity"
-    android:orientation="vertical"
-    android:gravity="center"
     android:padding="10dp"
     android:background="@drawable/bg">
 
-    <EditText
-        android:id="@+id/username"
-        android:layout_width="match_parent"
-        android:layout_height="40dp"
-        style="@style/UserInfoTheme"
-        android:background="@drawable/bg_et_user"
-        android:hint="@string/username" />
-
-    <EditText
-        android:id="@+id/password"
-        android:layout_width="match_parent"
-        android:layout_height="40dp"
-        style="@style/UserInfoTheme"
-        android:layout_marginTop="0.8dp"
-        android:background="@drawable/bg_et_pwd"
-        android:hint="@string/password"/>
-
-    <Button
-        android:id="@+id/login"
-        style="@style/BtnTheme"
-        android:layout_marginTop="20dp"
-        android:text="@string/login"/>
-
     <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        android:layout_height="wrap_content"
+        android:layout_centerInParent="true">
+
+        <EditText
+            android:id="@+id/username"
+            android:layout_width="match_parent"
+            android:layout_height="40dp"
+            style="@style/UserInfoTheme"
+            android:background="@drawable/bg_et_user"
+            android:hint="@string/username" />
+
+        <EditText
+            android:id="@+id/password"
+            android:layout_width="match_parent"
+            android:layout_height="40dp"
+            style="@style/UserInfoTheme"
+            android:inputType="textPassword"
+            android:layout_marginTop="0.8dp"
+            android:background="@drawable/bg_et_pwd"
+            android:hint="@string/password"
+            android:layout_below="@+id/username"/>
 
         <Button
-            android:id="@+id/forget"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:background="@null"
-            android:text="@string/forgetPwd"
-            android:textColor="@color/darkBlue"
-            android:layout_alignParentLeft="true"/>
+            android:id="@+id/login"
+            style="@style/BtnTheme"
+            android:layout_marginTop="20dp"
+            android:text="@string/login"
+            android:layout_below="@id/password"/>
 
         <Button
             android:id="@+id/register"
@@ -53,7 +46,32 @@
             android:background="@null"
             android:text="@string/registerNow"
             android:textColor="@color/darkBlue"
-            android:layout_alignParentRight="true"/>
+            android:layout_below="@+id/login"
+            android:layout_alignParentStart="true"
+            android:layout_alignParentLeft="true"/>
+
+        <Button
+            android:id="@+id/codeLogin"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="bottom"
+            android:background="@null"
+            android:text="@string/codeLogin"
+            android:textColor="@color/darkBlue"
+            android:layout_below="@+id/login"
+            android:layout_alignParentEnd="true"
+            android:layout_alignParentRight="true" />
+
     </RelativeLayout>
 
-</LinearLayout>
+    <Button
+        android:id="@+id/forget"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:background="@null"
+        android:text="@string/forgetPwd"
+        android:textColor="@color/darkBlue"
+        android:layout_alignParentBottom="true"
+        android:layout_centerHorizontal="true"/>
+
+</RelativeLayout>
