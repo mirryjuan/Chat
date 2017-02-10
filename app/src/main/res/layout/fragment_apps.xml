@@ -1,8 +1,9 @@
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="com.example.mirry.chat.fragment.AppsFragment">
+    tools:context="com.example.mirry.chat.fragment.AppsFragment"
+    android:orientation="vertical">
 
     <RelativeLayout
         android:layout_width="match_parent"
@@ -30,4 +31,63 @@
 
     </RelativeLayout>
 
-</FrameLayout>
+    <TextView
+        android:id="@+id/scan"
+        android:layout_width="match_parent"
+        android:layout_height="40dp"
+        android:layout_marginTop="20dp"
+        android:background="@color/white"
+        android:text="@string/scan"
+        android:gravity="center_vertical"
+        android:padding="10dp"/>
+
+    <TextView
+        android:id="@+id/robot"
+        android:layout_width="match_parent"
+        android:layout_height="40dp"
+        android:layout_marginTop="20dp"
+        android:background="@color/white"
+        android:text="@string/robot"
+        android:gravity="center_vertical"
+        android:padding="10dp"/>
+
+    <TextView
+        android:id="@+id/record"
+        android:layout_width="match_parent"
+        android:layout_height="40dp"
+        android:layout_marginTop="2dp"
+        android:background="@color/white"
+        android:text="@string/record"
+        android:gravity="center_vertical"
+        android:padding="10dp"/>
+
+    <TextView
+        android:id="@+id/news"
+        android:layout_width="match_parent"
+        android:layout_height="40dp"
+        android:layout_marginTop="20dp"
+        android:background="@color/white"
+        android:text="@string/news"
+        android:gravity="center_vertical"
+        android:padding="10dp"/>
+
+    <TextView
+        android:id="@+id/weather"
+        android:layout_width="match_parent"
+        android:layout_height="40dp"
+        android:layout_marginTop="2dp"
+        android:background="@color/white"
+        android:text="@string/weather"
+        android:gravity="center_vertical"
+        android:padding="10dp"/>
+
+    <TextView
+        android:id="@+id/share"
+        android:layout_width="match_parent"
+        android:layout_height="40dp"
+        android:layout_marginTop="20dp"
+        android:background="@color/white"
+        android:text="@string/share"
+        android:gravity="center_vertical"
+        android:padding="10dp"/>
+</LinearLayout>
