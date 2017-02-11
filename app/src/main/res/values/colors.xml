@@ -4,10 +4,13 @@
     <color name="colorPrimaryDark">#303F9F</color>
     <color name="colorAccent">#FF4081</color>
 
-    <color name="darkBlue">#18F</color>
-    <color name="lightBlue">#A39F</color>
-    <color name="bgBlue">#adef</color>
+    <color name="darkBlue">#01ABF4</color>
+    <color name="lightBlue">#AA33B8FF</color>
+    <color name="barBlue">#88bceaf9</color>
+    <color name="bgBlue">#AAE4F1FE</color>
     <color name="white">#FFF</color>
+    <color name="darkWhite">#F8F8F8</color>
+    <color name="navy">#120854</color>
     <color name="black">#000</color>
     <color name="lightGray">#EEE</color>
     <color name="darkGray">#AAA</color>

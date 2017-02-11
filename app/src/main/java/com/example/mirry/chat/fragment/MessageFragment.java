@@ -17,9 +17,8 @@ import com.example.mirry.chat.adapter.MsgAdapter;
 import butterknife.ButterKnife;
 import butterknife.InjectView;
 
-public class MessageFragment extends Fragment implements View.OnClickListener, AdapterView.OnItemClickListener {
-    @InjectView(R.id.add)
-    TextView add;
+public class MessageFragment extends Fragment implements AdapterView.OnItemClickListener {
+
     @InjectView(R.id.msgList)
     ListView msgList;
     private MainActivity mActivity;
@@ -37,8 +36,6 @@ public class MessageFragment extends Fragment implements View.OnClickListener, A
 
         ButterKnife.inject(this, view);
 
-        add.setOnClickListener(this);
-
         msgList.setAdapter(new MsgAdapter());
         //消息列表单击事件
         msgList.setOnItemClickListener(this);
@@ -47,18 +44,13 @@ public class MessageFragment extends Fragment implements View.OnClickListener, A
     }
 
     @Override
+    public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+
+    }
+
+    @Override
     public void onDestroyView() {
         super.onDestroyView();
         ButterKnife.reset(this);
-    }
-
-    @Override
-    public void onClick(View v) {
-        Toast.makeText(mActivity, "添加", Toast.LENGTH_SHORT).show();
-    }
-
-    @Override
-    public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-
     }
 }

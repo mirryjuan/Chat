@@ -14,8 +14,8 @@
         android:id="@+id/phoneNum"
         android:layout_width="match_parent"
         android:layout_height="40dp"
-        android:inputType="phone"
         style="@style/UserInfoTheme"
+        android:inputType="phone"
         android:background="@drawable/bg_et_user"
         android:hint="@string/phoneNum"/>
 

@@ -3,91 +3,54 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context="com.example.mirry.chat.fragment.AppsFragment"
-    android:orientation="vertical">
-
-    <RelativeLayout
-        android:layout_width="match_parent"
-        android:layout_height="48dp"
-        android:background="@color/darkBlue"
-        android:gravity="center_vertical"
-        android:padding="10dp">
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="match_parent"
-            android:text="@string/miniApps"
-            android:textColor="@color/white"
-            android:gravity="center_vertical" />
-
-        <TextView
-            android:id="@+id/add"
-            android:layout_width="wrap_content"
-            android:layout_height="match_parent"
-            android:text="@string/add"
-            android:textColor="@color/white"
-            android:gravity="center_vertical"
-            android:layout_alignParentRight="true"
-            android:layout_alignParentEnd="true"/>
-
-    </RelativeLayout>
+    android:orientation="vertical"
+    android:background="@color/bgBlue">
 
     <TextView
         android:id="@+id/scan"
+        style="@style/appsTheme"
         android:layout_width="match_parent"
         android:layout_height="40dp"
         android:layout_marginTop="20dp"
-        android:background="@color/white"
-        android:text="@string/scan"
-        android:gravity="center_vertical"
-        android:padding="10dp"/>
+        android:text="@string/scan" />
 
     <TextView
         android:id="@+id/robot"
+        style="@style/appsTheme"
         android:layout_width="match_parent"
         android:layout_height="40dp"
         android:layout_marginTop="20dp"
-        android:background="@color/white"
-        android:text="@string/robot"
-        android:gravity="center_vertical"
-        android:padding="10dp"/>
+        android:text="@string/robot"/>
 
     <TextView
         android:id="@+id/record"
+        style="@style/appsTheme"
         android:layout_width="match_parent"
         android:layout_height="40dp"
         android:layout_marginTop="2dp"
-        android:background="@color/white"
-        android:text="@string/record"
-        android:gravity="center_vertical"
-        android:padding="10dp"/>
+        android:text="@string/record" />
 
     <TextView
         android:id="@+id/news"
+        style="@style/appsTheme"
         android:layout_width="match_parent"
         android:layout_height="40dp"
         android:layout_marginTop="20dp"
-        android:background="@color/white"
-        android:text="@string/news"
-        android:gravity="center_vertical"
-        android:padding="10dp"/>
+        android:text="@string/news" />
 
     <TextView
         android:id="@+id/weather"
+        style="@style/appsTheme"
         android:layout_width="match_parent"
         android:layout_height="40dp"
         android:layout_marginTop="2dp"
-        android:background="@color/white"
-        android:text="@string/weather"
-        android:gravity="center_vertical"
-        android:padding="10dp"/>
+        android:text="@string/weather" />
 
     <TextView
         android:id="@+id/share"
+        style="@style/appsTheme"
         android:layout_width="match_parent"
         android:layout_height="40dp"
         android:layout_marginTop="20dp"
-        android:background="@color/white"
-        android:text="@string/share"
-        android:gravity="center_vertical"
-        android:padding="10dp"/>
+        android:text="@string/share"/>
 </LinearLayout>

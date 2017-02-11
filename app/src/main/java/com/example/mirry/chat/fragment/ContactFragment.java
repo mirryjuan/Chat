@@ -16,9 +16,8 @@ import com.example.mirry.chat.adapter.ContactAdapter;
 import butterknife.ButterKnife;
 import butterknife.InjectView;
 
-public class ContactFragment extends Fragment implements View.OnClickListener, AdapterView.OnItemClickListener {
-    @InjectView(R.id.add)
-    TextView add;
+public class ContactFragment extends Fragment implements AdapterView.OnItemClickListener {
+
     @InjectView(R.id.contactList)
     ListView contactList;
     private MainActivity mActivity;
@@ -36,16 +35,9 @@ public class ContactFragment extends Fragment implements View.OnClickListener, A
 
         ButterKnife.inject(this, view);
 
-        add.setOnClickListener(this);
-
         contactList.setAdapter(new ContactAdapter());
         contactList.setOnItemClickListener(this);
         return view;
-    }
-
-    @Override
-    public void onClick(View v) {
-
     }
 
     @Override
