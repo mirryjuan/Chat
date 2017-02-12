@@ -43,6 +43,9 @@
     <string name="scan">扫一扫</string>
     <string name="share">应用分享</string>
 
+    <!--我的界面-->
+    <string name="settings">设置</string>
+
     <!--添加界面popupWindow-->
     <string name="addFriend">加好友</string>
 </resources>
