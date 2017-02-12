@@ -1,5 +1,6 @@
 package com.example.mirry.chat.activity;
 
+import android.app.Activity;
 import android.app.FragmentManager;
 import android.app.FragmentTransaction;
 import android.graphics.drawable.ColorDrawable;
@@ -26,12 +27,13 @@ import com.example.mirry.chat.fragment.MeFragment;
 import com.example.mirry.chat.fragment.MessageFragment;
 import com.example.mirry.chat.view.CircleImageView;
 import com.jeremyfeinstein.slidingmenu.lib.SlidingMenu;
+import com.jeremyfeinstein.slidingmenu.lib.app.SlidingActivity;
 import com.jeremyfeinstein.slidingmenu.lib.app.SlidingFragmentActivity;
 
 import butterknife.ButterKnife;
 import butterknife.InjectView;
 
-public class MainActivity extends SlidingFragmentActivity implements RadioGroup.OnCheckedChangeListener, View.OnClickListener {
+public class MainActivity extends Activity implements RadioGroup.OnCheckedChangeListener, View.OnClickListener {
 
     @InjectView(R.id.content)
     FrameLayout content;
@@ -51,13 +53,30 @@ public class MainActivity extends SlidingFragmentActivity implements RadioGroup.
     TextView add;
     @InjectView(R.id.titleBar)
     RelativeLayout titleBar;
-    private SlidingMenu slidingMenu;
+    private SlidingMenu menu;
 
     @Override
-    public void onCreate(Bundle savedInstanceState) {
+    protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         requestWindowFeature(Window.FEATURE_NO_TITLE);
         setContentView(R.layout.activity_main);
+
+        menu = new SlidingMenu(this);
+        menu.setMode(SlidingMenu.LEFT);
+        menu.setTouchModeAbove(SlidingMenu.TOUCHMODE_FULLSCREEN);
+        menu.setBehindOffset(200);
+
+        menu.setFadeDegree(0.35f);       // 设置渐入渐出效果的值
+        menu.attachToActivity(this, SlidingMenu.SLIDING_CONTENT);
+
+        menu.setMenu(R.layout.menu_left); //为侧滑菜单设置布局;
+
+
+        FragmentManager fragmentManager = getFragmentManager();
+        FragmentTransaction transaction = fragmentManager.beginTransaction();
+        transaction.replace(R.id.fl_left_menu,new MeFragment());
+        transaction.commit();
+
         ButterKnife.inject(this);
 
         initData();
@@ -68,17 +87,6 @@ public class MainActivity extends SlidingFragmentActivity implements RadioGroup.
     }
 
     private void initData() {
-        //设置侧边栏
-        setBehindContentView(R.layout.menu_left);
-        slidingMenu = getSlidingMenu();
-        slidingMenu.setTouchModeAbove(SlidingMenu.TOUCHMODE_FULLSCREEN);
-        slidingMenu.setBehindOffset(200);// 设置预留屏幕的宽度
-
-        FragmentManager fragmentManager = getFragmentManager();
-        FragmentTransaction transaction = fragmentManager.beginTransaction();
-        transaction.replace(R.id.fl_left_menu,new MeFragment());
-        transaction.commit();
-
         tabsGroup.check(R.id.message);
         setDefaultFragment();
     }
@@ -118,7 +126,7 @@ public class MainActivity extends SlidingFragmentActivity implements RadioGroup.
     public void onClick(View view) {
         switch (view.getId()) {
             case R.id.head:
-                slidingMenu.toggle();
+                menu.toggle();
                 break;
             case R.id.add:
                 showPopupWindow();
