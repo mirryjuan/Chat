@@ -1,0 +1,63 @@
+
+@font-face {font-family: "iconfont";
+  src: url('../fonts/iconfont.ttf') format('truetype');
+}
+
+.iconfont {
+  font-family:"iconfont" !important;
+  font-size: 20px;
+  font-style:normal;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+.icon-password:before { content: "\e619"; }
+
+.icon-share:before { content: "\e625"; }
+
+.icon-username:before { content: "\e618"; }
+
+.icon-news:before { content: "\e621"; }
+
+.icon-scan:before { content: "\e615"; }
+
+.icon-QR-code:before { content: "\e617"; }
+
+.icon-delete:before { content: "\e616"; }
+
+.icon-settings:before { content: "\e614"; }
+
+.icon-refresh:before { content: "\e613"; }
+
+.icon-search:before { content: "\e612"; }
+
+.icon-accomplish:before { content: "\e611"; }
+
+.icon-orders:before { content: "\e610"; }
+
+.icon-red-envelopes:before { content: "\e609"; }
+
+.icon-drop-down:before { content: "\e608"; }
+
+.icon-merge:before { content: "\e607"; }
+
+.icon-expand:before { content: "\e606"; }
+
+.icon-next:before { content: "\e605"; }
+
+.icon-back:before { content: "\e604"; }
+
+.icon-camera:before { content: "\e603"; }
+
+.icon-message:before { content: "\e602"; }
+
+.icon-weather:before { content: "\e622"; }
+
+.icon-voice:before { content: "\e601"; }
+
+.icon-record:before { content: "\e623"; }
+
+.icon-love:before { content: "\e620"; }
+
+.icon-robot:before { content: "\e624"; }
+
