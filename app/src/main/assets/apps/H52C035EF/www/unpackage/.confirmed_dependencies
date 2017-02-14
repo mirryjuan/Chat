@@ -9,12 +9,20 @@
 			"css/apps.css"
 		],
 		"refer": [
-			"apps/html/scan.html"
+			"apps/html/scan.html",
+			"apps/html/robot.html"
 		]
 	},
 	"apps/html/scan.html": {
 		"resources": [
 			"fonts/mui.ttf"
+		]
+	},
+	"apps/html/robot.html": {
+		"resources": [
+			"js/mui.min.js",
+			"fonts/mui.ttf",
+			"css/mui.min.css"
 		]
 	}
 }
