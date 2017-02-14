@@ -29,8 +29,8 @@
 		<feature name="UI" value="io.dcloud.feature.ui.UIFeatureImpl"> 
 			<module name="Navigator" value="io.dcloud.feature.ui.NavView"/> 
 		</feature>
-		<feature name="Speech" value="io.dcloud.feature.speech.SpeechFeatureImpl"> 
-			<module name="iFly" value="io.dcloud.feature.speech.IflySpeechEngine"/> 
+		<feature name="Speech" value="io.dcloud.feature.speech.SpeechFeatureImpl" >
+			<module name="iFly" value="io.dcloud.feature.speech.IflySpeechEngine" />
 		</feature>
 		<feature name="Push" value="io.dcloud.feature.aps.APSFeatureImpl"> 
 			<module name="igexin" value="io.dcloud.feature.apsGt.GTPushService"/>
@@ -60,5 +60,6 @@
 		<service name="Statistic" value="io.dcloud.feature.statistics.StatisticsBootImpl"/>
 		<service name="Maps" value="io.dcloud.js.map.MapInitImpl"/>
 		<service name="push" value="io.dcloud.feature.aps.APSFeatureImpl"/> 
-	</services> 
+	</services>
+
 </properties>

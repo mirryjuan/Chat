@@ -44,4 +44,11 @@ dependencies {
     compile files('libs/share-qq.jar')
     compile files('libs/tx_wx.jar')
     compile files('libs/share.jar')
+    compile files('libs/barcode.jar')
+    compile files('libs/Msc.jar')
+    compile files('libs/pdr.jar')
+    compile files('libs/speech.jar')
+    compile files('libs/speech_ifly.jar')
+    compile files('libs/ui.jar')
+    compile files('libs/nativeui.jar')
 }
