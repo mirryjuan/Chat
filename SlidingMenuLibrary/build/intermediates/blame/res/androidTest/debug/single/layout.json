@@ -1,9 +1,5 @@
 [
     {
-        "merged": "D:\\ASWorkspace\\MyChat\\SlidingMenuLibrary\\build\\intermediates\\res\\merged\\androidTest\\debug\\layout\\slidingmenumain.xml",
-        "source": "D:\\ASWorkspace\\MyChat\\SlidingMenuLibrary\\build\\intermediates\\bundles\\debug\\res\\layout\\slidingmenumain.xml"
-    },
-    {
         "merged": "D:\\ASWorkspace\\Chat\\SlidingMenuLibrary\\build\\intermediates\\res\\merged\\androidTest\\debug\\layout\\slidingmenumain.xml",
         "source": "D:\\ASWorkspace\\Chat\\SlidingMenuLibrary\\build\\intermediates\\bundles\\debug\\res\\layout\\slidingmenumain.xml"
     }

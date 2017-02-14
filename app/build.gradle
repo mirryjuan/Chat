@@ -29,4 +29,19 @@ dependencies {
     compile 'com.jakewharton:butterknife:5.1.1'
     compile 'com.android.support:support-v4:25.1.0'
     testCompile 'junit:junit:4.12'
+    compile files('libs/android-support-v4.jar')
+    compile files('libs/messaging.jar')
+    compile files('libs/nineoldandroids-2.4.0.jar')
+    compile files('libs/camera.jar')
+    compile files('libs/share-weixin.jar')
+    compile files('libs/downloader.jar')
+    compile files('libs/open_sdk_r5043_lite.jar')
+    compile files('libs/gallery.jar')
+    compile files('libs/json_simple-1.1.jar')
+    compile files('libs/oauth-qq.jar')
+    compile files('libs/my-imageloader.jar')
+    compile files('libs/oauth-weixin.jar')
+    compile files('libs/share-qq.jar')
+    compile files('libs/tx_wx.jar')
+    compile files('libs/share.jar')
 }
