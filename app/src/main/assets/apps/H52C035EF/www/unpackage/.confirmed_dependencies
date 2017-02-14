@@ -1,0 +1,20 @@
+{
+	"index.html": {
+		"resources": [
+			"js/apps.js",
+			"js/mui.min.js",
+			"css/iconfont.css",
+			"css/mui.min.css",
+			"fonts/iconfont.ttf",
+			"css/apps.css"
+		],
+		"refer": [
+			"apps/html/scan.html"
+		]
+	},
+	"apps/html/scan.html": {
+		"resources": [
+			"fonts/mui.ttf"
+		]
+	}
+}
