@@ -38,6 +38,7 @@
         <item name="android:background">@color/white</item>
         <item name="android:gravity">center_vertical</item>
         <item name="android:padding">10dp</item>
+        <item name="android:textColor">@color/darkBlue</item>
     </style>
 
     <style name="popupTheme">
@@ -53,6 +54,4 @@
         <item name="android:gravity">left|center_vertical</item>
         <item name="android:padding">10dp</item>
     </style>
-
-
 </resources>
