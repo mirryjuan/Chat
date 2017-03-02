@@ -18,10 +18,10 @@ import io.dcloud.feature.internal.sdk.SDK;
  */
 
 public class WebviewModeListener implements ICore.ICoreStatusListener {
-    IWebview webview = null;
-    LinearLayout btns = null;
-    Activity activity = null;
-    ViewGroup mRootView = null;
+    private IWebview webview = null;
+    private LinearLayout btns = null;
+    private Activity activity = null;
+    private ViewGroup mRootView = null;
 
     public WebviewModeListener(Activity activity, ViewGroup rootView) {
         this.activity = activity;
