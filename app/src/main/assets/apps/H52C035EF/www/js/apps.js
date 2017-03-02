@@ -1,50 +1,17 @@
-
-document.getElementById('scan').addEventListener('click',scan);
-document.getElementById('robot').addEventListener('click',getRobot);
-document.getElementById('record').addEventListener('click',getRecord);
-document.getElementById('news').addEventListener('click',getNews);
-document.getElementById('weather').addEventListener('click',getWeather);
-document.getElementById('share').addEventListener('click',shareApp);
-
-function scan(){
-	mui.openWindow({
-		url:'apps/html/scan.html',
-		id:'scan'
+(function($) {
+	$.init();
+	$.plusReady(function() {
+        var pagePath = getPagePath();
+        if (!!pagePath) {
+            window.location.href = pagePath;
+        } else {
+             document.write('待实现的资源页面:');
+        }
 	});
-}
+})(mui);
 
-function getRobot(){
-	mui.openWindow({
-		url:'apps/html/robot.html',
-		id:'robot'
-	});
+function getPagePath(){
+    var basePath = 'file:///android_asset/apps/H52C035EF/www/';
+    var subPath = 'apps/html/news.html';
+    return basePath + subPath;
 }
-
-function getRecord(){
-	mui.openWindow({
-		url:'apps/html/record.html',
-		id:'record'
-	});
-}
-
-function getNews(){
-	mui.openWindow({
-		url:'apps/html/news.html',
-		id:'news'
-	});
-}
-
-function getWeather(){
-	mui.openWindow({
-		url:'apps/html/weather.html',
-		id:'weather'
-	});
-}
-
-function shareApp(){
-	mui.openWindow({
-		url:'apps/html/share.html',
-		id:'share'
-	});
-}
-
