@@ -18,6 +18,7 @@ import io.dcloud.feature.internal.sdk.SDK;
 public class AppsActivity extends Activity {
     private EntryProxy mEntryProxy = null;
     private WebviewModeListener wm;
+    private String appId = "";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -29,16 +30,24 @@ public class AppsActivity extends Activity {
 
         switch (item){
             case "scan":
+                appId = "001";
                 break;
             case "robot":
+                appId = "002";
                 break;
             case "record":
+                appId = "003";
                 break;
             case "news":
+                appId = "004";
                 break;
             case "weather":
+                appId = "005";
                 break;
             case "share":
+                appId = "006";
+                break;
+            default:
                 break;
         }
 
@@ -53,6 +62,12 @@ public class AppsActivity extends Activity {
             setContentView(rootView);
         }
     }
+
+    public String getAppId(){
+        String mId = appId;
+        return mId;
+    }
+
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         return mEntryProxy.onActivityExecute(this, ISysEventListener.SysEventType.onCreateOptionMenu, menu);

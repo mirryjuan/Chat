@@ -66,20 +66,20 @@ public class WebviewModeListener implements ICore.ICoreStatusListener {
             }
         });
 
-//        final WebView webviewInstance = webview.obtainWebview();
-//        // 监听返回键
-//        webviewInstance.setOnKeyListener(new View.OnKeyListener() {
-//            @Override
-//            public boolean onKey(View v, int keyCode, KeyEvent event) {
-//                if (keyCode == KeyEvent.KEYCODE_BACK) {
-//                    if (webviewInstance.canGoBack()) {
-//                        webviewInstance.goBack();
-//                        return true;
-//                    }
-//                }
-//                return false;
-//            }
-//        });
+        final WebView webviewInstance = webview.obtainWebview();
+        // 监听返回键
+        webviewInstance.setOnKeyListener(new View.OnKeyListener() {
+            @Override
+            public boolean onKey(View v, int keyCode, KeyEvent event) {
+                if (keyCode == KeyEvent.KEYCODE_BACK) {
+                    if (webviewInstance.canGoBack()) {
+                        webviewInstance.goBack();
+                        return true;
+                    }
+                }
+                return false;
+            }
+        });
     }
 
     @Override

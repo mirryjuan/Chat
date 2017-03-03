@@ -1,7 +1,10 @@
 (function($) {
 	$.init();
 	$.plusReady(function() {
-        var pagePath = getPagePath();
+//	    var app = plus.android.newObject("com.example.mirry.chat.activity.AppsActivity");
+//        var mId = plus.android.invoke(app ,"getAppId");
+        var mId = "001";
+        var pagePath = getPagePath(mId);
         if (!!pagePath) {
             window.location.href = pagePath;
         } else {
@@ -10,8 +13,17 @@
 	});
 })(mui);
 
-function getPagePath(){
-    var basePath = 'file:///android_asset/apps/H52C035EF/www/';
-    var subPath = 'apps/html/news.html';
+var appsPath = {
+    "001": "apps/html/scan.html",
+    "002": "apps/html/robot.html",
+    "003": "apps/html/record.html",
+    "004": "apps/html/news.html",
+    "005": "apps/html/weather.html",
+    "006": "apps/html/share.html",
+}
+
+function getPagePath(mId){
+    var basePath = "file:///android_asset/apps/H52C035EF/www/";
+    var subPath = appsPath[mId];
     return basePath + subPath;
 }
