@@ -14,4 +14,11 @@
     <color name="black">#000</color>
     <color name="lightGray">#EEE</color>
     <color name="darkGray">#AAA</color>
+
+    <color name="scan">#01ABF4</color>
+    <color name="robot">#3ee673</color>
+    <color name="record">#ff9640</color>
+    <color name="news">#ee3b77</color>
+    <color name="weather">#40d6ff</color>
+    <color name="share">#42db87</color>
 </resources>

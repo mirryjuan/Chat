@@ -34,11 +34,13 @@
             android:textColor="@color/white"
             android:layout_centerInParent="true" />
 
-        <TextView
+        <com.example.mirry.chat.view.IconFontTextView
             android:id="@+id/add"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="@string/add"
+            android:text="@string/img_add"
+            android:textSize="16sp"
+            android:padding="5dp"
             android:textColor="@color/white"
             android:layout_centerVertical="true"
             android:layout_alignParentRight="true"

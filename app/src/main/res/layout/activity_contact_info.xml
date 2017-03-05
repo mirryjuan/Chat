@@ -1,0 +1,106 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/activity_contact_info"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context="com.example.mirry.chat.activity.ContactInfoActivity"
+    android:background="@color/bgBlue">
+
+    <RelativeLayout
+        android:id="@+id/rl_title"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <com.example.mirry.chat.view.CircleImageView
+            android:id="@+id/head"
+            android:layout_width="80dp"
+            android:layout_height="80dp"
+            android:src="@drawable/head"
+            android:scaleType="centerCrop"
+            android:padding="10dp"/>
+
+        <EditText
+            android:id="@+id/nickname"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textSize="20sp"
+            android:textColor="@color/darkBlue"
+            android:maxLines="1"
+            android:ellipsize="end"
+            android:padding="5dp"
+            android:background="@null"
+            android:editable="false"
+            android:text="mirry"
+            android:layout_toRightOf="@id/head"/>
+
+        <EditText
+            android:id="@+id/note"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textSize="20sp"
+            android:textColor="@color/darkBlue"
+            android:maxLines="1"
+            android:ellipsize="end"
+            android:padding="5dp"
+            android:background="@null"
+            android:editable="false"
+            android:text="mirry"
+            android:layout_toRightOf="@id/head"
+            android:layout_below="@+id/nickname"/>
+
+    </RelativeLayout>
+
+    <TextView
+        android:id="@+id/phone"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/phone"
+        android:layout_below="@id/rl_title"
+        android:layout_marginTop="10dp"
+        android:padding="10dp"/>
+
+    <TextView
+        android:id="@+id/info_phone"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="15732136540"
+        android:layout_below="@id/rl_title"
+        android:layout_toRightOf="@+id/phone"
+        android:layout_marginTop="10dp"
+        android:padding="10dp"
+        android:textColor="@color/darkBlue"/>
+
+    <TextView
+        android:id="@+id/birthday"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/birthday"
+        android:layout_below="@id/phone"
+        android:layout_marginTop="5dp"
+        android:padding="10dp"/>
+
+    <TextView
+        android:id="@+id/info_birthday"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="1996-01-28"
+        android:layout_below="@id/phone"
+        android:layout_toRightOf="@+id/birthday"
+        android:layout_marginTop="5dp"
+        android:padding="10dp"
+        android:textColor="@color/darkBlue"/>
+
+    <Button
+        android:id="@+id/wechat"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/chat"
+        android:textColor="@color/white"
+        android:background="@drawable/bg_btn_login"
+        android:layout_below="@+id/birthday"
+        android:layout_marginTop="30dp"
+        android:layout_marginLeft="10dp"
+        android:layout_marginRight="10dp"/>
+
+</RelativeLayout>

@@ -6,7 +6,7 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.TextView;
+import android.widget.LinearLayout;
 
 import com.example.mirry.chat.R;
 import com.example.mirry.chat.activity.AppsActivity;
@@ -14,12 +14,12 @@ import com.example.mirry.chat.activity.MainActivity;
 
 public class AppsFragment extends Fragment implements View.OnClickListener {
     private MainActivity mActivity;
-    private TextView scan;
-    private TextView robot;
-    private TextView record;
-    private TextView news;
-    private TextView weather;
-    private TextView share;
+    private LinearLayout scan;
+    private LinearLayout robot;
+    private LinearLayout record;
+    private LinearLayout news;
+    private LinearLayout weather;
+    private LinearLayout share;
     private Intent intent;
 
 
@@ -33,12 +33,12 @@ public class AppsFragment extends Fragment implements View.OnClickListener {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View view = View.inflate(mActivity,R.layout.fragment_apps,null);
-        scan = (TextView) view.findViewById(R.id.scan);
-        robot = (TextView) view.findViewById(R.id.robot);
-        record = (TextView) view.findViewById(R.id.record);
-        news = (TextView) view.findViewById(R.id.news);
-        weather = (TextView) view.findViewById(R.id.weather);
-        share = (TextView) view.findViewById(R.id.share);
+        scan = (LinearLayout) view.findViewById(R.id.scan);
+        robot = (LinearLayout) view.findViewById(R.id.robot);
+        record = (LinearLayout) view.findViewById(R.id.record);
+        news = (LinearLayout) view.findViewById(R.id.news);
+        weather = (LinearLayout) view.findViewById(R.id.weather);
+        share = (LinearLayout) view.findViewById(R.id.share);
 
         scan.setOnClickListener(this);
         robot.setOnClickListener(this);

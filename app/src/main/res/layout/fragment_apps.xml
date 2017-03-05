@@ -6,51 +6,148 @@
     android:orientation="vertical"
     android:background="@color/bgBlue">
 
-    <TextView
+    <LinearLayout
         android:id="@+id/scan"
-        style="@style/appsTheme"
         android:layout_width="match_parent"
-        android:layout_height="40dp"
-        android:layout_marginTop="20dp"
-        android:text="@string/scan" />
+        android:layout_height="wrap_content"
+        style="@style/appsTheme"
+        android:layout_marginTop="20dp">
 
-    <TextView
+        <com.example.mirry.chat.view.IconFontTextView
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:text="@string/img_scan"
+            android:textSize="20sp"
+            android:textColor="@color/scan"
+            android:gravity="center_vertical"/>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:text="@string/scan"
+            android:layout_marginLeft="20dp"
+            android:gravity="center_vertical"/>
+
+    </LinearLayout>
+
+    <LinearLayout
         android:id="@+id/robot"
-        style="@style/appsTheme"
         android:layout_width="match_parent"
-        android:layout_height="40dp"
-        android:layout_marginTop="20dp"
-        android:text="@string/robot"/>
+        android:layout_height="wrap_content"
+        style="@style/appsTheme"
+        android:layout_marginTop="20dp">
 
-    <TextView
+        <com.example.mirry.chat.view.IconFontTextView
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:text="@string/img_robot"
+            android:textSize="20sp"
+            android:textColor="@color/robot"
+            android:gravity="center_vertical"/>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:text="@string/robot"
+            android:layout_marginLeft="20dp"
+            android:gravity="center_vertical"/>
+
+    </LinearLayout>
+
+    <LinearLayout
         android:id="@+id/record"
-        style="@style/appsTheme"
         android:layout_width="match_parent"
-        android:layout_height="40dp"
-        android:layout_marginTop="2dp"
-        android:text="@string/record" />
+        android:layout_height="wrap_content"
+        style="@style/appsTheme"
+        android:layout_marginTop="2dp">
 
-    <TextView
+        <com.example.mirry.chat.view.IconFontTextView
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:text="@string/img_record"
+            android:textSize="20sp"
+            android:textColor="@color/record"
+            android:gravity="center_vertical"/>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:text="@string/record"
+            android:layout_marginLeft="20dp"
+            android:gravity="center_vertical"/>
+
+    </LinearLayout>
+
+    <LinearLayout
         android:id="@+id/news"
-        style="@style/appsTheme"
         android:layout_width="match_parent"
-        android:layout_height="40dp"
-        android:layout_marginTop="20dp"
-        android:text="@string/news" />
+        android:layout_height="wrap_content"
+        style="@style/appsTheme"
+        android:layout_marginTop="20dp">
 
-    <TextView
+        <com.example.mirry.chat.view.IconFontTextView
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:text="@string/img_news"
+            android:textSize="20sp"
+            android:textColor="@color/news"
+            android:gravity="center_vertical"/>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:text="@string/news"
+            android:layout_marginLeft="20dp"
+            android:gravity="center_vertical"/>
+
+    </LinearLayout>
+
+    <LinearLayout
         android:id="@+id/weather"
-        style="@style/appsTheme"
         android:layout_width="match_parent"
-        android:layout_height="40dp"
-        android:layout_marginTop="2dp"
-        android:text="@string/weather" />
+        android:layout_height="wrap_content"
+        style="@style/appsTheme"
+        android:layout_marginTop="2dp">
 
-    <TextView
+        <com.example.mirry.chat.view.IconFontTextView
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:text="@string/img_weather"
+            android:textSize="20sp"
+            android:textColor="@color/weather"
+            android:gravity="center_vertical"/>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:text="@string/weather"
+            android:layout_marginLeft="20dp"
+            android:gravity="center_vertical"/>
+
+    </LinearLayout>
+
+    <LinearLayout
         android:id="@+id/share"
-        style="@style/appsTheme"
         android:layout_width="match_parent"
-        android:layout_height="40dp"
-        android:layout_marginTop="20dp"
-        android:text="@string/share"/>
+        android:layout_height="wrap_content"
+        style="@style/appsTheme"
+        android:layout_marginTop="20dp">
+
+        <com.example.mirry.chat.view.IconFontTextView
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:text="@string/img_share"
+            android:textSize="20sp"
+            android:textColor="@color/share"
+            android:gravity="center_vertical"/>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:text="@string/share"
+            android:layout_marginLeft="20dp"
+            android:gravity="center_vertical"/>
+
+    </LinearLayout>
+
 </LinearLayout>
