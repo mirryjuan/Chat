@@ -6,6 +6,11 @@
     android:orientation="vertical"
     android:background="@color/bgBlue">
 
+    <Button
+        android:id="@+id/btn"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="进入"/>
     <ListView
         android:id="@+id/msgList"
         android:layout_width="match_parent"
