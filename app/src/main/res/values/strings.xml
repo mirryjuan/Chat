@@ -2,7 +2,7 @@
     <string name="app_name">Chat</string>
 
     <!-- 登录界面 -->
-    <string name="username">手机号/昵称</string>
+    <string name="username">账号/手机号</string>
     <string name="password">密码</string>
     <string name="login">登录</string>
     <string name="registerNow">立即注册</string>
@@ -48,4 +48,34 @@
 
     <!--添加界面popupWindow-->
     <string name="addFriend">加好友</string>
+
+    <!--聊天界面-->
+    <string name="send">发送</string>
+
+    <!--字体图标-->
+    <string name="img_share">&#xe625;</string>
+    <string name="img_robot">&#xe624;</string>
+    <string name="img_record">&#xe623;</string>
+    <string name="img_weather">&#xe622;</string>
+    <string name="img_news">&#xe621;</string>
+    <string name="img_pwd">&#xe619;</string>
+    <string name="img_user">&#xe618;</string>
+    <string name="img_QR">&#xe617;</string>
+    <string name="img_delete">&#xe616;</string>
+    <string name="img_scan">&#xe615;</string>
+    <string name="img_setting">&#xe614;</string>
+    <string name="img_refresh">&#xe613;</string>
+    <string name="img_search">&#xe612;</string>
+    <string name="img_accomplish">&#xe611;</string>
+    <string name="img_orders">&#xe610;</string>
+    <string name="img_envelope">&#xe609;</string>
+    <string name="img_down">&#xe608;</string>
+    <string name="img_merge">&#xe607;</string>
+    <string name="img_expend">&#xe606;</string>
+    <string name="img_next">&#xe605;</string>
+    <string name="img_back">&#xe604;</string>
+    <string name="img_camera">&#xe603;</string>
+    <string name="img_message">&#xe602;</string>
+    <string name="img_voice">&#xe601;</string>
+
 </resources>
