@@ -25,6 +25,7 @@ import com.example.mirry.chat.fragment.AppsFragment;
 import com.example.mirry.chat.fragment.ContactFragment;
 import com.example.mirry.chat.fragment.MeFragment;
 import com.example.mirry.chat.fragment.MessageFragment;
+import com.example.mirry.chat.utils.DrawableUtil;
 import com.example.mirry.chat.view.CircleImageView;
 import com.jeremyfeinstein.slidingmenu.lib.SlidingMenu;
 import com.jeremyfeinstein.slidingmenu.lib.app.SlidingActivity;
@@ -78,6 +79,10 @@ public class MainActivity extends Activity implements RadioGroup.OnCheckedChange
         transaction.commit();
 
         ButterKnife.inject(this);
+
+        DrawableUtil.setDrawableSize(this,message,R.drawable.message_tab,60);
+        DrawableUtil.setDrawableSize(this,contact,R.drawable.contact_tab,60);
+        DrawableUtil.setDrawableSize(this,miniApps,R.drawable.apps_tab,60);
 
         initData();
 

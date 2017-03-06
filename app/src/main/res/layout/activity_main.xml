@@ -72,21 +72,24 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             style="@style/TabRadioButtonTheme"
-            android:text="@string/message"/>
+            android:text="@string/message"
+            android:drawableTop="@drawable/message_tab"/>
 
         <RadioButton
             android:id="@+id/contact"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             style="@style/TabRadioButtonTheme"
-            android:text="@string/contact"/>
+            android:text="@string/contact"
+            android:drawableTop="@drawable/contact_tab"/>
 
         <RadioButton
             android:id="@+id/miniApps"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             style="@style/TabRadioButtonTheme"
-            android:text="@string/miniApps"/>
+            android:text="@string/miniApps"
+            android:drawableTop="@drawable/apps_tab"/>
 
     </RadioGroup>
 

@@ -54,8 +54,7 @@ dependencies {
     compile files('libs/speech_ifly.jar')
     compile files('libs/ui.jar')
     compile files('libs/nativeui.jar')
-
-    compile fileTree(dir: 'libs', include: '*.jar')
+    compile fileTree(include: '*.jar', dir: 'libs')
     // 基础功能 (必需)
     compile 'com.netease.nimlib:basesdk:3.3.0'
     // 音视频需要
@@ -64,4 +63,5 @@ dependencies {
     compile 'com.netease.nimlib:chatroom:3.3.0'
     // 实时会话服务需要
     compile 'com.netease.nimlib:rts:3.3.0'
+    compile files('libs/commons-lang3-3.5.jar')
 }
