@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/bgBlue"
+    android:padding="10dp">
+
+    <TextView
+        android:id="@+id/msg"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:background="@drawable/msg_friend"
+        android:paddingLeft="16dp"
+        android:paddingStart="16dp"
+        android:paddingRight="8dp"
+        android:paddingEnd="8dp"
+        android:gravity="center_vertical"
+        android:textColor="@color/white"
+        android:layout_marginRight="50dp"
+        android:layout_marginEnd="50dp"
+        android:text="Hi,Mirry!I'm David!Hi,Mirry!I'm David!Hi,Mirry!I'm David!Hi,Mirry!I'm David!Hi,Mirry!I'm David!Hi,Mirry!I'm David!Hi,Mirry!I'm David!Hi,Mirry!I'm David!Hi,Mirry!I'm David!Hi,Mirry!I'm David!Hi,Mirry!I'm David!Hi,Mirry!I'm David!Hi,Mirry!I'm David!Hi,Mirry!I'm David!Hi,Mirry!I'm David!Hi,Mirry!I'm David!Hi,Mirry!I'm David!Hi,Mirry!I'm David!Hi,Mirry!I'm David!Hi,Mirry!I'm David!Hi,Mirry!I'm David!Hi,Mirry!I'm David!Hi,Mirry!I'm David!Hi,Mirry!I'm David!"
+        android:layout_toRightOf="@+id/head"
+        android:layout_toEndOf="@+id/head"/>
+
+    <ImageView
+        android:id="@+id/head"
+        android:layout_width="38dp"
+        android:layout_height="38dp"
+        android:src="@drawable/head" />
+
+</RelativeLayout>

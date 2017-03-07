@@ -7,20 +7,25 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ListView;
-import android.widget.TextView;
 
 import com.example.mirry.chat.R;
 import com.example.mirry.chat.activity.MainActivity;
 import com.example.mirry.chat.adapter.ContactAdapter;
+import com.example.mirry.chat.utils.ToastUtil;
+import com.example.mirry.chat.view.QuickIndexBar;
+
+import java.util.ArrayList;
+import java.util.List;
 
 import butterknife.ButterKnife;
 import butterknife.InjectView;
 
 public class ContactFragment extends Fragment implements AdapterView.OnItemClickListener {
 
-    @InjectView(R.id.contactList)
-    ListView contactList;
+    private ListView contactList;
     private MainActivity mActivity;
+    private QuickIndexBar bar;
+    private List<Object> list = new ArrayList<>();
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -33,9 +38,16 @@ public class ContactFragment extends Fragment implements AdapterView.OnItemClick
                              Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_contact, container, false);
 
-        ButterKnife.inject(this, view);
+        contactList = (ListView) view.findViewById(R.id.contactList);
+        bar = (QuickIndexBar) view.findViewById(R.id.bar);
 
-        contactList.setAdapter(new ContactAdapter());
+        bar.setListener(new QuickIndexBar.OnLetterUpdateListener() {
+            @Override
+            public void onLetterUpdate(String letter) {
+                ToastUtil.showToast(mActivity,letter);
+            }
+        });
+        contactList.setAdapter(new ContactAdapter(mActivity,list));
         contactList.setOnItemClickListener(this);
         return view;
     }

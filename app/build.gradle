@@ -64,4 +64,5 @@ dependencies {
     // 实时会话服务需要
     compile 'com.netease.nimlib:rts:3.3.0'
     compile files('libs/commons-lang3-3.5.jar')
+    compile files('libs/pinyin4j-2.5.0.jar')
 }

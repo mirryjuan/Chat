@@ -1,5 +1,6 @@
 package com.example.mirry.chat.activity;
 
+import android.app.Activity;
 import android.os.Bundle;
 import android.support.v4.app.FragmentActivity;
 import android.text.Editable;
@@ -20,7 +21,7 @@ import org.apache.commons.lang3.StringUtils;
 import butterknife.ButterKnife;
 import butterknife.InjectView;
 
-public class ChatActivity extends FragmentActivity implements View.OnClickListener, TextWatcher {
+public class ChatActivity extends Activity implements View.OnClickListener, TextWatcher {
 
     @InjectView(R.id.back)
     IconFontTextView back;
