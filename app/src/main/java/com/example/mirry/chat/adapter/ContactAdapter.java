@@ -1,13 +1,15 @@
 package com.example.mirry.chat.adapter;
 
 import android.content.Context;
+import android.text.TextUtils;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
+import android.widget.TextView;
 
 import com.example.mirry.chat.R;
+import com.example.mirry.chat.bean.Friend;
 
-import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -16,53 +18,65 @@ import java.util.List;
 
 public class ContactAdapter extends BaseAdapter {
     private Context mContext;
-    private List<Object> mData = null;
+    private List<Friend> mData = null;
 
-    public ContactAdapter(Context mContext,List<Object> mData) {
+    public ContactAdapter(Context mContext,List<Friend> mData) {
         this.mContext = mContext;
         this.mData = mData;
     }
 
     @Override
     public int getCount() {
-//        return mData.size();
-        return 0;
+        return mData.size();
     }
 
     @Override
     public Object getItem(int position) {
-//        return mData.get(position);
-        return null;
+        return mData.get(position);
     }
 
     @Override
     public long getItemId(int position) {
-//        return position;
-        return 0;
+        return position;
     }
 
 
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
-        ViewHolder holder = null;
-        // 通过加了 if (convertView != null) 这个判断条件。就省略了重复创建的浪费资源的情况
+        ViewHolder holder;
         if (convertView == null) {
-            convertView = View.inflate ( mContext, R.layout.item_contact , null);
+            convertView = View.inflate (mContext, R.layout.item_contact , null);
             holder = new ViewHolder();
 
-//            holder. tv_item_name = (TextView) convertView.findViewById(R.id. tv_item_name);
-//            holder. tv_item_word = (TextView) convertView.findViewById(R.id. tv_item_word);
+            holder.name = (TextView) convertView.findViewById(R.id.tv_name);
+            holder.pinyin = (TextView) convertView.findViewById(R.id.tv_index);
             convertView.setTag(holder);
         } else {
             holder = (ViewHolder) convertView.getTag();
         }
 
-//        holder. tv_item_word.setText( data .get(position).getPinyin().substring( 0, 1));
-//        holder.tv_item_name .setText( data.get(position).getName());
+        String preLetter;
+        String letter = mData.get(position).getPinyin().substring(0,1);
+        //根据上一个首字母决定是否显示字母
+        if(position == 0){
+            holder.pinyin.setVisibility(View.VISIBLE);
+        }else{
+            preLetter = mData.get(position - 1).getPinyin().substring(0,1);
+            if (!TextUtils.equals(preLetter,letter)){
+                holder.pinyin.setVisibility(View.VISIBLE);
+            }else{
+                holder.pinyin.setVisibility(View.GONE);
+            }
+        }
+
+        holder.name.setText(mData.get(position).getName());
+        holder.pinyin.setText(letter);
+
         return convertView;
     }
 
     private class ViewHolder{
-
+        TextView name;
+        TextView pinyin;
     }
 }

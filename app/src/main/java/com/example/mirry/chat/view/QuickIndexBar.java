@@ -55,9 +55,9 @@ public class QuickIndexBar extends View {
 
     public QuickIndexBar(Context context, AttributeSet attrs, int defStyleAttr) {
         super(context, attrs, defStyleAttr);
-
+        setBackgroundColor(getResources().getColor(R.color.transparent));
         mPaint = new Paint(Paint.ANTI_ALIAS_FLAG);   //抗锯齿
-        mPaint.setColor(getResources().getColor(R.color.colorAccent));
+        mPaint.setColor(getResources().getColor(R.color.darkBlue));
         mPaint.setTextSize(40);
         mPaint.setTypeface(Typeface.DEFAULT_BOLD);
     }
@@ -72,8 +72,10 @@ public class QuickIndexBar extends View {
             Rect bounds = new Rect();
             mPaint.getTextBounds(text,0,text.length(),bounds);
             int textHeight = bounds.height();
-
             int y = (int)(cellHeight/2.0f + textHeight/2.0f + i * cellHeight);
+
+            //根据当前按下的字母设置画笔颜色
+            mPaint.setColor(touchIndex == i ? getResources().getColor(R.color.colorAccent) : getResources().getColor(R.color.darkBlue));
             canvas.drawText(text, x, y, mPaint);
         }
     }
@@ -93,6 +95,7 @@ public class QuickIndexBar extends View {
         int index = -1;
         switch (MotionEventCompat.getActionMasked(event)){
             case MotionEvent.ACTION_DOWN:
+                setBackgroundColor(getResources().getColor(R.color.barBlue));
                 index = (int) (event.getY()/cellHeight);
                 if (index >=0 && index < LETTERS.length && index != touchIndex){
                     if(listener != null){
@@ -111,9 +114,11 @@ public class QuickIndexBar extends View {
                 }
                 break;
             case MotionEvent.ACTION_UP:
+                setBackgroundColor(getResources().getColor(R.color.transparent));
                 touchIndex = -1;
                 break;
         }
+        invalidate(); //重绘
         return true;
     }
 }
