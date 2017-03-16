@@ -1,22 +1,47 @@
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context="com.example.mirry.chat.fragment.ContactFragment"
     android:background="@color/bgBlue">
 
+    <LinearLayout
+        android:id="@+id/addFriend"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/white">
+
+        <com.example.mirry.chat.view.IconFontTextView
+            android:id="@+id/newFriend"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_margin="10dp"
+            android:textSize="30sp"
+            android:textColor="@color/white"
+            android:background="@color/colorFriend"
+            android:text="@string/img_add_friend"/>
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_vertical"
+            android:text="@string/newFriend"/>
+    </LinearLayout>
+
     <ListView
         android:id="@+id/contactList"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:divider="@null"
-        android:scrollbars="none"/>
+        android:scrollbars="none"
+        android:layout_below="@+id/addFriend"/>
 
     <com.example.mirry.chat.view.QuickIndexBar
         android:id="@+id/bar"
         android:layout_width="28dp"
         android:layout_height="match_parent"
-        android:layout_gravity="end"/>
+        android:layout_alignParentRight="true"
+        android:layout_alignParentEnd="true"/>
 
-</FrameLayout>
+</RelativeLayout>
 

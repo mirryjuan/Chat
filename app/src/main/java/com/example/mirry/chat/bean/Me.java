@@ -6,9 +6,8 @@ import com.example.mirry.chat.utils.PinyinUtil;
  * Created by Mirry on 2017/3/8.
  */
 
-public class Friend implements Comparable<Friend>{
+public class Me{
     private String name;
-    private String pinyin;
     private String id;
     private int type;
     private String msg;
@@ -37,19 +36,6 @@ public class Friend implements Comparable<Friend>{
         this.msg = msg;
     }
 
-    public Friend(String name) {
-        this.name = name;
-        this.pinyin = PinyinUtil.getPinyin(name);
-    }
-
-    public String getPinyin() {
-        return pinyin;
-    }
-
-    public void setPinyin(String pinyin) {
-        this.pinyin = pinyin;
-    }
-
     public String getName() {
         return name;
     }
@@ -58,8 +44,4 @@ public class Friend implements Comparable<Friend>{
         this.name = name;
     }
 
-    @Override
-    public int compareTo(Friend another) {
-        return this.getPinyin().compareTo(another.getPinyin());
-    }
 }

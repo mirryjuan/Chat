@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/activity_add_friend"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context="com.example.mirry.chat.activity.AddFriendActivity"
+    android:orientation="vertical"
+    android:background="@color/bgBlue">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="38dp"
+        android:layout_marginTop="5dp"
+        android:layout_marginLeft="5dp"
+        android:layout_marginRight="5dp"
+
+        android:orientation="horizontal"
+        android:background="@drawable/bg_search"
+        android:gravity="center_vertical">
+
+        <com.example.mirry.chat.view.IconFontTextView
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="0.5"
+            android:gravity="center"
+            android:text="@string/img_search"
+            android:layout_marginRight="5dp"
+            android:layout_marginLeft="5dp"/>
+
+        <EditText
+            android:id="@+id/et_search"
+            android:layout_weight="4"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:imeOptions="actionSearch"
+            android:layout_marginLeft="10dp"
+            android:layout_marginStart="10dp"
+            android:textSize="12sp"
+            android:singleLine="true"
+            android:inputType="text"
+            android:hint="@string/search"
+            android:gravity="center_vertical"
+            android:background="@null"/>
+
+        <com.example.mirry.chat.view.IconFontTextView
+            android:id="@+id/clear_search"
+            android:layout_weight="0.5"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_marginRight="5dp"
+            android:layout_marginLeft="5dp"
+            android:text="@string/img_delete"
+            android:textSize="24sp"
+            android:textColor="@color/darkGray"
+            android:gravity="center"
+            android:visibility="gone"/>
+    </LinearLayout>
+
+    <ListView
+        android:id="@+id/friend_list"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:padding="5dp">
+
+    </ListView>
+
+</LinearLayout>

@@ -9,8 +9,10 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.example.mirry.chat.R;
+import com.example.mirry.chat.bean.Friend;
+import com.example.mirry.chat.bean.Me;
 
-import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Created by Mirry on 2017/3/6.
@@ -20,10 +22,10 @@ public class ChatAdapter extends BaseAdapter {
     private static final int TYPE_ME = 0;
     private static final int TYPE_FRIEND = 1;
     private Context mContext;
-    private ArrayList<Object> mData = null;
+    private List<Object> mData = null;
 
 
-    public ChatAdapter(Context mContext,ArrayList<Object> mData) {
+    public ChatAdapter(Context mContext,List<Object> mData) {
         this.mContext = mContext;
         this.mData = mData;
     }
@@ -55,23 +57,23 @@ public class ChatAdapter extends BaseAdapter {
                     convertView = LayoutInflater.from(mContext).inflate(R.layout.item_msg_me, parent, false);
                     holderMe.head = (ImageView) convertView.findViewById(R.id.head);
                     holderMe.msg = (TextView) convertView.findViewById(R.id.msg);
-                    convertView.setTag(TYPE_ME,holderMe);
+                    convertView.setTag(R.id.Tag_Me,holderMe);
                     break;
                 case TYPE_FRIEND:
                     holderFriend = new ViewHolderFriend();
                     convertView = LayoutInflater.from(mContext).inflate(R.layout.item_msg_friend, parent, false);
                     holderFriend.head = (ImageView) convertView.findViewById(R.id.head);
                     holderFriend.msg = (TextView) convertView.findViewById(R.id.msg);
-                    convertView.setTag(TYPE_FRIEND,holderFriend);
+                    convertView.setTag(R.id.Tag_Friend,holderFriend);
                     break;
             }
         }else{
             switch (type){
                 case TYPE_ME:
-                    holderMe = (ViewHolderMe) convertView.getTag(TYPE_ME);
+                    holderMe = (ViewHolderMe) convertView.getTag(R.id.Tag_Me);
                     break;
                 case TYPE_FRIEND:
-                    holderFriend = (ViewHolderFriend) convertView.getTag(TYPE_FRIEND);
+                    holderFriend = (ViewHolderFriend) convertView.getTag(R.id.Tag_Friend);
                     break;
             }
         }
@@ -80,18 +82,16 @@ public class ChatAdapter extends BaseAdapter {
         //设置下控件的值
         switch (type){
             case TYPE_ME:
-//                App app = (App) obj;
-//                if(app != null){
-//                    holderMe.img_icon.setImageResource(app.getaIcon());
-//                    holderMe.txt_aname.setText(app.getaName());
-//                }
+                Me me = (Me) obj;
+                if(me != null){
+                   holderMe.msg.setText(me.getMsg());
+                }
                 break;
             case TYPE_FRIEND:
-//                Book book = (Book) obj;
-//                if(book != null){
-//                    holderFriend.txt_bname.setText(book.getbName());
-//                    holderFriend.txt_bauthor.setText(book.getbAuthor());
-//                }
+                Friend friend = (Friend) obj;
+                if(friend != null){
+                    holderFriend.msg.setText(friend.getMsg());
+                }
                 break;
         }
 
@@ -109,17 +109,17 @@ public class ChatAdapter extends BaseAdapter {
         TextView msg;
     }
 
-//    //多布局的核心，通过这个判断类别
-//    @Override
-//    public int getItemViewType(int position) {
-//        if (mData.get(position) instanceof App) {
-//            return TYPE_ME;
-//        } else if (mData.get(position) instanceof Book) {
-//            return TYPE_FRIEND;
-//        } else {
-//            return super.getItemViewType(position);
-//        }
-//    }
+    //多布局的核心，通过这个判断类别
+    @Override
+    public int getItemViewType(int position) {
+        if (mData.get(position) instanceof Me) {
+            return TYPE_ME;
+        } else if (mData.get(position) instanceof Friend) {
+            return TYPE_FRIEND;
+        } else {
+            return super.getItemViewType(position);
+        }
+    }
 
     //类别数目
     @Override

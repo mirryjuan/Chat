@@ -16,6 +16,8 @@
     <color name="lightGray">#EEE</color>
     <color name="darkGray">#AAA</color>
 
+    <color name="colorFriend">#fa9c4f</color>
+
     <color name="scan">#01ABF4</color>
     <color name="robot">#3ee673</color>
     <color name="record">#ff9640</color>
