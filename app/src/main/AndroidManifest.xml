@@ -161,7 +161,7 @@
             android:value="com.netease.nimlib.service.NimReceiver" />
 
         <activity android:name=".activity.AddFriendActivity" />
-        <activity android:name=".activity.NewFriendActivity"></activity>
+        <activity android:name=".activity.NewFriendActivity"/>
     </application>
 
 </manifest>
