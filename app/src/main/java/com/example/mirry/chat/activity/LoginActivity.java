@@ -50,6 +50,16 @@ public class LoginActivity extends Activity implements View.OnClickListener, Vie
     IconFontTextView deletePwd;
     private StatusCode status;
 
+    Observer<StatusCode> observer = new Observer<StatusCode>() {
+        @Override
+        public void onEvent(StatusCode statusCode) {
+            if(statusCode == StatusCode.LOGINED){
+                startActivity(new Intent(LoginActivity.this,MainActivity.class));
+                finish();
+            }
+        }
+    };
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -59,18 +69,7 @@ public class LoginActivity extends Activity implements View.OnClickListener, Vie
 
         initUserData();
 
-        NIMClient.getService(AuthServiceObserver.class).observeOnlineStatus(
-            new Observer<StatusCode>() {
-                @Override
-                public void onEvent(StatusCode statusCode) {
-                    if(statusCode == StatusCode.LOGINED){
-                        startActivity(new Intent(LoginActivity.this,MainActivity.class));
-                        finish();
-                    }
-                }
-            }
-        ,true );
-
+        NIMClient.getService(AuthServiceObserver.class).observeOnlineStatus(observer,true );
 
 
         login.setOnClickListener(this);
@@ -232,5 +231,11 @@ public class LoginActivity extends Activity implements View.OnClickListener, Vie
                 }
                 break;
         }
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        NIMClient.getService(AuthServiceObserver.class).observeOnlineStatus(observer,false);
     }
 }
