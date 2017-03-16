@@ -89,14 +89,13 @@
             android:value="f12752f14a1ed52eb6e6a0f024015a70" />
 
         <activity android:name=".activity.MainActivity" />
-        <activity android:name=".activity.SplashActivity">
+        <activity android:name=".activity.LoginActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".activity.LoginActivity"/>
         <activity android:name=".activity.RegisterActivity" />
         <activity android:name=".activity.InfoSetActivity" />
         <activity android:name=".activity.CodeLoginActivity" />
@@ -161,7 +160,8 @@
             android:name="com.netease.cosine.target.receiver"
             android:value="com.netease.nimlib.service.NimReceiver" />
 
-
+        <activity android:name=".activity.AddFriendActivity" />
+        <activity android:name=".activity.NewFriendActivity"/>
     </application>
 
 </manifest>
