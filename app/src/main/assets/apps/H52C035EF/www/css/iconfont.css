@@ -11,19 +11,42 @@
   -moz-osx-font-smoothing: grayscale;
 }
 
-.icon-password:before { content: "\e619"; }
+
+.icon-picture:before { content: "\e632"; }
+
+.icon-app:before { content: "\e631"; }
+
+.icon-contact:before { content: "\e630"; }
+
+.icon-addfriend:before { content: "\e629"; }
+
+.icon-head:before { content: "\e628"; }
+
+.icon-add:before { content: "\e627"; }
+
+.icon-menu:before { content: "\e626"; }
 
 .icon-share:before { content: "\e625"; }
 
-.icon-username:before { content: "\e618"; }
+.icon-robot:before { content: "\e624"; }
+
+.icon-record:before { content: "\e623"; }
+
+.icon-weather:before { content: "\e622"; }
 
 .icon-news:before { content: "\e621"; }
 
-.icon-scan:before { content: "\e615"; }
+.icon-love:before { content: "\e620"; }
+
+.icon-password:before { content: "\e619"; }
+
+.icon-username:before { content: "\e618"; }
 
 .icon-QR-code:before { content: "\e617"; }
 
 .icon-delete:before { content: "\e616"; }
+
+.icon-scan:before { content: "\e615"; }
 
 .icon-settings:before { content: "\e614"; }
 
@@ -51,13 +74,6 @@
 
 .icon-message:before { content: "\e602"; }
 
-.icon-weather:before { content: "\e622"; }
-
 .icon-voice:before { content: "\e601"; }
 
-.icon-record:before { content: "\e623"; }
-
-.icon-love:before { content: "\e620"; }
-
-.icon-robot:before { content: "\e624"; }
 

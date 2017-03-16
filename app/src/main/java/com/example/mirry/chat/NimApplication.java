@@ -9,7 +9,8 @@ import android.text.TextUtils;
 import android.util.DisplayMetrics;
 import android.view.WindowManager;
 
-import com.example.mirry.chat.activity.MainActivity;
+import com.example.mirry.chat.activity.ChatActivity;
+import com.example.mirry.chat.utils.SharedPreferencesUtil;
 import com.example.mirry.chat.utils.SystemUtil;
 import com.netease.nimlib.sdk.NIMClient;
 import com.netease.nimlib.sdk.SDKOptions;
@@ -18,7 +19,6 @@ import com.netease.nimlib.sdk.auth.LoginInfo;
 import com.netease.nimlib.sdk.msg.constant.SessionTypeEnum;
 import com.netease.nimlib.sdk.uinfo.UserInfoProvider;
 
-import java.util.prefs.Preferences;
 
 /**
  * Created by Mirry on 2017/3/4.
@@ -34,7 +34,6 @@ public class NimApplication extends Application {
         NIMClient.init(this, loginInfo(), options());
 
         if (inMainProcess(context)) {
-            // 注意：以下操作必须在主进程中进行
             // 1、UI相关初始化操作
             // 2、相关Service调用
         }
@@ -46,7 +45,7 @@ public class NimApplication extends Application {
 
         // 如果将新消息通知提醒托管给 SDK 完成，需要添加以下配置。否则无需设置。
         StatusBarNotificationConfig config = new StatusBarNotificationConfig();
-        config.notificationEntrance = MainActivity.class;  // 点击通知栏跳转到该Activity
+        config.notificationEntrance = ChatActivity.class;  // 点击通知栏跳转到该Activity
         config.notificationSmallIconId = R.drawable.head;
         // 呼吸灯配置
         config.ledARGB = Color.GREEN;
@@ -100,16 +99,15 @@ public class NimApplication extends Application {
 
     // 如果已经存在用户登录信息，返回LoginInfo，否则返回null即可
     private LoginInfo loginInfo() {
-//        String account = Preferences.getUserAccount();
-//        String token = Preferences.getUserToken();
-//
-//        if (!TextUtils.isEmpty(account) && !TextUtils.isEmpty(token)) {
-//            MyCache.setAccount(account.toLowerCase());
-//            return new LoginInfo(account, token);
-//        } else {
-//            return null;
-//        }
-        return null;
+        String userName = SharedPreferencesUtil.getString(context,"account","");
+        String password = SharedPreferencesUtil.getString(context,"token","");
+
+        if (!TextUtils.isEmpty(userName) && !TextUtils.isEmpty(password)) {
+            return new LoginInfo(userName, password);
+        } else {
+            return null;
+        }
+//        return null;
     }
 
     private int getScreenWidth(){

@@ -58,7 +58,7 @@ public class QuickIndexBar extends View {
         setBackgroundColor(getResources().getColor(R.color.transparent));
         mPaint = new Paint(Paint.ANTI_ALIAS_FLAG);   //抗锯齿
         mPaint.setColor(getResources().getColor(R.color.darkBlue));
-        mPaint.setTextSize(40);
+        mPaint.setTextSize(34);
         mPaint.setTypeface(Typeface.DEFAULT_BOLD);
     }
 

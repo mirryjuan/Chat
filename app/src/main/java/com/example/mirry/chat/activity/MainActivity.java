@@ -3,6 +3,7 @@ package com.example.mirry.chat.activity;
 import android.app.Activity;
 import android.app.FragmentManager;
 import android.app.FragmentTransaction;
+import android.content.Intent;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 import android.util.DisplayMetrics;
@@ -28,8 +29,6 @@ import com.example.mirry.chat.fragment.MessageFragment;
 import com.example.mirry.chat.utils.DrawableUtil;
 import com.example.mirry.chat.view.CircleImageView;
 import com.jeremyfeinstein.slidingmenu.lib.SlidingMenu;
-import com.jeremyfeinstein.slidingmenu.lib.app.SlidingActivity;
-import com.jeremyfeinstein.slidingmenu.lib.app.SlidingFragmentActivity;
 
 import butterknife.ButterKnife;
 import butterknife.InjectView;
@@ -137,7 +136,7 @@ public class MainActivity extends Activity implements RadioGroup.OnCheckedChange
                 showPopupWindow();
                 break;
             case R.id.addFriend:
-                Toast.makeText(this, "加好友", Toast.LENGTH_SHORT).show();
+                startActivity(new Intent(MainActivity.this,AddFriendActivity.class));
                 break;
             case R.id.scan:
                 Toast.makeText(this, "扫一扫", Toast.LENGTH_SHORT).show();
