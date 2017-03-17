@@ -182,4 +182,13 @@ public class MainActivity extends Activity implements RadioGroup.OnCheckedChange
         windowManager.getDefaultDisplay().getMetrics(metrics);
         return metrics.widthPixels;
     }
+
+    @Override
+    public void onBackPressed() {
+        if(menu.isMenuShowing()){
+            menu.toggle();
+        }else {
+            super.onBackPressed();
+        }
+    }
 }
