@@ -54,6 +54,7 @@ public class MainActivity extends Activity implements RadioGroup.OnCheckedChange
     @InjectView(R.id.titleBar)
     RelativeLayout titleBar;
     private SlidingMenu menu;
+    private PopupWindow popupWindow;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -136,6 +137,9 @@ public class MainActivity extends Activity implements RadioGroup.OnCheckedChange
                 showPopupWindow();
                 break;
             case R.id.addFriend:
+                if(popupWindow.isShowing()){
+                    popupWindow.dismiss();
+                }
                 startActivity(new Intent(MainActivity.this,AddFriendActivity.class));
                 break;
             case R.id.scan:
@@ -152,7 +156,7 @@ public class MainActivity extends Activity implements RadioGroup.OnCheckedChange
         addFriend.setOnClickListener(this);
         scan.setOnClickListener(this);
 
-        PopupWindow popupWindow = new PopupWindow(popupView, ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT, true);
+        popupWindow = new PopupWindow(popupView, ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT, true);
         popupWindow.setContentView(popupView);
         popupWindow.setAnimationStyle(R.anim.anim_popup);  //设置加载动画
 
