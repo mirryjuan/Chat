@@ -102,8 +102,6 @@
             android:launchMode="singleTask"/>
         <activity android:name=".activity.InfoSetActivity"
             android:launchMode="singleTask"/>
-        <activity android:name=".activity.CodeLoginActivity"
-            android:launchMode="singleTask"/>
         <activity android:name=".activity.AppsActivity"
             android:launchMode="singleTask"/>
         <activity android:name=".activity.ChatActivity"

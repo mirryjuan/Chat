@@ -47,7 +47,7 @@ public class MessageFragment extends Fragment implements AdapterView.OnItemClick
 
             }
         });
-        msgList.setAdapter(new MsgAdapter());
+        msgList.setAdapter(new MsgAdapter(mActivity,null));
         //消息列表单击事件
         msgList.setOnItemClickListener(this);
 

@@ -11,6 +11,7 @@ import android.widget.TextView;
 import com.example.mirry.chat.R;
 import com.example.mirry.chat.bean.Friend;
 import com.example.mirry.chat.bean.Me;
+import com.example.mirry.chat.view.CircleImageView;
 
 import java.util.List;
 
@@ -55,14 +56,14 @@ public class ChatAdapter extends BaseAdapter {
                 case TYPE_ME:
                     holderMe = new ViewHolderMe();
                     convertView = LayoutInflater.from(mContext).inflate(R.layout.item_msg_me, parent, false);
-                    holderMe.head = (ImageView) convertView.findViewById(R.id.head);
+                    holderMe.head = (CircleImageView) convertView.findViewById(R.id.head);
                     holderMe.msg = (TextView) convertView.findViewById(R.id.msg);
                     convertView.setTag(R.id.Tag_Me,holderMe);
                     break;
                 case TYPE_FRIEND:
                     holderFriend = new ViewHolderFriend();
                     convertView = LayoutInflater.from(mContext).inflate(R.layout.item_msg_friend, parent, false);
-                    holderFriend.head = (ImageView) convertView.findViewById(R.id.head);
+                    holderFriend.head = (CircleImageView) convertView.findViewById(R.id.head);
                     holderFriend.msg = (TextView) convertView.findViewById(R.id.msg);
                     convertView.setTag(R.id.Tag_Friend,holderFriend);
                     break;
@@ -100,12 +101,12 @@ public class ChatAdapter extends BaseAdapter {
 
     //两个不同的ViewHolder
     private class ViewHolderMe{
-        ImageView head;
+        CircleImageView head;
         TextView msg;
     }
 
     private class ViewHolderFriend{
-        ImageView head;
+        CircleImageView head;
         TextView msg;
     }
 

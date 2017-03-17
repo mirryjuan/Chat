@@ -5,13 +5,14 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context="com.example.mirry.chat.activity.LoginActivity"
-    android:padding="10dp"
     android:background="@drawable/bg">
+
 
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_centerInParent="true">
+        android:layout_centerInParent="true"
+        android:layout_margin="10dp">
 
         <LinearLayout
             android:id="@+id/userinfo"
@@ -108,12 +109,12 @@
             android:layout_alignParentLeft="true"/>
 
         <Button
-            android:id="@+id/codeLogin"
+            android:id="@+id/forget"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="bottom"
             android:background="@null"
-            android:text="@string/codeLogin"
+            android:text="@string/forgetPwd"
             android:textColor="@color/darkBlue"
             android:layout_below="@+id/login"
             android:layout_alignParentEnd="true"
@@ -121,14 +122,12 @@
 
     </RelativeLayout>
 
-    <Button
-        android:id="@+id/forget"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:background="@null"
-        android:text="@string/forgetPwd"
-        android:textColor="@color/darkBlue"
-        android:layout_alignParentBottom="true"
-        android:layout_centerHorizontal="true"/>
+    <ImageView
+        android:id="@+id/splash"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:src="@drawable/splash"
+        android:scaleType="centerCrop"
+        android:visibility="visible"/>
 
 </RelativeLayout>

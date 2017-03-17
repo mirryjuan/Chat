@@ -22,7 +22,7 @@
         android:layout_toRightOf="@+id/head"
         android:layout_toEndOf="@+id/head"/>
 
-    <ImageView
+    <com.example.mirry.chat.view.CircleImageView
         android:id="@+id/head"
         android:layout_width="38dp"
         android:layout_height="38dp"

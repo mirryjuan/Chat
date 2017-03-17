@@ -10,6 +10,7 @@ import android.view.View;
 import android.view.Window;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.Toast;
 
 import com.example.mirry.chat.R;
@@ -25,6 +26,9 @@ import com.netease.nimlib.sdk.auth.LoginInfo;
 
 import org.apache.commons.lang3.StringUtils;
 
+import java.util.Timer;
+import java.util.TimerTask;
+
 import butterknife.ButterKnife;
 import butterknife.InjectView;
 
@@ -38,8 +42,6 @@ public class LoginActivity extends Activity implements View.OnClickListener, Vie
     Button login;
     @InjectView(R.id.register)
     Button register;
-    @InjectView(R.id.codeLogin)
-    Button codeLogin;
     @InjectView(R.id.forget)
     Button forget;
     @InjectView(R.id.delete_name)
@@ -48,14 +50,16 @@ public class LoginActivity extends Activity implements View.OnClickListener, Vie
     IconFontTextView down;
     @InjectView(R.id.delete_pwd)
     IconFontTextView deletePwd;
+    @InjectView(R.id.splash)
+    ImageView splash;
     private StatusCode status;
 
     Observer<StatusCode> observer = new Observer<StatusCode>() {
         @Override
         public void onEvent(StatusCode statusCode) {
-            if(statusCode == StatusCode.LOGINED){
-                startActivity(new Intent(LoginActivity.this,MainActivity.class));
-                finish();
+            if (statusCode == StatusCode.LOGINED) {
+                startActivity(new Intent(LoginActivity.this, MainActivity.class));
+                LoginActivity.this.finish();
             }
         }
     };
@@ -69,11 +73,22 @@ public class LoginActivity extends Activity implements View.OnClickListener, Vie
 
         initUserData();
 
-        NIMClient.getService(AuthServiceObserver.class).observeOnlineStatus(observer,true );
+        NIMClient.getService(AuthServiceObserver.class).observeOnlineStatus(observer, true);
+
+        new Timer().schedule(new TimerTask() {
+            @Override
+            public void run() {
+                runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        splash.setVisibility(View.GONE);
+                    }
+                });
+            }
+        },2000);
 
 
         login.setOnClickListener(this);
-        codeLogin.setOnClickListener(this);
         forget.setOnClickListener(this);
         register.setOnClickListener(this);
 
@@ -94,9 +109,9 @@ public class LoginActivity extends Activity implements View.OnClickListener, Vie
 
             @Override
             public void afterTextChanged(Editable s) {
-                if(StringUtils.isNotEmpty(username.getText().toString())){
+                if (StringUtils.isNotEmpty(username.getText().toString())) {
                     deleteName.setVisibility(View.VISIBLE);
-                }else{
+                } else {
                     deleteName.setVisibility(View.GONE);
                 }
             }
@@ -112,11 +127,11 @@ public class LoginActivity extends Activity implements View.OnClickListener, Vie
 
             @Override
             public void afterTextChanged(Editable s) {
-                if(StringUtils.isNotEmpty(password.getText().toString())){
-                    if(deletePwd.getVisibility() != View.VISIBLE){
+                if (StringUtils.isNotEmpty(password.getText().toString())) {
+                    if (deletePwd.getVisibility() != View.VISIBLE) {
                         deletePwd.setVisibility(View.VISIBLE);
                     }
-                }else{
+                } else {
                     deletePwd.setVisibility(View.GONE);
                 }
             }
@@ -125,8 +140,8 @@ public class LoginActivity extends Activity implements View.OnClickListener, Vie
     }
 
     private void initUserData() {
-        String name = SharedPreferencesUtil.getString(LoginActivity.this,"userName","");
-        String pwd = SharedPreferencesUtil.getString(LoginActivity.this,"password","");
+        String name = SharedPreferencesUtil.getString(LoginActivity.this, "userName", "");
+        String pwd = SharedPreferencesUtil.getString(LoginActivity.this, "password", "");
         username.setText(name);
         password.setText(pwd);
     }
@@ -136,9 +151,6 @@ public class LoginActivity extends Activity implements View.OnClickListener, Vie
         switch (v.getId()) {
             case R.id.login:
                 doLogin();
-                break;
-            case R.id.codeLogin:
-                startActivity(new Intent(LoginActivity.this, CodeLoginActivity.class));
                 break;
             case R.id.forget:
                 break;
@@ -172,8 +184,8 @@ public class LoginActivity extends Activity implements View.OnClickListener, Vie
                     new RequestCallback<LoginInfo>() {
                         @Override
                         public void onSuccess(LoginInfo param) {
-                            SharedPreferencesUtil.setString(LoginActivity.this, "userName",name);
-                            SharedPreferencesUtil.setString(LoginActivity.this, "password",pwd);
+                            SharedPreferencesUtil.setString(LoginActivity.this, "userName", name);
+                            SharedPreferencesUtil.setString(LoginActivity.this, "password", pwd);
                             SharedPreferencesUtil.setString(LoginActivity.this, "account", param.getAccount());
                             SharedPreferencesUtil.setString(LoginActivity.this, "token", param.getToken());
                             startActivity(new Intent(LoginActivity.this, MainActivity.class));
@@ -213,20 +225,20 @@ public class LoginActivity extends Activity implements View.OnClickListener, Vie
 
     @Override
     public void onFocusChange(View v, boolean hasFocus) {
-        switch (v.getId()){
+        switch (v.getId()) {
             case R.id.username:
-                if(deletePwd.getVisibility() != View.GONE){
+                if (deletePwd.getVisibility() != View.GONE) {
                     deletePwd.setVisibility(View.GONE);
                 }
-                if(StringUtils.isNotEmpty(username.getText().toString())){
+                if (StringUtils.isNotEmpty(username.getText().toString())) {
                     deleteName.setVisibility(View.VISIBLE);
                 }
                 break;
             case R.id.password:
-                if(deleteName.getVisibility() != View.GONE){
+                if (deleteName.getVisibility() != View.GONE) {
                     deleteName.setVisibility(View.GONE);
                 }
-                if(StringUtils.isNotEmpty(password.getText().toString())){
+                if (StringUtils.isNotEmpty(password.getText().toString())) {
                     deletePwd.setVisibility(View.VISIBLE);
                 }
                 break;
@@ -236,6 +248,6 @@ public class LoginActivity extends Activity implements View.OnClickListener, Vie
     @Override
     protected void onDestroy() {
         super.onDestroy();
-        NIMClient.getService(AuthServiceObserver.class).observeOnlineStatus(observer,false);
+        NIMClient.getService(AuthServiceObserver.class).observeOnlineStatus(observer, false);
     }
 }
