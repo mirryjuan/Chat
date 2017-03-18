@@ -54,9 +54,11 @@
 
     <!--联系人信息界面-->
     <string name="newFriend">新朋友</string>
-    <string name="phone">手机：</string>
-    <string name="birthday">生日：</string>
+    <string name="accid">账号</string>
+    <string name="phone">手机号</string>
+    <string name="birthday">生日</string>
     <string name="chat">聊一聊</string>
+    <string name="friendInfo">好友信息</string>
 
     <!--添加好友界面-->
     <string name="search">搜索</string>

@@ -88,9 +88,11 @@
             android:name="com.netease.nim.appKey"
             android:value="f12752f14a1ed52eb6e6a0f024015a70" />
 
-        <activity android:name=".activity.MainActivity"
-            android:launchMode="singleTask"/>
-        <activity android:name=".activity.LoginActivity"
+        <activity
+            android:name=".activity.MainActivity"
+            android:launchMode="singleTask" />
+        <activity
+            android:name=".activity.LoginActivity"
             android:launchMode="singleTask">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -98,20 +100,27 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".activity.RegisterActivity"
-            android:launchMode="singleTask"/>
-        <activity android:name=".activity.InfoSetActivity"
-            android:launchMode="singleTask"/>
-        <activity android:name=".activity.AppsActivity"
-            android:launchMode="singleTask"/>
-        <activity android:name=".activity.ChatActivity"
-            android:launchMode="singleTask"/>
-        <activity android:name=".activity.ContactInfoActivity"
-            android:launchMode="singleTask"/>
-        <activity android:name=".activity.AddFriendActivity"
-            android:launchMode="singleTask"/>
-        <activity android:name=".activity.NewFriendActivity"
-            android:launchMode="singleTask"/>
+        <activity
+            android:name=".activity.RegisterActivity"
+            android:launchMode="singleTask" />
+        <activity
+            android:name=".activity.InfoSetActivity"
+            android:launchMode="singleTask" />
+        <activity
+            android:name=".activity.AppsActivity"
+            android:launchMode="singleTask" />
+        <activity
+            android:name=".activity.ChatActivity"
+            android:launchMode="singleTask" />
+        <activity
+            android:name=".activity.ContactInfoActivity"
+            android:launchMode="singleTask" />
+        <activity
+            android:name=".activity.AddFriendActivity"
+            android:launchMode="singleTask" />
+        <activity
+            android:name=".activity.NewFriendActivity"
+            android:launchMode="singleTask" />
         <activity
             android:name="io.dcloud.PandoraEntry"
             android:configChanges="orientation|keyboardHidden"
@@ -170,7 +179,7 @@
             android:name="com.netease.cosine.target.receiver"
             android:value="com.netease.nimlib.service.NimReceiver" />
 
-
+        <activity android:name=".activity.FriendInfoActivity"></activity>
     </application>
 
 </manifest>

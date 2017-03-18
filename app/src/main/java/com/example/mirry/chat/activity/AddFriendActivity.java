@@ -1,28 +1,36 @@
 package com.example.mirry.chat.activity;
 
 import android.app.Activity;
+import android.content.Intent;
 import android.os.Bundle;
-import android.support.v7.app.AppCompatActivity;
 import android.text.Editable;
 import android.text.TextWatcher;
+import android.util.Log;
 import android.view.KeyEvent;
 import android.view.View;
 import android.view.Window;
 import android.view.inputmethod.EditorInfo;
+import android.widget.AdapterView;
 import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.mirry.chat.R;
+import com.example.mirry.chat.adapter.NewFriendAdapter;
+import com.example.mirry.chat.utils.CommonUtil;
+import com.example.mirry.chat.utils.NimUserInfoCache;
 import com.example.mirry.chat.view.IconFontTextView;
-import com.netease.nimlib.sdk.NIMClient;
 import com.netease.nimlib.sdk.RequestCallback;
-import com.netease.nimlib.sdk.friend.FriendService;
-import com.netease.nimlib.sdk.friend.constant.VerifyType;
-import com.netease.nimlib.sdk.friend.model.AddFriendData;
+import com.netease.nimlib.sdk.uinfo.model.NimUserInfo;
 
 import org.apache.commons.lang3.StringUtils;
+
+import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 import butterknife.ButterKnife;
 import butterknife.InjectView;
@@ -30,11 +38,16 @@ import butterknife.InjectView;
 public class AddFriendActivity extends Activity implements TextView.OnEditorActionListener, View.OnClickListener, TextWatcher {
 
     @InjectView(R.id.et_search)
-    EditText search;
+    EditText searchText;
     @InjectView(R.id.friend_list)
     ListView friendList;
     @InjectView(R.id.clear_search)
     IconFontTextView clearSearch;
+    @InjectView(R.id.search)
+    IconFontTextView search;
+
+    private List<Map<String, Object>> list = new ArrayList<>();
+    private NewFriendAdapter adapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -43,27 +56,86 @@ public class AddFriendActivity extends Activity implements TextView.OnEditorActi
         setContentView(R.layout.activity_add_friend);
         ButterKnife.inject(this);
 
-        search.setOnEditorActionListener(this);
-        search.addTextChangedListener(this);
+        searchText.setOnEditorActionListener(this);
+        searchText.addTextChangedListener(this);
         clearSearch.setOnClickListener(this);
+        search.setOnClickListener(this);
+
+        adapter = new NewFriendAdapter(this, list);
+
+        friendList.setAdapter(adapter);
+        friendList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                Intent intent = new Intent(AddFriendActivity.this, FriendInfoActivity.class);
+                intent.putExtra("info", (Serializable) list.get(position));
+                startActivity(intent);
+            }
+        });
 
     }
 
     @Override
     public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
-        switch (actionId){
+        switch (actionId) {
             case EditorInfo.IME_ACTION_SEARCH:
-                Toast.makeText(this, search.getText().toString(), Toast.LENGTH_SHORT).show();
+                list.clear();
+                searchFriend();
+                CommonUtil.hideKeyBoard(AddFriendActivity.this, searchText);
                 break;
         }
         return false;
+    }
+
+    private void searchFriend() {
+        String account = searchText.getText().toString();
+        NimUserInfoCache.getInstance().getUserInfoFromRemote(account, new RequestCallback<NimUserInfo>() {
+            @Override
+            public void onSuccess(NimUserInfo param) {
+                if (param == null) {
+                    Toast.makeText(AddFriendActivity.this, "没有找到用户", Toast.LENGTH_SHORT).show();
+                } else {
+//                    Map<String, Object> extensionMap = param.getExtensionMap();
+//                    Log.e("info",extensionMap.toString());
+                    Map<String, Object> info = new HashMap<>();
+                    info.put("account", param.getAccount());
+                    info.put("birthday", param.getBirthday());
+                    info.put("mobile", param.getMobile());
+                    list.add(info);
+                    adapter.notifyDataSetChanged();
+                    Toast.makeText(AddFriendActivity.this, "成功添加到列表中", Toast.LENGTH_SHORT).show();
+                }
+            }
+
+            @Override
+            public void onFailed(int code) {
+                Log.e("code", "错误码：" + code);
+                switch (code) {
+                    case 408:
+                        Toast.makeText(AddFriendActivity.this, "请求超时，请稍候重试", Toast.LENGTH_SHORT).show();
+                        break;
+                }
+            }
+
+            @Override
+            public void onException(Throwable exception) {
+
+            }
+        });
     }
 
     @Override
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.clear_search:
-                search.setText("");
+                searchText.setText("");
+                list.clear();
+                adapter.notifyDataSetChanged();
+                break;
+            case R.id.search:
+                list.clear();
+                searchFriend();
+                CommonUtil.hideKeyBoard(AddFriendActivity.this, searchText);
                 break;
             default:
                 break;
@@ -82,34 +154,12 @@ public class AddFriendActivity extends Activity implements TextView.OnEditorActi
 
     @Override
     public void afterTextChanged(Editable s) {
-        if (StringUtils.isNotEmpty(search.getText().toString())) {
+        if (StringUtils.isNotEmpty(searchText.getText().toString())) {
             clearSearch.setVisibility(View.VISIBLE);
         } else {
             clearSearch.setVisibility(View.GONE);
         }
     }
 
-    private void addFriend(String account) {
-        final VerifyType verifyType = VerifyType.VERIFY_REQUEST; // 发起好友验证请求
-        String msg = "好友请求附言";
-        NIMClient.getService(FriendService.class).addFriend(new AddFriendData(account, verifyType, msg))
-                .setCallback(new RequestCallback<Void>() {
 
-                    @Override
-                    public void onSuccess(Void param) {
-                        // TODO: 2017/3/16 添加至联系人列表
-                    }
-
-                    @Override
-                    public void onFailed(int code) {
-                        // TODO: 2017/3/16 返回失败消息
-
-                    }
-
-                    @Override
-                    public void onException(Throwable exception) {
-
-                    }
-                });
-    }
 }
