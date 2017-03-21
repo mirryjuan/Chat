@@ -61,7 +61,7 @@ public class AddFriendActivity extends Activity implements TextView.OnEditorActi
         clearSearch.setOnClickListener(this);
         search.setOnClickListener(this);
 
-        adapter = new NewFriendAdapter(this, list);
+        adapter = new NewFriendAdapter(this, list, false);
 
         friendList.setAdapter(adapter);
         friendList.setOnItemClickListener(new AdapterView.OnItemClickListener() {

@@ -4,6 +4,7 @@ import android.content.Context;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -18,10 +19,12 @@ import java.util.Map;
 public class NewFriendAdapter extends BaseAdapter {
     private Context context;
     private List<Map<String, Object>> mData;
+    private boolean addShow = false;
 
-    public NewFriendAdapter(Context context, List<Map<String, Object>> list) {
+    public NewFriendAdapter(Context context, List<Map<String, Object>> list,boolean addShow) {
         this.context = context;
         mData = list;
+        this.addShow = addShow;
     }
 
     @Override
@@ -50,6 +53,7 @@ public class NewFriendAdapter extends BaseAdapter {
             holder.account = (TextView) convertView.findViewById(R.id.account);
             holder.sexImg = (ImageView) convertView.findViewById(R.id.img_sex);
             holder.sex = (TextView) convertView.findViewById(R.id.sex);
+            holder.add = (Button) convertView.findViewById(R.id.add);
             convertView.setTag(holder);
         } else {
             holder = (ViewHolder) convertView.getTag();
@@ -62,6 +66,16 @@ public class NewFriendAdapter extends BaseAdapter {
             holder.account.setText(info.get("account")==null?"":info.get("account").toString());
             holder.sex.setText(info.get("sex")==null?"":info.get("sex").toString());
 //            holder.sexImg.setImageResource((Integer) info.get("sexImg"));
+
+            if(addShow){
+                holder.add.setVisibility(View.VISIBLE);
+                holder.add.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        // TODO: 2017/3/19 添加好友操作
+                    }
+                });
+            }
         }
 
         return convertView;
@@ -73,5 +87,6 @@ public class NewFriendAdapter extends BaseAdapter {
         TextView account;
         ImageView sexImg;
         TextView sex;
+        Button add;
     }
 }
