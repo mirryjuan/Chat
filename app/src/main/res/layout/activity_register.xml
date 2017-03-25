@@ -11,13 +11,13 @@
     android:background="@drawable/bg">
 
     <EditText
-        android:id="@+id/phoneNum"
+        android:id="@+id/account"
         android:layout_width="match_parent"
         android:layout_height="40dp"
         style="@style/UserInfoTheme"
-        android:inputType="phone"
+        android:inputType="text"
         android:background="@drawable/bg_et_user"
-        android:hint="@string/phoneNum"/>
+        android:hint="@string/account"/>
 
     <EditText
         android:id="@+id/password"

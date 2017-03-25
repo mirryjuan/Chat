@@ -4,6 +4,7 @@ import android.app.Fragment;
 import android.content.Intent;
 import android.os.Bundle;
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -17,15 +18,19 @@ import com.example.mirry.chat.activity.NewFriendActivity;
 import com.example.mirry.chat.adapter.ContactAdapter;
 import com.example.mirry.chat.bean.Friend;
 import com.example.mirry.chat.view.QuickIndexBar;
+import com.netease.nimlib.sdk.NIMClient;
 import com.netease.nimlib.sdk.Observer;
 import com.netease.nimlib.sdk.friend.model.AddFriendNotify;
 import com.netease.nimlib.sdk.msg.SystemMessageObserver;
 import com.netease.nimlib.sdk.msg.constant.SystemMessageType;
 import com.netease.nimlib.sdk.msg.model.SystemMessage;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 public class ContactFragment extends Fragment implements AdapterView.OnItemClickListener, View.OnClickListener {
 
@@ -33,35 +38,8 @@ public class ContactFragment extends Fragment implements AdapterView.OnItemClick
     private MainActivity mActivity;
     private QuickIndexBar bar;
     private LinearLayout addFriend;
-    private List<Friend> list = new ArrayList<>();
-
-    SystemMessageObserver observer = new SystemMessageObserver() {
-        @Override
-        public void observeReceiveSystemMsg(Observer<SystemMessage> observer, boolean register) {
-//            SystemMessage message = observer.getClass();
-//            if (message.getType() == SystemMessageType.AddFriend) {
-//                AddFriendNotify attachData = (AddFriendNotify) message.getAttachObject();
-//                if (attachData != null) {
-//                    // 针对不同的事件做处理
-//                    if (attachData.getEvent() == AddFriendNotify.Event.RECV_ADD_FRIEND_DIRECT) {
-//                        // 对方直接添加你为好友
-//                    } else if (attachData.getEvent() == AddFriendNotify.Event.RECV_AGREE_ADD_FRIEND) {
-//                        // 对方通过了你的好友验证请求
-//                    } else if (attachData.getEvent() == AddFriendNotify.Event.RECV_REJECT_ADD_FRIEND) {
-//                        // 对方拒绝了你的好友验证请求
-//                    } else if (attachData.getEvent() == AddFriendNotify.Event.RECV_ADD_FRIEND_VERIFY_REQUEST) {
-//                        // 对方请求添加好友，一般场景会让用户选择同意或拒绝对方的好友请求。
-//                        // 通过message.getContent()获取好友验证请求的附言
-//                    }
-//                }
-//            }
-        }
-
-        @Override
-        public void observeUnreadCountChange(Observer<Integer> observer, boolean register) {
-
-        }
-    };
+    private List<Friend> friendList = new ArrayList<>();
+    private List<Map<String,String>> newFriendList = new ArrayList<>();
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -72,6 +50,7 @@ public class ContactFragment extends Fragment implements AdapterView.OnItemClick
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
+        newFriendList = (List<Map<String, String>>) getArguments().getSerializable("newFriend");
         View view = inflater.inflate(R.layout.fragment_contact, container, false);
 
         contactList = (ListView) view.findViewById(R.id.contactList);
@@ -84,8 +63,8 @@ public class ContactFragment extends Fragment implements AdapterView.OnItemClick
             @Override
             public void onLetterUpdate(String letter) {
                 //根据字母定位List
-                for(int i = 0; i < list.size();i++){
-                    Friend friend = list.get(i);
+                for(int i = 0; i < friendList.size();i++){
+                    Friend friend = friendList.get(i);
                     String pinyin = friend.getPinyin().substring(0, 1);
                     if(TextUtils.equals(letter,pinyin)){
                         contactList.setSelection(i);
@@ -95,8 +74,8 @@ public class ContactFragment extends Fragment implements AdapterView.OnItemClick
             }
         });
 
-        fillAndSortData(list);
-        contactList.setAdapter(new ContactAdapter(mActivity,list));
+        fillAndSortData(friendList);
+        contactList.setAdapter(new ContactAdapter(mActivity,friendList));
         contactList.setOnItemClickListener(this);
         return view;
     }
@@ -136,9 +115,11 @@ public class ContactFragment extends Fragment implements AdapterView.OnItemClick
 
     @Override
     public void onClick(View v) {
-        switch (v.getId()){
+        switch (v.getId()) {
             case R.id.addFriend:
-                startActivity(new Intent(mActivity, NewFriendActivity.class));
+                Intent intent = new Intent(mActivity, NewFriendActivity.class);
+                intent.putExtra("newFriend", (Serializable) newFriendList);
+                startActivity(intent);
                 break;
             default:
                 break;

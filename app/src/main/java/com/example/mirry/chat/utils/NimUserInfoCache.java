@@ -123,7 +123,6 @@ public class NimUserInfoCache {
                     callback.onFailed(code);
                 }
             }
-
             @Override
             public void onException(Throwable exception) {
                 if (callback != null) {

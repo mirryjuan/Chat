@@ -76,19 +76,52 @@
             android:layout_alignParentEnd="true"
             android:layout_centerVertical="true"
             android:layout_marginRight="30dp"
-            android:layout_marginEnd="30dp"/>
+            android:layout_marginEnd="30dp" />
+
+        <ImageView
+            android:id="@+id/refuse"
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            android:background="@drawable/bg_add"
+            android:scaleType="centerInside"
+            android:src="@drawable/refuse"
+            android:padding="10dp"
+            android:layout_alignParentRight="true"
+            android:layout_alignParentEnd="true"
+            android:layout_centerVertical="true"
+            android:layout_marginRight="30dp"
+            android:layout_marginEnd="30dp"
+            android:visibility="gone"
+            android:clickable="false"/>
     </RelativeLayout>
 
-    <TextView
-        android:id="@+id/nickName"
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:background="@color/darkBlue"
-        android:text="Mirry"
-        android:textSize="20sp"
-        android:textColor="@color/white"
-        android:gravity="center"
-        android:padding="5dp"/>
+        android:gravity="center">
+
+        <ImageView
+            android:id="@+id/img_sex"
+            android:layout_width="20dp"
+            android:layout_height="20dp"
+            android:src="@drawable/sex_male"
+            android:layout_marginLeft="10dp"
+            android:layout_marginRight="10dp"
+            android:layout_gravity="center"
+            android:gravity="center"
+            android:textColor="@color/white"/>
+
+        <TextView
+            android:id="@+id/nickName"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Mirry"
+            android:textSize="20sp"
+            android:textColor="@color/white"
+            android:gravity="center"
+            android:padding="5dp"/>
+    </LinearLayout>
 
     <TextView
         android:layout_width="match_parent"
@@ -107,49 +140,68 @@
         android:textSize="14sp"
         android:textColor="@color/darkGray"/>
 
-    <View
+    <LinearLayout
+        android:id="@+id/info_phone"
         android:layout_width="match_parent"
-        android:layout_height="0.5dp"
-        android:background="@color/lightBlue"
-        android:layout_margin="8dp"/>
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
 
-    <TextView
-        android:id="@+id/phone"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_margin="10dp"
-        android:text="@string/phone"
-        android:textSize="12sp"
-        android:textColor="@color/lightBlue"/>
-    <TextView
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginLeft="10dp"
-        android:layout_marginStart="10dp"
-        android:text="15732136540"
-        android:textSize="14sp"
-        android:textColor="@color/darkGray"/>
-    <View
-        android:layout_width="match_parent"
-        android:layout_height="0.5dp"
-        android:background="@color/lightBlue"
-        android:layout_margin="8dp"/>
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="0.5dp"
+            android:background="@color/lightBlue"
+            android:layout_margin="8dp"/>
 
-    <TextView
+        <TextView
+            android:id="@+id/phone"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="10dp"
+            android:text="@string/phone"
+            android:textSize="12sp"
+            android:textColor="@color/lightBlue"/>
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="10dp"
+            android:layout_marginStart="10dp"
+            android:text="15732136540"
+            android:textSize="14sp"
+            android:textColor="@color/darkGray"/>
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/info_birthday"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_margin="10dp"
-        android:text="@string/birthday"
-        android:textSize="10sp"
-        android:textColor="@color/lightBlue"/>
-    <TextView
-        android:id="@+id/birthday"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginLeft="10dp"
-        android:layout_marginStart="10dp"
-        android:text="2017-3-18"
-        android:textSize="14sp"
-        android:textColor="@color/darkGray"/>
+        android:orientation="vertical">
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="0.5dp"
+            android:background="@color/lightBlue"
+            android:layout_margin="8dp"/>
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="10dp"
+            android:text="@string/birthday"
+            android:textSize="10sp"
+            android:textColor="@color/lightBlue"/>
+        <TextView
+            android:id="@+id/birthday"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="10dp"
+            android:layout_marginStart="10dp"
+            android:text="2017-3-18"
+            android:textSize="14sp"
+            android:textColor="@color/darkGray"/>
+
+    </LinearLayout>
+
+
 
 </LinearLayout>

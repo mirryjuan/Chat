@@ -26,7 +26,8 @@
             android:id="@+id/next"
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
-            android:text="@string/next"
+            android:text="@string/img_next"
+            android:textSize="20sp"
             android:textColor="@color/white"
             android:gravity="center_vertical"
             android:layout_alignParentRight="true"
@@ -36,8 +37,8 @@
 
     <com.example.mirry.chat.view.CircleImageView
         android:id="@+id/head"
-        android:layout_width="120dp"
-        android:layout_height="120dp"
+        android:layout_width="100dp"
+        android:layout_height="100dp"
         android:src="@drawable/head"
         android:scaleType="centerCrop"
         android:layout_marginTop="20dp"
@@ -71,18 +72,35 @@
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="@string/age"
+            android:text="@string/birthday"
             android:textColor="@color/darkBlue"
             android:layout_marginTop="10dp"/>
 
         <EditText
-            android:id="@+id/age"
+            android:id="@+id/birthday"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:background="@drawable/bg_info"
             android:textSize="20sp"
             android:layout_marginTop="8dp"
-            android:inputType="number"
+            android:inputType="text"
+            android:padding="5dp"/>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/phone"
+            android:textColor="@color/darkBlue"
+            android:layout_marginTop="10dp"/>
+
+        <EditText
+            android:id="@+id/phone"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@drawable/bg_info"
+            android:textSize="20sp"
+            android:layout_marginTop="8dp"
+            android:inputType="phone"
             android:padding="5dp"/>
 
         <RelativeLayout

@@ -179,7 +179,9 @@
             android:name="com.netease.cosine.target.receiver"
             android:value="com.netease.nimlib.service.NimReceiver" />
 
-        <activity android:name=".activity.FriendInfoActivity"></activity>
+        <activity android:name=".activity.FriendInfoActivity" />
+        <activity android:name=".activity.MyInfoActivity" />
+        <activity android:name=".activity.SettingsActivity"></activity>
     </application>
 
 </manifest>

@@ -21,6 +21,14 @@
             android:background="@drawable/bg_et_user"
             android:gravity="center_vertical">
 
+            <com.example.mirry.chat.view.IconFontTextView
+                android:layout_width="34dp"
+                android:layout_height="34dp"
+                android:text="@string/img_user"
+                android:gravity="center"
+                android:textSize="18sp"
+                android:textColor="@color/darkGray"/>
+
             <EditText
                 android:id="@+id/username"
                 android:layout_width="0dp"
@@ -64,6 +72,14 @@
             android:layout_below="@+id/userinfo"
             android:layout_marginTop="0.8dp"
             android:orientation="horizontal">
+
+            <com.example.mirry.chat.view.IconFontTextView
+                android:layout_width="34dp"
+                android:layout_height="34dp"
+                android:text="@string/img_pwd"
+                android:gravity="center"
+                android:textSize="18sp"
+                android:textColor="@color/darkGray"/>
 
             <EditText
                 android:id="@+id/password"

@@ -9,7 +9,6 @@ import android.widget.EditText;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.example.mirry.chat.R;
 import com.example.mirry.chat.view.CircleImageView;
@@ -23,8 +22,6 @@ public class InfoSetActivity extends Activity implements View.OnClickListener {
     CircleImageView head;
     @InjectView(R.id.nickname)
     EditText nickname;
-    @InjectView(R.id.age)
-    EditText age;
     @InjectView(R.id.male)
     RadioButton male;
     @InjectView(R.id.female)
@@ -35,6 +32,10 @@ public class InfoSetActivity extends Activity implements View.OnClickListener {
     Button accomplish;
     @InjectView(R.id.next)
     TextView next;
+    @InjectView(R.id.birthday)
+    EditText birthday;
+    @InjectView(R.id.phone)
+    EditText phone;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -45,13 +46,19 @@ public class InfoSetActivity extends Activity implements View.OnClickListener {
 
         next.setOnClickListener(this);
         accomplish.setOnClickListener(this);
+
+        sex.check(R.id.male);   //默认选中 "男"
     }
 
     @Override
     public void onClick(View v) {
-        switch (v.getId()){
+        switch (v.getId()) {
             case R.id.next:
+                finish();
+                break;
             case R.id.accomplish:
+                //存储到本地user表
+                //存储到服务器
                 finish();
                 break;
         }

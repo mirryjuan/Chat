@@ -2,7 +2,8 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:gravity="center">
+    android:gravity="center"
+    >
 
     <com.example.mirry.chat.view.CircleImageView
         android:id="@+id/head"
@@ -19,12 +20,14 @@
         android:textColor="@color/black"
         android:textSize="18sp"
         android:paddingTop="10dp"
-        android:layout_toRightOf="@id/head"/>
+        android:layout_toRightOf="@id/head"
+        android:layout_toEndOf="@+id/head"/>
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_toRightOf="@id/head"
+        android:layout_toEndOf="@+id/head"
         android:layout_below="@+id/remark"
         android:orientation="horizontal"
         android:gravity="center"

@@ -69,6 +69,7 @@ public class AddFriendActivity extends Activity implements TextView.OnEditorActi
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 Intent intent = new Intent(AddFriendActivity.this, FriendInfoActivity.class);
                 intent.putExtra("info", (Serializable) list.get(position));
+                intent.putExtra("isRequest",true);
                 startActivity(intent);
             }
         });
@@ -99,6 +100,9 @@ public class AddFriendActivity extends Activity implements TextView.OnEditorActi
 //                    Log.e("info",extensionMap.toString());
                     Map<String, Object> info = new HashMap<>();
                     info.put("account", param.getAccount());
+                    info.put("head",param.getAvatar());
+                    info.put("nickname",param.getName());
+                    info.put("sex",param.getGenderEnum().getValue());
                     info.put("birthday", param.getBirthday());
                     info.put("mobile", param.getMobile());
                     list.add(info);

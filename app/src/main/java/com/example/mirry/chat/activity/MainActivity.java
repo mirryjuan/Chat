@@ -7,6 +7,7 @@ import android.content.Intent;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 import android.util.DisplayMetrics;
+import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
@@ -29,6 +30,18 @@ import com.example.mirry.chat.fragment.MessageFragment;
 import com.example.mirry.chat.utils.DrawableUtil;
 import com.example.mirry.chat.view.CircleImageView;
 import com.jeremyfeinstein.slidingmenu.lib.SlidingMenu;
+import com.netease.nimlib.sdk.NIMClient;
+import com.netease.nimlib.sdk.Observer;
+import com.netease.nimlib.sdk.friend.model.AddFriendNotify;
+import com.netease.nimlib.sdk.msg.SystemMessageObserver;
+import com.netease.nimlib.sdk.msg.constant.SystemMessageType;
+import com.netease.nimlib.sdk.msg.model.SystemMessage;
+
+import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 import butterknife.ButterKnife;
 import butterknife.InjectView;
@@ -56,11 +69,51 @@ public class MainActivity extends Activity implements RadioGroup.OnCheckedChange
     private SlidingMenu menu;
     private PopupWindow popupWindow;
 
+    private List<Map<String,String>> newFriendList = new ArrayList<>();
+
+    private Observer<SystemMessage> messageObserver = new Observer<SystemMessage>() {
+
+        @Override
+        public void onEvent(SystemMessage message) {
+            Log.e("message",message.getFromAccount());
+            if (message.getType() == SystemMessageType.AddFriend) {
+                AddFriendNotify attachData = (AddFriendNotify) message.getAttachObject();
+                if (attachData != null) {
+                    // 针对不同的事件做处理
+                    if (attachData.getEvent() == AddFriendNotify.Event.RECV_ADD_FRIEND_DIRECT) {
+                        // 对方直接添加你为好友
+                    } else if (attachData.getEvent() == AddFriendNotify.Event.RECV_AGREE_ADD_FRIEND) {
+                        // 对方通过了你的好友验证请求
+                    } else if (attachData.getEvent() == AddFriendNotify.Event.RECV_REJECT_ADD_FRIEND) {
+                        // 对方拒绝了你的好友验证请求
+                    } else if (attachData.getEvent() == AddFriendNotify.Event.RECV_ADD_FRIEND_VERIFY_REQUEST) {
+                        // 对方请求添加好友，一般场景会让用户选择同意或拒绝对方的好友请求。
+                        // 通过message.getContent()获取好友验证请求的附言
+                        Map<String,String> newFriendInfo = new HashMap<>();
+                        newFriendInfo.put("account",message.getFromAccount());
+                        newFriendInfo.put("content",message.getContent());
+                        newFriendList.add(newFriendInfo);
+                    }
+                }
+            }
+        }
+    };
+
+    private Observer<Integer> countObserver = new Observer<Integer>() {
+        @Override
+        public void onEvent(Integer integer) {
+
+        }
+    };
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         requestWindowFeature(Window.FEATURE_NO_TITLE);
         setContentView(R.layout.activity_main);
+
+        NIMClient.getService(SystemMessageObserver.class).observeReceiveSystemMsg(messageObserver,true);
+        NIMClient.getService(SystemMessageObserver.class).observeUnreadCountChange(countObserver,true);
 
         menu = new SlidingMenu(this);
         menu.setMode(SlidingMenu.LEFT);
@@ -117,7 +170,11 @@ public class MainActivity extends Activity implements RadioGroup.OnCheckedChange
                 break;
             case R.id.contact:
                 title.setText("联系人");
-                transaction.replace(R.id.content, new ContactFragment());
+                ContactFragment contactFragment = new ContactFragment();
+                Bundle bundle = new Bundle();
+                bundle.putSerializable("newFriend", (Serializable) newFriendList);
+                contactFragment.setArguments(bundle);
+                transaction.replace(R.id.content, contactFragment);
                 break;
             case R.id.miniApps:
                 title.setText("小应用");
@@ -191,4 +248,12 @@ public class MainActivity extends Activity implements RadioGroup.OnCheckedChange
             super.onBackPressed();
         }
     }
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        NIMClient.getService(SystemMessageObserver.class).observeReceiveSystemMsg(messageObserver,false);
+        NIMClient.getService(SystemMessageObserver.class).observeUnreadCountChange(countObserver,false);
+    }
+
 }

@@ -17,8 +17,8 @@ import butterknife.InjectView;
 
 public class RegisterActivity extends Activity implements View.OnClickListener {
 
-    @InjectView(R.id.phoneNum)
-    EditText phoneNum;
+    @InjectView(R.id.account)
+    EditText account;
     @InjectView(R.id.password)
     EditText password;
     @InjectView(R.id.confirmPwd)

@@ -4,7 +4,7 @@
     android:layout_height="match_parent"
     tools:context="com.example.mirry.chat.fragment.MessageFragment"
     android:orientation="vertical"
-    android:background="@color/bgBlue">
+    android:background="@color/white">
 
     <Button
         android:id="@+id/btn"
@@ -16,6 +16,9 @@
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:layout_weight="1"
-        android:scrollbars="none"/>
+        android:scrollbars="none"
+        android:padding="6dp"
+        android:divider="@color/darkBlue"
+        android:dividerHeight="0.5dp"/>
 
 </LinearLayout>
