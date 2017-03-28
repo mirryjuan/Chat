@@ -2,18 +2,26 @@ package com.example.mirry.chat.activity;
 
 import android.app.Activity;
 import android.content.Intent;
+import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.Log;
+import android.view.LayoutInflater;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.Window;
+import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
+import android.widget.ListView;
+import android.widget.PopupWindow;
 import android.widget.Toast;
 
 import com.example.mirry.chat.R;
+import com.example.mirry.chat.adapter.AllUsersAdapter;
 import com.example.mirry.chat.utils.SharedPreferencesUtil;
 import com.example.mirry.chat.view.IconFontTextView;
 import com.netease.nimlib.sdk.NIMClient;
@@ -26,6 +34,10 @@ import com.netease.nimlib.sdk.auth.LoginInfo;
 
 import org.apache.commons.lang3.StringUtils;
 
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
 import java.util.Timer;
 import java.util.TimerTask;
 
@@ -52,7 +64,17 @@ public class LoginActivity extends Activity implements View.OnClickListener, Vie
     IconFontTextView deletePwd;
     @InjectView(R.id.splash)
     ImageView splash;
-    private StatusCode status;
+    @InjectView(R.id.userinfo)
+    LinearLayout userLayout;
+
+    private ListView userList;
+    private AllUsersAdapter adapter;
+
+    private List<String> users = new ArrayList<>();
+    private Map<String, String> allUserInfo;
+
+    private String currentUser = "";
+    private PopupWindow popupWindow = null;
 
     Observer<StatusCode> observer = new Observer<StatusCode>() {
         @Override
@@ -85,7 +107,7 @@ public class LoginActivity extends Activity implements View.OnClickListener, Vie
                     }
                 });
             }
-        },2000);
+        }, 1500);
 
 
         login.setOnClickListener(this);
@@ -140,10 +162,16 @@ public class LoginActivity extends Activity implements View.OnClickListener, Vie
     }
 
     private void initUserData() {
-        String name = SharedPreferencesUtil.getString(LoginActivity.this, "userName", "");
-        String pwd = SharedPreferencesUtil.getString(LoginActivity.this, "password", "");
+        String name = SharedPreferencesUtil.getString(LoginActivity.this, "config","userName", "");
+        String pwd = SharedPreferencesUtil.getString(LoginActivity.this,"config", "password", "");
         username.setText(name);
         password.setText(pwd);
+
+        allUserInfo = SharedPreferencesUtil.getAll(LoginActivity.this,"users");
+        Set<String> set = allUserInfo.keySet();
+        for (String username : set) {
+            users.add(username);
+        }
     }
 
     @Override
@@ -167,10 +195,47 @@ public class LoginActivity extends Activity implements View.OnClickListener, Vie
                 deletePwd.setVisibility(View.GONE);
                 break;
             case R.id.down:
+                showPopupWindow();
                 break;
             default:
                 break;
         }
+    }
+
+    private void showPopupWindow() {
+        View view = LayoutInflater.from(LoginActivity.this).inflate(R.layout.popup_user, null, false);
+        userList = (ListView) view.findViewById(R.id.list_user);
+        adapter = new AllUsersAdapter(LoginActivity.this,users);
+        userList.setAdapter(adapter);
+
+        popupWindow = new PopupWindow(view,
+                userLayout.getMeasuredWidth(), LinearLayout.LayoutParams.WRAP_CONTENT, true);
+
+        popupWindow.setAnimationStyle(R.anim.anim_popup);  //设置加载动画
+
+        popupWindow.setTouchable(true);
+        popupWindow.setTouchInterceptor(new View.OnTouchListener() {
+            @Override
+            public boolean onTouch(View v, MotionEvent event) {
+                return false;
+            }
+        });
+        popupWindow.setBackgroundDrawable(new ColorDrawable(0x00000000));    //要为popWindow设置一个背景才有效
+
+
+        //设置popupWindow显示的位置，参数依次是参照View，x轴的偏移量，y轴的偏移量
+        popupWindow.showAsDropDown(userLayout, 0, 0);
+
+        userList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                currentUser = users.get(position);
+                username.setText(currentUser);
+                password.setText(allUserInfo.get(currentUser));
+                popupWindow.dismiss();
+            }
+        });
+
     }
 
     private void doLogin() {
@@ -184,10 +249,11 @@ public class LoginActivity extends Activity implements View.OnClickListener, Vie
                     new RequestCallback<LoginInfo>() {
                         @Override
                         public void onSuccess(LoginInfo param) {
-                            SharedPreferencesUtil.setString(LoginActivity.this, "userName", name);
-                            SharedPreferencesUtil.setString(LoginActivity.this, "password", pwd);
-                            SharedPreferencesUtil.setString(LoginActivity.this, "account", param.getAccount());
-                            SharedPreferencesUtil.setString(LoginActivity.this, "token", param.getToken());
+                            SharedPreferencesUtil.setString(LoginActivity.this,"config", "userName", name);
+                            SharedPreferencesUtil.setString(LoginActivity.this,"config", "password", pwd);
+                            SharedPreferencesUtil.setString(LoginActivity.this,"config", "account", param.getAccount());
+                            SharedPreferencesUtil.setString(LoginActivity.this,"config", "token", param.getToken());
+                            saveUsersInfo(name, pwd);   //缓存登陆过的用户信息
                             startActivity(new Intent(LoginActivity.this, MainActivity.class));
                             finish();
                         }
@@ -221,6 +287,11 @@ public class LoginActivity extends Activity implements View.OnClickListener, Vie
                     };
             NIMClient.getService(AuthService.class).login(info).setCallback(callback);
         }
+    }
+
+    private void saveUsersInfo(String name, String pwd) {
+        // TODO: 2017/3/26 保存到sp中
+        SharedPreferencesUtil.setString(LoginActivity.this,"users",name,pwd);
     }
 
     @Override

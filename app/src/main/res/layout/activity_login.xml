@@ -144,6 +144,6 @@
         android:layout_height="match_parent"
         android:src="@drawable/splash"
         android:scaleType="centerCrop"
-        android:visibility="visible"/>
+        android:visibility="gone"/>
 
 </RelativeLayout>

@@ -99,15 +99,14 @@ public class NimApplication extends Application {
 
     // 如果已经存在用户登录信息，返回LoginInfo，否则返回null即可
     private LoginInfo loginInfo() {
-        String userName = SharedPreferencesUtil.getString(context,"account","");
-        String password = SharedPreferencesUtil.getString(context,"token","");
+        String userName = SharedPreferencesUtil.getString(context,"config","account","");
+        String password = SharedPreferencesUtil.getString(context,"config","token","");
 
         if (!TextUtils.isEmpty(userName) && !TextUtils.isEmpty(password)) {
             return new LoginInfo(userName, password);
         } else {
             return null;
         }
-//        return null;
     }
 
     private int getScreenWidth(){

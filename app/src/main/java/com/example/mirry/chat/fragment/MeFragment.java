@@ -13,10 +13,13 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.mirry.chat.R;
+import com.example.mirry.chat.activity.LoginActivity;
 import com.example.mirry.chat.activity.MainActivity;
 import com.example.mirry.chat.activity.MyInfoActivity;
 import com.example.mirry.chat.activity.SettingsActivity;
 import com.example.mirry.chat.view.CircleImageView;
+import com.netease.nimlib.sdk.NIMClient;
+import com.netease.nimlib.sdk.auth.AuthService;
 
 import butterknife.ButterKnife;
 import butterknife.InjectView;
@@ -65,6 +68,7 @@ public class MeFragment extends Fragment implements View.OnClickListener {
         diary.setOnClickListener(this);
         share.setOnClickListener(this);
 
+        exist.setOnClickListener(this);
         return view;
     }
 
@@ -88,6 +92,11 @@ public class MeFragment extends Fragment implements View.OnClickListener {
                 break;
             case R.id.share:
                 shareMyApp();
+                break;
+            case R.id.exist:
+                NIMClient.getService(AuthService.class).logout();
+                startActivity(new Intent(mActivity, LoginActivity.class));
+                mActivity.finish();
                 break;
             default:
                 break;

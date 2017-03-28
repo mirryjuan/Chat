@@ -4,7 +4,8 @@
     android:layout_height="match_parent"
     android:gravity="center"
     android:background="@color/white"
-    android:orientation="horizontal">
+    android:orientation="horizontal"
+    android:descendantFocusability="blocksDescendants">
 
     <com.example.mirry.chat.view.CircleImageView
         android:id="@+id/head"
@@ -134,7 +135,8 @@
             android:background="@drawable/bg_btn_login"
             android:layout_marginRight="5dp"
             android:layout_marginLeft="5dp"
-            android:layout_gravity="center_vertical"/>
+            android:layout_gravity="center_vertical"
+            android:focusable="false" />
 
     </LinearLayout>
 
