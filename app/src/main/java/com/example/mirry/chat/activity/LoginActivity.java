@@ -4,6 +4,8 @@ import android.app.Activity;
 import android.content.Intent;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Message;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.Log;
@@ -18,11 +20,14 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.PopupWindow;
+import android.widget.RelativeLayout;
 import android.widget.Toast;
 
+import com.example.mirry.chat.Common;
 import com.example.mirry.chat.R;
 import com.example.mirry.chat.adapter.AllUsersAdapter;
-import com.example.mirry.chat.utils.SharedPreferencesUtil;
+import com.example.mirry.chat.utils.CommonUtil;
+import com.example.mirry.chat.utils.PreferencesUtil;
 import com.example.mirry.chat.view.IconFontTextView;
 import com.netease.nimlib.sdk.NIMClient;
 import com.netease.nimlib.sdk.Observer;
@@ -66,6 +71,8 @@ public class LoginActivity extends Activity implements View.OnClickListener, Vie
     ImageView splash;
     @InjectView(R.id.userinfo)
     LinearLayout userLayout;
+    @InjectView(R.id.activity_login)
+    RelativeLayout activityLogin;
 
     private ListView userList;
     private AllUsersAdapter adapter;
@@ -75,6 +82,18 @@ public class LoginActivity extends Activity implements View.OnClickListener, Vie
 
     private String currentUser = "";
     private PopupWindow popupWindow = null;
+
+    private Handler handler = new Handler() {
+        @Override
+        public void handleMessage(Message msg) {
+            switch (msg.what) {
+                case Common.USER_DELETE:
+                    username.setText("");
+                    password.setText("");
+                    break;
+            }
+        }
+    };
 
     Observer<StatusCode> observer = new Observer<StatusCode>() {
         @Override
@@ -97,6 +116,7 @@ public class LoginActivity extends Activity implements View.OnClickListener, Vie
 
         NIMClient.getService(AuthServiceObserver.class).observeOnlineStatus(observer, true);
 
+
         new Timer().schedule(new TimerTask() {
             @Override
             public void run() {
@@ -117,6 +137,8 @@ public class LoginActivity extends Activity implements View.OnClickListener, Vie
         deleteName.setOnClickListener(this);
         deletePwd.setOnClickListener(this);
         down.setOnClickListener(this);
+
+        activityLogin.setOnClickListener(this);
 
         username.setOnFocusChangeListener(this);
         password.setOnFocusChangeListener(this);
@@ -162,12 +184,12 @@ public class LoginActivity extends Activity implements View.OnClickListener, Vie
     }
 
     private void initUserData() {
-        String name = SharedPreferencesUtil.getString(LoginActivity.this, "config","userName", "");
-        String pwd = SharedPreferencesUtil.getString(LoginActivity.this,"config", "password", "");
+        String name = PreferencesUtil.getString(LoginActivity.this, "config", "userName", "");
+        String pwd = PreferencesUtil.getString(LoginActivity.this, "config", "password", "");
         username.setText(name);
         password.setText(pwd);
 
-        allUserInfo = SharedPreferencesUtil.getAll(LoginActivity.this,"users");
+        allUserInfo = PreferencesUtil.getAll(LoginActivity.this, "users");
         Set<String> set = allUserInfo.keySet();
         for (String username : set) {
             users.add(username);
@@ -195,7 +217,12 @@ public class LoginActivity extends Activity implements View.OnClickListener, Vie
                 deletePwd.setVisibility(View.GONE);
                 break;
             case R.id.down:
+                deleteName.setVisibility(View.GONE);
+                deletePwd.setVisibility(View.GONE);
                 showPopupWindow();
+                break;
+            case R.id.activity_login:
+                CommonUtil.hideKeyBoard(LoginActivity.this,password);
                 break;
             default:
                 break;
@@ -205,7 +232,7 @@ public class LoginActivity extends Activity implements View.OnClickListener, Vie
     private void showPopupWindow() {
         View view = LayoutInflater.from(LoginActivity.this).inflate(R.layout.popup_user, null, false);
         userList = (ListView) view.findViewById(R.id.list_user);
-        adapter = new AllUsersAdapter(LoginActivity.this,users);
+        adapter = new AllUsersAdapter(LoginActivity.this, users, handler);
         userList.setAdapter(adapter);
 
         popupWindow = new PopupWindow(view,
@@ -239,6 +266,7 @@ public class LoginActivity extends Activity implements View.OnClickListener, Vie
     }
 
     private void doLogin() {
+        CommonUtil.hideKeyBoard(LoginActivity.this, password);
         final String name = username.getText().toString().toLowerCase();
         final String pwd = password.getText().toString();
         if (name.equals("") || pwd.equals("")) {
@@ -249,10 +277,10 @@ public class LoginActivity extends Activity implements View.OnClickListener, Vie
                     new RequestCallback<LoginInfo>() {
                         @Override
                         public void onSuccess(LoginInfo param) {
-                            SharedPreferencesUtil.setString(LoginActivity.this,"config", "userName", name);
-                            SharedPreferencesUtil.setString(LoginActivity.this,"config", "password", pwd);
-                            SharedPreferencesUtil.setString(LoginActivity.this,"config", "account", param.getAccount());
-                            SharedPreferencesUtil.setString(LoginActivity.this,"config", "token", param.getToken());
+                            PreferencesUtil.setString(LoginActivity.this, "config", "userName", name);
+                            PreferencesUtil.setString(LoginActivity.this, "config", "password", pwd);
+                            PreferencesUtil.setString(LoginActivity.this, "config", "account", param.getAccount());
+                            PreferencesUtil.setString(LoginActivity.this, "config", "token", param.getToken());
                             saveUsersInfo(name, pwd);   //缓存登陆过的用户信息
                             startActivity(new Intent(LoginActivity.this, MainActivity.class));
                             finish();
@@ -290,27 +318,38 @@ public class LoginActivity extends Activity implements View.OnClickListener, Vie
     }
 
     private void saveUsersInfo(String name, String pwd) {
-        // TODO: 2017/3/26 保存到sp中
-        SharedPreferencesUtil.setString(LoginActivity.this,"users",name,pwd);
+        PreferencesUtil.setString(LoginActivity.this, "users", name, pwd);
     }
 
     @Override
     public void onFocusChange(View v, boolean hasFocus) {
         switch (v.getId()) {
             case R.id.username:
-                if (deletePwd.getVisibility() != View.GONE) {
-                    deletePwd.setVisibility(View.GONE);
-                }
-                if (StringUtils.isNotEmpty(username.getText().toString())) {
-                    deleteName.setVisibility(View.VISIBLE);
+                if(hasFocus){
+                    if (deletePwd.getVisibility() != View.GONE) {
+                        deletePwd.setVisibility(View.GONE);
+                    }
+                    if (StringUtils.isNotEmpty(username.getText().toString())) {
+                        deleteName.setVisibility(View.VISIBLE);
+                    }else{
+                        deleteName.setVisibility(View.GONE);
+                    }
+                }else{
+                    deleteName.setVisibility(View.GONE);
                 }
                 break;
             case R.id.password:
-                if (deleteName.getVisibility() != View.GONE) {
-                    deleteName.setVisibility(View.GONE);
-                }
-                if (StringUtils.isNotEmpty(password.getText().toString())) {
-                    deletePwd.setVisibility(View.VISIBLE);
+                if(hasFocus){
+                    if (deleteName.getVisibility() != View.GONE) {
+                        deleteName.setVisibility(View.GONE);
+                    }
+                    if (StringUtils.isNotEmpty(password.getText().toString())) {
+                        deletePwd.setVisibility(View.VISIBLE);
+                    }else{
+                        deletePwd.setVisibility(View.GONE);
+                    }
+                }else{
+                    deletePwd.setVisibility(View.GONE);
                 }
                 break;
         }

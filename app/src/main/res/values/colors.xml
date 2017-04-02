@@ -14,14 +14,16 @@
     <color name="navy">#120854</color>
     <color name="black">#000</color>
     <color name="lightGray">#EEE</color>
-    <color name="darkGray">#6c6c6c</color>
+    <color name="darkGray">#7b7b7b</color>
+    <color name="slideBg">#334C8D96</color>
+    <color name="slideLine">#884C8D96</color>
+    <color name="slideBtn">#6FFF</color>
 
     <color name="colorFriend">#fa9c4f</color>
 
-    <color name="scan">#01ABF4</color>
-    <color name="robot">#3ee673</color>
-    <color name="record">#ff9640</color>
-    <color name="news">#ee3b77</color>
+    <color name="scan">#2cbcfa</color>
+    <color name="robot">#42db87</color>
+    <color name="record">#fa9c4f</color>
+    <color name="news">#f23165</color>
     <color name="weather">#40d6ff</color>
-    <color name="share">#42db87</color>
 </resources>

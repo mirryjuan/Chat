@@ -1,19 +1,18 @@
 package com.example.mirry.chat.adapter;
 
 import android.content.Context;
-import android.content.SharedPreferences;
+import android.os.Handler;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.TextView;
-import android.widget.Toast;
 
+import com.example.mirry.chat.Common;
 import com.example.mirry.chat.R;
-import com.example.mirry.chat.utils.SharedPreferencesUtil;
+import com.example.mirry.chat.utils.PreferencesUtil;
 import com.example.mirry.chat.view.IconFontTextView;
 
 import java.util.List;
-import java.util.Map;
 
 /**
  * Created by Mirry on 2017/3/26.
@@ -22,10 +21,12 @@ public class AllUsersAdapter extends BaseAdapter{
     private Context context;
     private List<String> users = null;
     private String user = "";
+    private Handler handler = null;
 
-    public AllUsersAdapter(Context context, List<String> users){
+    public AllUsersAdapter(Context context, List<String> users, Handler handler){
         this.context = context;
         this.users = users;
+        this.handler = handler;
     }
 
     @Override
@@ -65,7 +66,13 @@ public class AllUsersAdapter extends BaseAdapter{
                 users.remove(position);
                 notifyDataSetChanged();
                 //删除用户名密码
-                SharedPreferencesUtil.deleteItem(context,"users",user);
+                PreferencesUtil.deleteItem(context,"users",user);
+                String name = PreferencesUtil.getString(context, "config","userName", "");
+                if(user.equals(name)){
+                    PreferencesUtil.deleteItem(context,"config","userName");
+                    PreferencesUtil.deleteItem(context,"config","password");
+                    handler.sendEmptyMessage(Common.USER_DELETE);
+                }
             }
         });
         return convertView;

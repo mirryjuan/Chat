@@ -9,7 +9,7 @@ import java.util.Map;
  * Created by Mirry on 2017/3/15.
  */
 
-public class SharedPreferencesUtil {
+public class PreferencesUtil {
     private static final String PREF_NAME = "config";
 
     public static boolean getBoolean(Context context, String name, String key, boolean defaultValue){
@@ -20,7 +20,7 @@ public class SharedPreferencesUtil {
         SharedPreferences sp = context.getSharedPreferences(name, Context.MODE_PRIVATE);
         SharedPreferences.Editor editor = sp.edit();
         editor.putBoolean(key, value);
-        editor.commit();
+        editor.apply();
     }
 
     public static String getString(Context context, String name,String key, String defaultValue){
@@ -31,7 +31,7 @@ public class SharedPreferencesUtil {
         SharedPreferences sp = context.getSharedPreferences(name, Context.MODE_PRIVATE);
         SharedPreferences.Editor editor = sp.edit();
         editor.putString(key, value);
-        editor.commit();
+        editor.apply();
     }
 
     public static Map<String,String> getAll(Context context,String name){
@@ -44,7 +44,7 @@ public class SharedPreferencesUtil {
         SharedPreferences sp = context.getSharedPreferences(name, Context.MODE_PRIVATE);
         SharedPreferences.Editor editor = sp.edit();
         editor.remove(key);
-        editor.commit();
+        editor.apply();
     }
 
 }

@@ -13,6 +13,7 @@ import com.example.mirry.chat.R;
 import com.example.mirry.chat.view.CircleImageView;
 import com.netease.nimlib.sdk.NIMClient;
 import com.netease.nimlib.sdk.friend.FriendService;
+import com.netease.nimlib.sdk.uinfo.constant.GenderEnum;
 
 import java.util.List;
 import java.util.Map;
@@ -75,7 +76,7 @@ public class NewFriendAdapter extends BaseAdapter {
 //            }
             holder.nickname.setText(info.get("nickname")==null?"":info.get("nickname").toString());
             holder.account.setText(info.get("account")==null?"":info.get("account").toString());
-            if(info.get("sex").equals(2)){
+            if(info.get("sex").equals(GenderEnum.FEMALE)){
                 holder.sex.setText("女");
                 holder.sexImg.setImageResource(R.drawable.female);
             }else{

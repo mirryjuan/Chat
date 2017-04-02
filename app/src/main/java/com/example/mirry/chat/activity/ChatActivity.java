@@ -1,13 +1,11 @@
 package com.example.mirry.chat.activity;
 
 import android.app.Activity;
-import android.content.Context;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.view.View;
 import android.view.Window;
-import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ListView;
@@ -18,7 +16,6 @@ import com.example.mirry.chat.R;
 import com.example.mirry.chat.adapter.ChatAdapter;
 import com.example.mirry.chat.bean.Friend;
 import com.example.mirry.chat.bean.Me;
-import com.example.mirry.chat.utils.CommonUtil;
 import com.example.mirry.chat.view.IconFontTextView;
 import com.netease.nimlib.sdk.NIMClient;
 import com.netease.nimlib.sdk.Observer;
@@ -32,9 +29,7 @@ import com.netease.nimlib.sdk.msg.model.IMMessage;
 import org.apache.commons.lang3.StringUtils;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 import butterknife.ButterKnife;
 import butterknife.InjectView;
@@ -92,6 +87,7 @@ public class ChatActivity extends Activity implements View.OnClickListener, Text
 
         adapter = new ChatAdapter(this, list);
         chatList.setAdapter(adapter);
+        chatList.smoothScrollToPosition(adapter.getCount() - 1);
 
         //true表示注册消息接收观察者
         NIMClient.getService(MsgServiceObserve.class)
@@ -134,8 +130,7 @@ public class ChatActivity extends Activity implements View.OnClickListener, Text
         NIMClient.getService(MsgService.class).sendMessage(message, false).setCallback(new RequestCallback<Void>() {
             @Override
             public void onSuccess(Void param) {
-                //隐藏软键盘
-                CommonUtil.hideKeyBoard(ChatActivity.this,msg);
+
             }
 
             @Override

@@ -10,34 +10,94 @@
     android:padding="10dp"
     android:background="@drawable/bg">
 
-    <EditText
-        android:id="@+id/account"
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="40dp"
-        style="@style/UserInfoTheme"
-        android:inputType="text"
         android:background="@drawable/bg_et_user"
-        android:hint="@string/account"/>
+        android:orientation="horizontal">
 
-    <EditText
-        android:id="@+id/password"
+        <EditText
+            android:id="@+id/account"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            style="@style/UserInfoTheme"
+            android:inputType="text"
+            android:hint="@string/account"/>
+
+        <com.example.mirry.chat.view.IconFontTextView
+            android:id="@+id/delete_account"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:text="@string/img_delete"
+            android:textSize="24sp"
+            android:textColor="@color/darkGray"
+            android:gravity="center"
+            android:visibility="gone"
+            android:layout_marginRight="10dp"
+            android:layout_marginEnd="10dp"/>
+
+    </LinearLayout>
+
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="40dp"
-        style="@style/UserInfoTheme"
-        android:inputType="textPassword"
         android:background="@color/white"
         android:layout_marginTop="0.8dp"
-        android:hint="@string/password"/>
+        android:orientation="horizontal">
 
-    <EditText
-        android:id="@+id/confirmPwd"
+        <EditText
+            android:id="@+id/password"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            style="@style/UserInfoTheme"
+            android:inputType="textPassword"
+            android:hint="@string/password"/>
+
+        <com.example.mirry.chat.view.IconFontTextView
+            android:id="@+id/delete_pwd"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:text="@string/img_delete"
+            android:textSize="24sp"
+            android:textColor="@color/darkGray"
+            android:gravity="center"
+            android:visibility="gone"
+            android:layout_marginRight="10dp"
+            android:layout_marginEnd="10dp"/>
+
+    </LinearLayout>
+
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="40dp"
-        style="@style/UserInfoTheme"
-        android:inputType="textPassword"
         android:layout_marginTop="0.8dp"
         android:background="@drawable/bg_et_pwd"
-        android:hint="@string/confirmPwd"/>
+        android:orientation="horizontal">
+
+        <EditText
+            android:id="@+id/confirmPwd"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            style="@style/UserInfoTheme"
+            android:inputType="textPassword"
+            android:hint="@string/confirmPwd"/>
+
+        <com.example.mirry.chat.view.IconFontTextView
+            android:id="@+id/delete_confirm"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:text="@string/img_delete"
+            android:textSize="24sp"
+            android:textColor="@color/darkGray"
+            android:gravity="center"
+            android:visibility="gone"
+            android:layout_marginRight="10dp"
+            android:layout_marginEnd="10dp"/>
+
+    </LinearLayout>
 
     <Button
         android:id="@+id/register"

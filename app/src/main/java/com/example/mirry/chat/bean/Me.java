@@ -1,12 +1,10 @@
 package com.example.mirry.chat.bean;
 
-import com.example.mirry.chat.utils.PinyinUtil;
-
 /**
  * Created by Mirry on 2017/3/8.
  */
 
-public class Me{
+public class Me {
     private String name;
     private String id;
     private int type;

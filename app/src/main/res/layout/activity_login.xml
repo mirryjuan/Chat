@@ -35,8 +35,7 @@
                 android:layout_height="match_parent"
                 android:layout_weight="8"
                 style="@style/UserInfoTheme"
-                android:hint="@string/username"
-                android:background="@null"/>
+                android:hint="@string/username" />
 
             <com.example.mirry.chat.view.IconFontTextView
                 android:id="@+id/delete_name"
@@ -88,8 +87,7 @@
                 android:layout_weight="8"
                 style="@style/UserInfoTheme"
                 android:inputType="textPassword"
-                android:hint="@string/password"
-                android:background="@null"/>
+                android:hint="@string/password" />
 
             <com.example.mirry.chat.view.IconFontTextView
                 android:id="@+id/delete_pwd"
@@ -144,6 +142,6 @@
         android:layout_height="match_parent"
         android:src="@drawable/splash"
         android:scaleType="centerCrop"
-        android:visibility="gone"/>
+        android:visibility="visible"/>
 
 </RelativeLayout>

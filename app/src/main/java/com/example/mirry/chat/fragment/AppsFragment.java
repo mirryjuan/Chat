@@ -19,7 +19,6 @@ public class AppsFragment extends Fragment implements View.OnClickListener {
     private LinearLayout record;
     private LinearLayout news;
     private LinearLayout weather;
-    private LinearLayout share;
     private Intent intent;
 
 
@@ -38,14 +37,12 @@ public class AppsFragment extends Fragment implements View.OnClickListener {
         record = (LinearLayout) view.findViewById(R.id.record);
         news = (LinearLayout) view.findViewById(R.id.news);
         weather = (LinearLayout) view.findViewById(R.id.weather);
-        share = (LinearLayout) view.findViewById(R.id.share);
 
         scan.setOnClickListener(this);
         robot.setOnClickListener(this);
         record.setOnClickListener(this);
         news.setOnClickListener(this);
         weather.setOnClickListener(this);
-        share.setOnClickListener(this);
 
         return view;
     }
@@ -72,10 +69,6 @@ public class AppsFragment extends Fragment implements View.OnClickListener {
                 break;
             case R.id.weather:
                 intent.putExtra("item","weather");
-                startActivity(intent);
-                break;
-            case R.id.share:
-                intent.putExtra("item","share");
                 startActivity(intent);
                 break;
         }

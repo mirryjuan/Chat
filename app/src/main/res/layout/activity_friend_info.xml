@@ -105,7 +105,6 @@
             android:id="@+id/img_sex"
             android:layout_width="20dp"
             android:layout_height="20dp"
-            android:src="@drawable/sex_male"
             android:layout_marginLeft="10dp"
             android:layout_marginRight="10dp"
             android:layout_gravity="center"
@@ -116,7 +115,6 @@
             android:id="@+id/nickName"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Mirry"
             android:textSize="20sp"
             android:textColor="@color/white"
             android:gravity="center"
@@ -136,7 +134,6 @@
         android:layout_height="wrap_content"
         android:layout_marginLeft="10dp"
         android:layout_marginStart="10dp"
-        android:text="15732136540"
         android:textSize="14sp"
         android:textColor="@color/darkGray"/>
 
@@ -165,7 +162,6 @@
             android:layout_height="wrap_content"
             android:layout_marginLeft="10dp"
             android:layout_marginStart="10dp"
-            android:text="15732136540"
             android:textSize="14sp"
             android:textColor="@color/darkGray"/>
 
@@ -196,7 +192,6 @@
             android:layout_height="wrap_content"
             android:layout_marginLeft="10dp"
             android:layout_marginStart="10dp"
-            android:text="2017-3-18"
             android:textSize="14sp"
             android:textColor="@color/darkGray"/>
 

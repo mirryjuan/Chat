@@ -32,7 +32,6 @@
                 android:id="@+id/nickname"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Mirry"
                 android:textColor="@color/darkGray"
                 android:textSize="18sp"
                 android:maxLines="1"
@@ -48,7 +47,6 @@
                 android:layout_gravity="center"
                 android:gravity="center"
                 android:maxLines="15"
-                android:text="(15732136540)"
                 android:textColor="@color/darkGray"
                 android:textSize="18sp"/>
 
@@ -67,7 +65,6 @@
                 android:id="@+id/img_sex"
                 android:layout_width="20dp"
                 android:layout_height="20dp"
-                android:src="@drawable/female"
                 android:layout_marginLeft="10dp"
                 android:layout_marginRight="10dp"
                 android:layout_gravity="center"
@@ -78,7 +75,6 @@
                 android:id="@+id/sex"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="女"
                 android:textSize="16sp"
                 android:maxLines="1"
                 android:ellipsize="end"
@@ -121,8 +117,8 @@
             android:layout_weight="1"
             android:textSize="16sp"
             android:layout_marginLeft="8dp"
+            android:layout_marginStart="8dp"
             android:textColor="@color/darkGray"
-            android:text="fhdsssssssssssssssssssssssssssssssssssssss"
             android:layout_gravity="center_vertical"
             android:gravity="center_vertical"/>
 

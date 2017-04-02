@@ -31,8 +31,10 @@
             android:padding="5dp"
             android:background="@null"
             android:editable="false"
-            android:text="mirry"
-            android:layout_toRightOf="@id/head"/>
+            android:layout_toRightOf="@id/head"
+            android:layout_toEndOf="@+id/head"
+            android:layout_toLeftOf="@+id/note"
+            android:layout_toStartOf="@+id/note" />
 
         <EditText
             android:id="@+id/note"
@@ -45,8 +47,8 @@
             android:padding="5dp"
             android:background="@null"
             android:editable="false"
-            android:text="mirry"
             android:layout_toRightOf="@id/head"
+            android:layout_toEndOf="@+id/head"
             android:layout_below="@+id/nickname"/>
 
     </RelativeLayout>
@@ -64,9 +66,9 @@
         android:id="@+id/info_phone"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="15732136540"
         android:layout_below="@id/rl_title"
         android:layout_toRightOf="@+id/phone"
+        android:layout_toEndOf="@+id/phone"
         android:layout_marginTop="10dp"
         android:padding="10dp"
         android:textColor="@color/darkBlue"/>
@@ -84,9 +86,9 @@
         android:id="@+id/info_birthday"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="1996-01-28"
         android:layout_below="@id/phone"
         android:layout_toRightOf="@+id/birthday"
+        android:layout_toEndOf="@+id/birthday"
         android:layout_marginTop="5dp"
         android:padding="10dp"
         android:textColor="@color/darkBlue"/>

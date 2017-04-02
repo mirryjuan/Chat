@@ -12,13 +12,12 @@
         android:background="@drawable/msg_friend"
         android:paddingLeft="16dp"
         android:paddingStart="16dp"
-        android:paddingRight="8dp"
-        android:paddingEnd="8dp"
+        android:paddingRight="16dp"
+        android:paddingEnd="16dp"
         android:gravity="center_vertical"
         android:textColor="@color/white"
         android:layout_marginRight="50dp"
         android:layout_marginEnd="50dp"
-        android:text="Hi,Mirry!I'm David!Hi,Mirry!I'm David!Hi,Mirry!I'm David!Hi,Mirry!I'm David!Hi,Mirry!I'm David!Hi,Mirry!I'm David!Hi,Mirry!I'm David!Hi,Mirry!I'm David!Hi,Mirry!I'm David!Hi,Mirry!I'm David!Hi,Mirry!I'm David!Hi,Mirry!I'm David!Hi,Mirry!I'm David!Hi,Mirry!I'm David!Hi,Mirry!I'm David!Hi,Mirry!I'm David!Hi,Mirry!I'm David!Hi,Mirry!I'm David!Hi,Mirry!I'm David!Hi,Mirry!I'm David!Hi,Mirry!I'm David!Hi,Mirry!I'm David!Hi,Mirry!I'm David!Hi,Mirry!I'm David!"
         android:layout_toRightOf="@+id/head"
         android:layout_toEndOf="@+id/head"/>
 

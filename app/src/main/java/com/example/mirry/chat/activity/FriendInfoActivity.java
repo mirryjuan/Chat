@@ -21,6 +21,7 @@ import com.netease.nimlib.sdk.RequestCallback;
 import com.netease.nimlib.sdk.friend.FriendService;
 import com.netease.nimlib.sdk.friend.constant.VerifyType;
 import com.netease.nimlib.sdk.friend.model.AddFriendData;
+import com.netease.nimlib.sdk.uinfo.constant.GenderEnum;
 
 import java.io.Serializable;
 import java.util.Map;
@@ -93,7 +94,7 @@ public class FriendInfoActivity extends Activity implements View.OnClickListener
 //            }
         nickName.setText(info.get("nickname") == null ? "" : info.get("nickname").toString());
         account.setText(info.get("account") == null ? "" : info.get("account").toString());
-        if (info.get("sex").equals(2)) {
+        if (info.get("sex").equals(GenderEnum.FEMALE)) {
             sexImg.setImageResource(R.drawable.sex_female);
         } else {
             sexImg.setImageResource(R.drawable.sex_male);

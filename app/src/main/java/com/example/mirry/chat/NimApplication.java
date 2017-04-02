@@ -10,7 +10,7 @@ import android.util.DisplayMetrics;
 import android.view.WindowManager;
 
 import com.example.mirry.chat.activity.ChatActivity;
-import com.example.mirry.chat.utils.SharedPreferencesUtil;
+import com.example.mirry.chat.utils.PreferencesUtil;
 import com.example.mirry.chat.utils.SystemUtil;
 import com.netease.nimlib.sdk.NIMClient;
 import com.netease.nimlib.sdk.SDKOptions;
@@ -99,8 +99,8 @@ public class NimApplication extends Application {
 
     // 如果已经存在用户登录信息，返回LoginInfo，否则返回null即可
     private LoginInfo loginInfo() {
-        String userName = SharedPreferencesUtil.getString(context,"config","account","");
-        String password = SharedPreferencesUtil.getString(context,"config","token","");
+        String userName = PreferencesUtil.getString(context,"config","account","");
+        String password = PreferencesUtil.getString(context,"config","token","");
 
         if (!TextUtils.isEmpty(userName) && !TextUtils.isEmpty(password)) {
             return new LoginInfo(userName, password);

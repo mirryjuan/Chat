@@ -11,12 +11,13 @@
         android:layout_height="wrap_content"
         android:background="@drawable/msg_me"
         android:paddingLeft="8dp"
-        android:paddingRight="8dp"
+        android:paddingStart="8dp"
+        android:paddingRight="16dp"
+        android:paddingEnd="16dp"
         android:gravity="center_vertical"
         android:textColor="@color/lightBlue"
         android:layout_marginLeft="50dp"
         android:layout_marginStart="50dp"
-        android:text="Hello,I'm Mirry!Nice to meet you!Hello,I'm Mirry!Nice to meet you!Hello,I'm Mirry!Nice to meet you!Hello,I'm Mirry!Nice to meet you!Hello,I'm Mirry!Nice to meet you!Hello,I'm Mirry!Nice to meet you!Hello,I'm Mirry!Nice to meet you!Hello,I'm Mirry!Nice to meet you!Hello,I'm Mirry!Nice to meet you!Hello,I'm Mirry!Nice to meet you!Hello,I'm Mirry!Nice to meet you!Hello,I'm Mirry!Nice to meet you!Hello,I'm Mirry!Nice to meet you!Hello,I'm Mirry!Nice to meet you!Hello,I'm Mirry!Nice to meet you!Hello,I'm Mirry!Nice to meet you!Hello,I'm Mirry!Nice to meet you!Hello,I'm Mirry!Nice to meet you!Hello,I'm Mirry!Nice to meet you!Hello,I'm Mirry!Nice to meet you!Hello,I'm Mirry!Nice to meet you!Hello,I'm Mirry!Nice to meet you!Hello,I'm Mirry!Nice to meet you!Hello,I'm Mirry!Nice to meet you!"
         android:layout_toLeftOf="@+id/head"
         android:layout_toStartOf="@+id/head"/>
 
