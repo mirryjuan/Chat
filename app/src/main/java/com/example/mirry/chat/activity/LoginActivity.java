@@ -23,7 +23,7 @@ import android.widget.PopupWindow;
 import android.widget.RelativeLayout;
 import android.widget.Toast;
 
-import com.example.mirry.chat.Common;
+import com.example.mirry.chat.common.Common;
 import com.example.mirry.chat.R;
 import com.example.mirry.chat.adapter.AllUsersAdapter;
 import com.example.mirry.chat.utils.CommonUtil;
@@ -203,6 +203,7 @@ public class LoginActivity extends Activity implements View.OnClickListener, Vie
                 doLogin();
                 break;
             case R.id.forget:
+                startActivity(new Intent(LoginActivity.this,ResetPwdActivity.class));
                 break;
             case R.id.register:
                 startActivity(new Intent(LoginActivity.this, RegisterActivity.class));
@@ -281,7 +282,8 @@ public class LoginActivity extends Activity implements View.OnClickListener, Vie
                             PreferencesUtil.setString(LoginActivity.this, "config", "password", pwd);
                             PreferencesUtil.setString(LoginActivity.this, "config", "account", param.getAccount());
                             PreferencesUtil.setString(LoginActivity.this, "config", "token", param.getToken());
-                            saveUsersInfo(name, pwd);   //缓存登陆过的用户信息
+                            //缓存登陆过的用户信息
+                            PreferencesUtil.setString(LoginActivity.this, "users", name, pwd);
                             startActivity(new Intent(LoginActivity.this, MainActivity.class));
                             finish();
                         }
@@ -315,10 +317,6 @@ public class LoginActivity extends Activity implements View.OnClickListener, Vie
                     };
             NIMClient.getService(AuthService.class).login(info).setCallback(callback);
         }
-    }
-
-    private void saveUsersInfo(String name, String pwd) {
-        PreferencesUtil.setString(LoginActivity.this, "users", name, pwd);
     }
 
     @Override

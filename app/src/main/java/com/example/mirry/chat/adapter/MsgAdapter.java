@@ -7,7 +7,7 @@ import android.widget.BaseAdapter;
 import android.widget.TextView;
 
 import com.example.mirry.chat.R;
-import com.example.mirry.chat.bean.Message;
+import com.example.mirry.chat.bean.Msg;
 import com.example.mirry.chat.view.CircleImageView;
 
 import java.util.List;
@@ -18,28 +18,25 @@ import java.util.List;
 
 public class MsgAdapter extends BaseAdapter {
     private Context mContext;
-    private List<Message> mData = null;
-    public MsgAdapter(Context mContext, List<Message> mData) {
+    private List<Msg> mData = null;
+    public MsgAdapter(Context mContext, List<Msg> mData) {
         this.mContext = mContext;
         this.mData = mData;
     }
 
     @Override
     public int getCount() {
-//        return mData.size();
-        return 10;
+        return mData.size();
     }
 
     @Override
     public Object getItem(int position) {
-//        return mData.get(position);
-        return null;
+        return mData.get(position);
     }
 
     @Override
     public long getItemId(int position) {
-//        return position;
-        return 0;
+        return position;
     }
 
     @Override
@@ -58,7 +55,6 @@ public class MsgAdapter extends BaseAdapter {
         }else{
             holder = (ViewHolder) convertView.getTag();
         }
-
 
 //        holder.head.setImageResource(R.drawable.head);
 

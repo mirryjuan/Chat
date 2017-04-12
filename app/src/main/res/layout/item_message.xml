@@ -1,9 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:gravity="center"
-    >
+    android:gravity="center_vertical"
+    android:padding="10dp"
+    android:orientation="horizontal">
 
     <com.example.mirry.chat.view.CircleImageView
         android:id="@+id/head"
@@ -12,51 +13,54 @@
         android:src="@drawable/head"
         android:layout_margin="10dp"/>
 
-    <TextView
-        android:id="@+id/remark"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="Mirry"
-        android:textColor="@color/black"
-        android:textSize="18sp"
-        android:paddingTop="10dp"
-        android:layout_toRightOf="@id/head"
-        android:layout_toEndOf="@+id/head"/>
-
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_toRightOf="@id/head"
-        android:layout_toEndOf="@+id/head"
-        android:layout_below="@+id/remark"
-        android:orientation="horizontal"
-        android:gravity="center"
-        android:paddingBottom="10dp">
+        android:orientation="vertical"
+        android:gravity="center_vertical">
 
         <TextView
-            android:id="@+id/msg"
-            android:layout_width="0dp"
+            android:id="@+id/remark"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:text="MirryMirryMirryMirryMirryMirryMirryMirryMirryMirryMirryMirryMirry"
-            android:textSize="16sp"
-            android:maxLines="1"
-            android:ellipsize="end"
-            android:textColor="@color/darkGray" />
+            android:text="Mirry"
+            android:textColor="@color/black"
+            android:textSize="14sp"
+            android:layout_margin="3dp"/>
 
-        <TextView
-            android:id="@+id/count_msg"
-            android:layout_width="wrap_content"
+        <LinearLayout
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:background="@drawable/bg_count"
-            android:layout_marginLeft="10dp"
-            android:layout_marginRight="10dp"
-            android:layout_gravity="center"
-            android:text="99+"
-            android:gravity="center"
-            android:textColor="@color/white"
-            android:textSize="10sp"/>
+            android:orientation="horizontal"
+            android:gravity="center">
+
+            <TextView
+                android:id="@+id/msg"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:layout_margin="3dp"
+                android:text="MirryMirryMirryMirry"
+                android:textSize="12sp"
+                android:maxLines="2"
+                android:ellipsize="end"
+                android:textColor="@color/darkGray" />
+
+            <TextView
+                android:id="@+id/count_msg"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:background="@drawable/bg_count"
+                android:layout_marginLeft="8dp"
+                android:layout_marginRight="8dp"
+                android:layout_gravity="center"
+                android:text="9"
+                android:gravity="center"
+                android:textColor="@color/white"
+                android:textSize="10sp" />
+
+        </LinearLayout>
 
     </LinearLayout>
 
-</RelativeLayout>
+</LinearLayout>

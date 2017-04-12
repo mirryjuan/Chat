@@ -5,6 +5,7 @@ import android.content.ContentValues;
 import android.content.Intent;
 import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.view.Window;
 import android.widget.Button;
@@ -12,11 +13,19 @@ import android.widget.EditText;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.TextView;
+import android.widget.Toast;
 
-import com.example.mirry.chat.Common;
-import com.example.mirry.chat.MyOpenHelper;
+import com.example.mirry.chat.common.Common;
+import com.example.mirry.chat.common.MyOpenHelper;
 import com.example.mirry.chat.R;
 import com.example.mirry.chat.view.CircleImageView;
+import com.netease.nimlib.sdk.NIMClient;
+import com.netease.nimlib.sdk.RequestCallbackWrapper;
+import com.netease.nimlib.sdk.uinfo.UserService;
+import com.netease.nimlib.sdk.uinfo.constant.UserInfoFieldEnum;
+
+import java.util.HashMap;
+import java.util.Map;
 
 import butterknife.ButterKnife;
 import butterknife.InjectView;
@@ -43,6 +52,9 @@ public class InfoSetActivity extends Activity implements View.OnClickListener, R
     EditText phone;
     private String accid;
     private int mSex = Common.MALE;
+    private String mNickname;
+    private String mBirthday;
+    private String mPhone;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -69,28 +81,53 @@ public class InfoSetActivity extends Activity implements View.OnClickListener, R
 
     @Override
     public void onClick(View v) {
+        mNickname = nickname.getText().toString();
+        mBirthday = birthday.getText().toString();
+        mPhone = phone.getText().toString();
         switch (v.getId()) {
             case R.id.next:
+                updateRemoteData(mNickname, mBirthday, mPhone);
                 finish();
                 break;
             case R.id.accomplish:
-                // TODO: 2017/4/2 服务器数据库
-                updateUserData();
+                //更新本地数据库信息
+                updateDatabaseInfo(mNickname, mBirthday, mPhone);
+                //更新服务器用户信息
+                updateRemoteData(mNickname, mBirthday, mPhone);
                 finish();
                 break;
         }
     }
 
-    private void updateUserData() {
+    private void updateDatabaseInfo(String mNickname, String mBirthday,String mPhone) {
         MyOpenHelper helper = new MyOpenHelper(InfoSetActivity.this);
         SQLiteDatabase db = helper.getWritableDatabase();
         ContentValues values = new ContentValues();
-        values.put("nickname",nickname.getText().toString());
+        // TODO: 2017/4/12 头像
+        values.put("nickname",mNickname);
         values.put("sex",mSex);
-        values.put("birthday",birthday.getText().toString());
-        values.put("phone",phone.getText().toString());
+        values.put("birthday",mBirthday);
+        values.put("phone",mPhone);
         db.update("users",values,"account = ?",new String[]{ accid });
         db.close();
+    }
+
+    private void updateRemoteData(String mNickname, String mBirthday, String mPhone) {
+        Map<UserInfoFieldEnum, Object> fields = new HashMap<>(1);
+        // TODO: 2017/4/12 头像
+        fields.put(UserInfoFieldEnum.Name, mNickname);
+        fields.put(UserInfoFieldEnum.GENDER, mSex);
+        fields.put(UserInfoFieldEnum.BIRTHDAY, mBirthday);
+        fields.put(UserInfoFieldEnum.MOBILE, mPhone);
+        NIMClient.getService(UserService.class).updateUserInfo(fields)
+                .setCallback(new RequestCallbackWrapper<Void>() {
+
+                    @Override
+                    public void onResult(int code, Void result, Throwable exception) {
+                        Log.e("code",""+code);
+                        Toast.makeText(InfoSetActivity.this, "信息更新成功", Toast.LENGTH_SHORT).show();
+                    }
+                });
     }
 
     @Override

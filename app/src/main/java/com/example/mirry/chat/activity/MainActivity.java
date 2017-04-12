@@ -1,11 +1,14 @@
 package com.example.mirry.chat.activity;
 
 import android.app.Activity;
+import android.app.Fragment;
 import android.app.FragmentManager;
 import android.app.FragmentTransaction;
 import android.content.Intent;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Message;
 import android.util.DisplayMetrics;
 import android.util.Log;
 import android.view.MotionEvent;
@@ -22,11 +25,12 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.example.mirry.chat.common.Common;
 import com.example.mirry.chat.R;
 import com.example.mirry.chat.fragment.AppsFragment;
 import com.example.mirry.chat.fragment.ContactFragment;
 import com.example.mirry.chat.fragment.MeFragment;
-import com.example.mirry.chat.fragment.MessageFragment;
+import com.example.mirry.chat.fragment.MsgFragment;
 import com.example.mirry.chat.utils.DrawableUtil;
 import com.example.mirry.chat.view.CircleImageView;
 import com.jeremyfeinstein.slidingmenu.lib.SlidingMenu;
@@ -35,6 +39,7 @@ import com.netease.nimlib.sdk.Observer;
 import com.netease.nimlib.sdk.friend.model.AddFriendNotify;
 import com.netease.nimlib.sdk.msg.SystemMessageObserver;
 import com.netease.nimlib.sdk.msg.constant.SystemMessageType;
+import com.netease.nimlib.sdk.msg.model.IMMessage;
 import com.netease.nimlib.sdk.msg.model.SystemMessage;
 
 import java.io.Serializable;
@@ -71,6 +76,24 @@ public class MainActivity extends Activity implements RadioGroup.OnCheckedChange
 
     private List<Map<String,String>> newFriendList = new ArrayList<>();
 
+    Observer<List<IMMessage>> incomingMessageObserver =
+            new Observer<List<IMMessage>>() {
+                @Override
+                public void onEvent(List<IMMessage> messages) {
+                    for (IMMessage message : messages) {
+                        MsgFragment msgFragment = (MsgFragment) getCurrentFragment("message");
+                        Handler handler = msgFragment.getHandler();
+                        Message msg = handler.obtainMessage();
+                        msg.what = Common.MSG_COMING;
+                        Bundle bundle = new Bundle();
+                        bundle.putString("fromAccount",message.getFromAccount());
+                        bundle.putString("content",message.getContent());
+                        msg.setData(bundle);
+                        handler.sendMessage(msg);
+                    }
+                }
+            };
+
     private Observer<SystemMessage> messageObserver = new Observer<SystemMessage>() {
 
         @Override
@@ -79,16 +102,20 @@ public class MainActivity extends Activity implements RadioGroup.OnCheckedChange
             if (message.getType() == SystemMessageType.AddFriend) {
                 AddFriendNotify attachData = (AddFriendNotify) message.getAttachObject();
                 if (attachData != null) {
-                    // 针对不同的事件做处理
                     if (attachData.getEvent() == AddFriendNotify.Event.RECV_ADD_FRIEND_DIRECT) {
                         // 对方直接添加你为好友
                     } else if (attachData.getEvent() == AddFriendNotify.Event.RECV_AGREE_ADD_FRIEND) {
                         // 对方通过了你的好友验证请求
+                        ContactFragment contactFragment = (ContactFragment) getCurrentFragment("contact");
+                        Handler handler = contactFragment.getHandler();
+                        Message msg = handler.obtainMessage();
+                        msg.what = Common.FRIEND_ADD;
+                        msg.obj = message.getFromAccount();
+                        handler.sendMessage(msg);
                     } else if (attachData.getEvent() == AddFriendNotify.Event.RECV_REJECT_ADD_FRIEND) {
                         // 对方拒绝了你的好友验证请求
                     } else if (attachData.getEvent() == AddFriendNotify.Event.RECV_ADD_FRIEND_VERIFY_REQUEST) {
                         // 对方请求添加好友，一般场景会让用户选择同意或拒绝对方的好友请求。
-                        // 通过message.getContent()获取好友验证请求的附言
                         Map<String,String> newFriendInfo = new HashMap<>();
                         newFriendInfo.put("account",message.getFromAccount());
                         newFriendInfo.put("content",message.getContent());
@@ -154,7 +181,7 @@ public class MainActivity extends Activity implements RadioGroup.OnCheckedChange
         FragmentManager fragmentManager = getFragmentManager();
         //开启事务
         FragmentTransaction transaction = fragmentManager.beginTransaction();
-        transaction.replace(R.id.content, new MessageFragment());
+        transaction.replace(R.id.content, new MsgFragment());
         transaction.commit();
     }
 
@@ -166,7 +193,7 @@ public class MainActivity extends Activity implements RadioGroup.OnCheckedChange
         switch (checkedId) {
             case R.id.message:
                 title.setText("消息");
-                transaction.replace(R.id.content, new MessageFragment());
+                transaction.replace(R.id.content, new MsgFragment(),"message");
                 break;
             case R.id.contact:
                 title.setText("联系人");
@@ -174,11 +201,11 @@ public class MainActivity extends Activity implements RadioGroup.OnCheckedChange
                 Bundle bundle = new Bundle();
                 bundle.putSerializable("newFriend", (Serializable) newFriendList);
                 contactFragment.setArguments(bundle);
-                transaction.replace(R.id.content, contactFragment);
+                transaction.replace(R.id.content, contactFragment,"contact");
                 break;
             case R.id.miniApps:
                 title.setText("小应用");
-                transaction.replace(R.id.content, new AppsFragment());
+                transaction.replace(R.id.content, new AppsFragment(),"miniApps");
                 break;
         }
         transaction.commit();
@@ -254,6 +281,12 @@ public class MainActivity extends Activity implements RadioGroup.OnCheckedChange
         super.onDestroy();
         NIMClient.getService(SystemMessageObserver.class).observeReceiveSystemMsg(messageObserver,false);
         NIMClient.getService(SystemMessageObserver.class).observeUnreadCountChange(countObserver,false);
+    }
+
+    public Fragment getCurrentFragment(String tag){
+        FragmentManager manager = getFragmentManager();
+        Fragment fragment = manager.findFragmentByTag(tag);
+        return fragment;
     }
 
 }

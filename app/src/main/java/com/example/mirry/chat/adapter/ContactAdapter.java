@@ -2,6 +2,7 @@ package com.example.mirry.chat.adapter;
 
 import android.content.Context;
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
@@ -55,8 +56,9 @@ public class ContactAdapter extends BaseAdapter {
             holder = (ViewHolder) convertView.getTag();
         }
 
-        String preLetter;
+        String preLetter ;
         String letter = mData.get(position).getPinyin().substring(0,1);
+
         //根据上一个首字母决定是否显示字母
         if(position == 0){
             holder.pinyin.setVisibility(View.VISIBLE);

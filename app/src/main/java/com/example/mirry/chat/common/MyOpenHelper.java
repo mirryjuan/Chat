@@ -1,4 +1,4 @@
-package com.example.mirry.chat;
+package com.example.mirry.chat.common;
 
 import android.content.Context;
 import android.database.sqlite.SQLiteDatabase;

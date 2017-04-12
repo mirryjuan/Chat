@@ -1,4 +1,4 @@
-package com.example.mirry.chat;
+package com.example.mirry.chat.common;
 
 import android.app.Application;
 import android.content.Context;
@@ -9,6 +9,7 @@ import android.text.TextUtils;
 import android.util.DisplayMetrics;
 import android.view.WindowManager;
 
+import com.example.mirry.chat.R;
 import com.example.mirry.chat.activity.ChatActivity;
 import com.example.mirry.chat.utils.PreferencesUtil;
 import com.example.mirry.chat.utils.SystemUtil;

@@ -56,6 +56,10 @@
     <string name="birthday">生日</string>
     <string name="chat">聊一聊</string>
     <string name="friendInfo">好友信息</string>
+    <string name="conHint">您还没有联系人，快点击 + 添加</string>
+
+    <!-- 消息界面-->
+    <string name="msgHint">暂时没有新消息</string>
 
     <!--添加好友界面-->
     <string name="search">搜索</string>

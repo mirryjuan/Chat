@@ -2,7 +2,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="com.example.mirry.chat.fragment.MessageFragment"
+    tools:context="com.example.mirry.chat.fragment.MsgFragment"
     android:orientation="vertical"
     android:background="@color/white">
 
@@ -11,6 +11,29 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="进入"/>
+
+    <LinearLayout
+        android:id="@+id/emptyView"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        android:gravity="center"
+        android:visibility="gone">
+
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/empty"/>
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/msgHint"
+            android:textColor="@color/hintGray"
+            android:gravity="center"/>
+
+    </LinearLayout>
+
     <ListView
         android:id="@+id/msgList"
         android:layout_width="match_parent"

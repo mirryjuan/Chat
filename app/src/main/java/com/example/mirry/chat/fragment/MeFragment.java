@@ -14,7 +14,8 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.example.mirry.chat.MyOpenHelper;
+import com.example.mirry.chat.common.Common;
+import com.example.mirry.chat.common.MyOpenHelper;
 import com.example.mirry.chat.R;
 import com.example.mirry.chat.activity.LoginActivity;
 import com.example.mirry.chat.activity.MainActivity;
@@ -24,11 +25,11 @@ import com.example.mirry.chat.utils.PreferencesUtil;
 import com.example.mirry.chat.view.CircleImageView;
 import com.netease.nimlib.sdk.NIMClient;
 import com.netease.nimlib.sdk.auth.AuthService;
+import com.netease.nimlib.sdk.uinfo.UserService;
+import com.netease.nimlib.sdk.uinfo.model.NimUserInfo;
 
 import java.io.Serializable;
-import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 import butterknife.ButterKnife;
@@ -52,11 +53,11 @@ public class MeFragment extends Fragment implements View.OnClickListener {
     @InjectView(R.id.info_user)
     LinearLayout userInfo;
     private MainActivity mActivity;
-    private String mNickname;
-    private int mSex;
-    private String mAccount;
-    private String mPhone;
-    private String mBirthday;
+    private String mNickname = "";
+    private int mSex = Common.MALE;
+    private String mAccount = "";
+    private String mPhone = "";
+    private String mBirthday = "";
 
     private Map<String,Object> mInfo = null;
 
@@ -89,7 +90,7 @@ public class MeFragment extends Fragment implements View.OnClickListener {
     }
 
     private void initUserData() {
-        String account = PreferencesUtil.getString(mActivity, "config", "userName", "");
+        String account = PreferencesUtil.getString(mActivity, "config", "account", "");
         queryUserData(account);
         // TODO: 2017/4/2 设置头像
         nickname.setText(mNickname);
@@ -109,7 +110,14 @@ public class MeFragment extends Fragment implements View.OnClickListener {
             cursor.close();
             db.close();
         }else{
-            // TODO: 2017/4/2 到服务器中查询
+            NimUserInfo mInfo = NIMClient.getService(UserService.class).getUserInfo(account);
+            if(mInfo != null){
+                mAccount = mInfo.getAccount();
+                mNickname = mInfo.getName();
+                mSex = mInfo.getGenderEnum().getValue();
+                mPhone = mInfo.getMobile();
+                mBirthday = mInfo.getBirthday();
+            }
         }
     }
 
@@ -120,6 +128,7 @@ public class MeFragment extends Fragment implements View.OnClickListener {
             case R.id.nickname:
             case R.id.info_user:
                 mInfo = new HashMap<>();
+                // TODO: 2017/4/12 头像
                 mInfo.put("nickname",mNickname);
                 mInfo.put("account",mAccount);
                 mInfo.put("phone",mPhone);

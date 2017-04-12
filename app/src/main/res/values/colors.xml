@@ -15,6 +15,7 @@
     <color name="black">#000</color>
     <color name="lightGray">#EEE</color>
     <color name="darkGray">#7b7b7b</color>
+    <color name="hintGray">#bfbfbf</color>
     <color name="slideBg">#334C8D96</color>
     <color name="slideLine">#884C8D96</color>
     <color name="slideBtn">#6FFF</color>

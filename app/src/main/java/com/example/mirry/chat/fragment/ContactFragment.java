@@ -3,8 +3,9 @@ package com.example.mirry.chat.fragment;
 import android.app.Fragment;
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Message;
 import android.text.TextUtils;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -12,6 +13,7 @@ import android.widget.AdapterView;
 import android.widget.LinearLayout;
 import android.widget.ListView;
 
+import com.example.mirry.chat.common.Common;
 import com.example.mirry.chat.R;
 import com.example.mirry.chat.activity.MainActivity;
 import com.example.mirry.chat.activity.NewFriendActivity;
@@ -19,16 +21,13 @@ import com.example.mirry.chat.adapter.ContactAdapter;
 import com.example.mirry.chat.bean.Friend;
 import com.example.mirry.chat.view.QuickIndexBar;
 import com.netease.nimlib.sdk.NIMClient;
-import com.netease.nimlib.sdk.Observer;
-import com.netease.nimlib.sdk.friend.model.AddFriendNotify;
-import com.netease.nimlib.sdk.msg.SystemMessageObserver;
-import com.netease.nimlib.sdk.msg.constant.SystemMessageType;
-import com.netease.nimlib.sdk.msg.model.SystemMessage;
+import com.netease.nimlib.sdk.friend.FriendService;
+import com.netease.nimlib.sdk.uinfo.UserService;
+import com.netease.nimlib.sdk.uinfo.model.NimUserInfo;
 
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Collections;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -40,6 +39,27 @@ public class ContactFragment extends Fragment implements AdapterView.OnItemClick
     private LinearLayout addFriend;
     private List<Friend> friendList = new ArrayList<>();
     private List<Map<String,String>> newFriendList = new ArrayList<>();
+    private ContactAdapter adapter;
+    private LinearLayout emptyView;
+
+    private Handler handler = new Handler() {
+        @Override
+        public void handleMessage(Message msg) {
+            switch (msg.what) {
+                case Common.FRIEND_ADD:
+                    String curAccount = (String) msg.obj;
+                    NimUserInfo userInfo = NIMClient.getService(UserService.class).getUserInfo(curAccount);
+                    friendList.add(new Friend(userInfo.getName()));
+                    adapter.notifyDataSetChanged();
+                    break;
+            }
+        }
+    };
+
+
+    public Handler getHandler(){
+        return handler;
+    }
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -56,6 +76,7 @@ public class ContactFragment extends Fragment implements AdapterView.OnItemClick
         contactList = (ListView) view.findViewById(R.id.contactList);
         bar = (QuickIndexBar) view.findViewById(R.id.bar);
         addFriend = (LinearLayout) view.findViewById(R.id.addFriend);
+        emptyView = (LinearLayout) view.findViewById(R.id.emptyView);
 
         addFriend.setOnClickListener(this);
 
@@ -75,37 +96,59 @@ public class ContactFragment extends Fragment implements AdapterView.OnItemClick
         });
 
         fillAndSortData(friendList);
-        contactList.setAdapter(new ContactAdapter(mActivity,friendList));
+        adapter = new ContactAdapter(mActivity,friendList);
+        contactList.setAdapter(adapter);
+        contactList.setEmptyView(emptyView);
         contactList.setOnItemClickListener(this);
         return view;
     }
 
-    private void fillAndSortData(List<Friend> list) {
-        // TODO: 2017/3/8   设置联系人list
-        list.add(new Friend("张三"));
-        list.add(new Friend("陈芳"));
-        list.add(new Friend("程一峰"));
-        list.add(new Friend("杜立明"));
-        list.add(new Friend("吕静"));
-        list.add(new Friend("尚红艳"));
-        list.add(new Friend("韩世飞"));
-        list.add(new Friend("王琳琳"));
-        list.add(new Friend("王明月"));
-        list.add(new Friend("王熙"));
-        list.add(new Friend("李志杰"));
-        list.add(new Friend("李宁"));
-        list.add(new Friend("李伟"));
-        list.add(new Friend("付东"));
-        list.add(new Friend("武少广"));
-        list.add(new Friend("张筱雨"));
-        list.add(new Friend("惠鹏"));
-        list.add(new Friend("Mirry"));
-        list.add(new Friend("David"));
-        list.add(new Friend("高凯"));
-        list.add(new Friend("蒋雯丽"));
+    private void fillAndSortData(List<Friend> friendList) {
+        List<String> accounts = NIMClient.getService(FriendService.class).getFriendAccounts(); // 获取所有好友帐号
+        if(accounts.size() != 0){
+            List<NimUserInfo> users = NIMClient.getService(UserService.class).getUserInfoList(accounts); // 获取所有好友用户资料
+            for (NimUserInfo user : users) {
+                if(!TextUtils.equals(user.getName(),"")){
+                    friendList.add(new Friend(user.getName()));
+                }else{
+                    friendList.add(new Friend(user.getAccount()));
+                }
+            }
+            addElse();
+            //进行排序
+            Collections.sort(friendList);
+        }
+    }
 
-        //进行排序
-        Collections.sort(list);
+    private void addElse() {
+        friendList.add(new Friend("安吉"));
+        friendList.add(new Friend("看风景"));
+        friendList.add(new Friend("水滴"));
+        friendList.add(new Friend("付冬"));
+        friendList.add(new Friend("粉丝"));
+        friendList.add(new Friend("师傅"));
+        friendList.add(new Friend("大师"));
+        friendList.add(new Friend("设备"));
+        friendList.add(new Friend("花粉管"));
+        friendList.add(new Friend("方法"));
+        friendList.add(new Friend("动画"));
+        friendList.add(new Friend("监听"));
+        friendList.add(new Friend("他"));
+        friendList.add(new Friend("热"));
+        friendList.add(new Friend("弟弟"));
+        friendList.add(new Friend("动感"));
+        friendList.add(new Friend("风格"));
+        friendList.add(new Friend("♥"));
+        friendList.add(new Friend("付东"));
+        friendList.add(new Friend("面积"));
+        friendList.add(new Friend("统一"));
+        friendList.add(new Friend("功能"));
+        friendList.add(new Friend("浮动"));
+        friendList.add(new Friend("很大"));
+        friendList.add(new Friend("和"));
+        friendList.add(new Friend("给"));
+        friendList.add(new Friend("他"));
+        friendList.add(new Friend("返回"));
     }
 
     @Override

@@ -7,7 +7,7 @@ import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.TextView;
 
-import com.example.mirry.chat.Common;
+import com.example.mirry.chat.common.Common;
 import com.example.mirry.chat.R;
 import com.example.mirry.chat.utils.PreferencesUtil;
 import com.example.mirry.chat.view.IconFontTextView;

@@ -76,7 +76,7 @@
     <uses-permission android:name="android.permission.READ_PHONE_STATE" />
 
     <application
-        android:name=".NimApplication"
+        android:name=".common.NimApplication"
         android:allowBackup="true"
         android:icon="@mipmap/icon"
         android:label="@string/app_name"
@@ -91,12 +91,12 @@
         <activity
             android:name=".activity.MainActivity"
             android:launchMode="singleTask"
-            android:screenOrientation="portrait"/>
+            android:screenOrientation="portrait" />
         <activity
             android:name=".activity.LoginActivity"
             android:launchMode="singleTask"
-            android:windowSoftInputMode="stateHidden|adjustPan"
-            android:screenOrientation="portrait">
+            android:screenOrientation="portrait"
+            android:windowSoftInputMode="stateHidden|adjustPan">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -106,32 +106,32 @@
         <activity
             android:name=".activity.RegisterActivity"
             android:launchMode="singleTask"
-            android:screenOrientation="portrait"/>
+            android:screenOrientation="portrait" />
         <activity
             android:name=".activity.InfoSetActivity"
             android:launchMode="singleTask"
-            android:screenOrientation="portrait"/>
+            android:screenOrientation="portrait" />
         <activity
             android:name=".activity.AppsActivity"
             android:launchMode="singleTask"
-            android:screenOrientation="portrait"/>
+            android:screenOrientation="portrait" />
         <activity
             android:name=".activity.ChatActivity"
             android:launchMode="singleTask"
-            android:windowSoftInputMode="stateVisible|adjustResize"
-            android:screenOrientation="portrait"/>
+            android:screenOrientation="portrait"
+            android:windowSoftInputMode="stateHidden|adjustResize" />
         <activity
             android:name=".activity.ContactInfoActivity"
             android:launchMode="singleTask"
-            android:screenOrientation="portrait"/>
+            android:screenOrientation="portrait" />
         <activity
             android:name=".activity.AddFriendActivity"
             android:launchMode="singleTask"
-            android:screenOrientation="portrait"/>
+            android:screenOrientation="portrait" />
         <activity
             android:name=".activity.NewFriendActivity"
             android:launchMode="singleTask"
-            android:screenOrientation="portrait"/>
+            android:screenOrientation="portrait" />
         <activity
             android:name="io.dcloud.PandoraEntry"
             android:configChanges="orientation|keyboardHidden"
@@ -190,12 +190,16 @@
             android:name="com.netease.cosine.target.receiver"
             android:value="com.netease.nimlib.service.NimReceiver" />
 
-        <activity android:name=".activity.FriendInfoActivity"
-            android:screenOrientation="portrait"/>
-        <activity android:name=".activity.MyInfoActivity"
-            android:screenOrientation="portrait"/>
-        <activity android:name=".activity.SettingsActivity"
-            android:screenOrientation="portrait"/>
+        <activity
+            android:name=".activity.FriendInfoActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".activity.MyInfoActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".activity.SettingsActivity"
+            android:screenOrientation="portrait" />
+        <activity android:name=".activity.ResetPwdActivity"></activity>
     </application>
 
 </manifest>

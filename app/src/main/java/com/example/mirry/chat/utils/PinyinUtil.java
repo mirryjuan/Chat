@@ -22,16 +22,13 @@ public class PinyinUtil {
 		StringBuilder sb = new StringBuilder();
 		
 		char[] charArray = str.toCharArray();
-		for (int i = 0; i < charArray.length; i++) {
-			char c = charArray[i];
+		for (char c : charArray) {
 			// 如果是空格, 跳过
 			if(Character.isWhitespace(c)){
 				continue;
 			}
-			if(c >= -127 && c < 128){
-				// 肯定不是汉字
-				sb.append(c);
-			}else {
+			if((c >= 0x4e00)&&(c <= 0x9fbb)){
+				//如果为汉字，转化为拼音
 				String s = "";
 				try {
 					// 通过char得到拼音集合.
@@ -41,6 +38,9 @@ public class PinyinUtil {
 					e.printStackTrace();
 					sb.append(s);
 				}
+			}else{
+				//如果不是汉字，直接拼接
+				sb.append(c);
 			}
 		}
 		

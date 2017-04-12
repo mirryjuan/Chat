@@ -50,7 +50,7 @@ public class ChatActivity extends Activity implements View.OnClickListener, Text
     EditText msg;
     @InjectView(R.id.send)
     Button send;
-
+    private ChatAdapter adapter;
     private static final int TYPE_ME = 0;
     private static final int TYPE_FRIEND = 1;
 
@@ -69,7 +69,6 @@ public class ChatActivity extends Activity implements View.OnClickListener, Text
                     }
                 }
             };
-    private ChatAdapter adapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

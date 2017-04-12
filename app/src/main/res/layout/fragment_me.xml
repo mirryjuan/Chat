@@ -39,7 +39,7 @@
     <Button
         android:id="@+id/gallery"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="35dp"
         style="@style/meItemsTheme"
         android:text="@string/gallery" />
 
@@ -53,7 +53,7 @@
     <Button
         android:id="@+id/diary"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="35dp"
         style="@style/meItemsTheme"
         android:text="@string/diary" />
 
@@ -67,7 +67,7 @@
     <Button
         android:id="@+id/settings"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="35dp"
         style="@style/meItemsTheme"
         android:text="@string/settings" />
 
@@ -81,7 +81,7 @@
     <Button
         android:id="@+id/share"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="35dp"
         style="@style/meItemsTheme"
         android:text="@string/share" />
 
@@ -95,7 +95,7 @@
     <Button
         android:id="@+id/exist"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="35dp"
         style="@style/meItemsTheme"
         android:text="@string/exist" />
 
