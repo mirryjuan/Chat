@@ -19,7 +19,9 @@ import com.example.mirry.chat.R;
 import com.example.mirry.chat.common.CheckSumBuilder;
 import com.example.mirry.chat.common.Common;
 import com.example.mirry.chat.common.MyOpenHelper;
+import com.example.mirry.chat.service.NetBroadcastReceiver;
 import com.example.mirry.chat.utils.CommonUtil;
+import com.example.mirry.chat.utils.NetUtil;
 import com.example.mirry.chat.view.IconFontTextView;
 
 import org.apache.commons.lang3.StringUtils;
@@ -46,7 +48,7 @@ import butterknife.ButterKnife;
 import butterknife.InjectView;
 
 @SuppressWarnings("all")
-public class RegisterActivity extends Activity implements View.OnClickListener, View.OnFocusChangeListener {
+public class RegisterActivity extends BaseActivity implements View.OnClickListener, View.OnFocusChangeListener {
 
     @InjectView(R.id.account)
     EditText account;
@@ -171,7 +173,11 @@ public class RegisterActivity extends Activity implements View.OnClickListener, 
                 } else {
                     if (mConfirm.equals(mPwd)) {
                         try {
-                            doRegister(mAccid, mPwd);
+                            if(isNetConnected){
+                                doRegister(mAccid, mPwd);
+                            }else{
+                                Toast.makeText(this, "网络异常,请检查网络连接", Toast.LENGTH_SHORT).show();
+                            }
                         } catch (Exception e) {
                             e.printStackTrace();
                         }
@@ -217,7 +223,7 @@ public class RegisterActivity extends Activity implements View.OnClickListener, 
                             }, 1500);
                         }
                     } else {
-                        Toast.makeText(RegisterActivity.this, "网络异常,请检查网络连接", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(RegisterActivity.this, "注册失败，请稍后重试", Toast.LENGTH_SHORT).show();
                     }
                 } catch (JSONException e) {
                     e.printStackTrace();
@@ -338,5 +344,10 @@ public class RegisterActivity extends Activity implements View.OnClickListener, 
             default:
                 break;
         }
+    }
+
+    @Override
+    public void onNetChange(int netType) {
+        isNetConnected = isNetConnect(netType);
     }
 }

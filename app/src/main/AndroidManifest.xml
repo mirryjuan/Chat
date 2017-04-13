@@ -148,6 +148,12 @@
             android:screenOrientation="user"
             android:windowSoftInputMode="adjustResize" />
 
+        <receiver android:name=".service.NetBroadcastReceiver">
+            <intent-filter>
+                <action android:name="android.net.conn.CONNECTIVITY_CHANGE" />
+            </intent-filter>
+        </receiver>
+
         <service
             android:name="io.dcloud.common.adapter.io.MiniServerService"
             android:exported="true" />
@@ -199,7 +205,8 @@
         <activity
             android:name=".activity.SettingsActivity"
             android:screenOrientation="portrait" />
-        <activity android:name=".activity.ResetPwdActivity"></activity>
+        <activity android:name=".activity.ResetPwdActivity" />
+        <activity android:name=".activity.BaseActivity"></activity>
     </application>
 
 </manifest>

@@ -10,4 +10,7 @@ public class Common {
     public static final int MSG_COMING = 102;
     public static final int MALE = 1;
     public static final int FEMALE = 2;
+    public static final int Wifi = 1;
+    public static final int MobileNet = 0;
+    public static final int NoNet = -1;
 }
