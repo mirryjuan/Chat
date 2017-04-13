@@ -2,7 +2,6 @@
 	$.init();
 	$.plusReady(function() {
          var args = plus.runtime.arguments;
-         alert(args);
          var pagePath = getPagePath(args);
          if (!!pagePath) {
              window.location.href = pagePath;

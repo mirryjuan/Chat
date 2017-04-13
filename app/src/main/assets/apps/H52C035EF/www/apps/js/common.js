@@ -6,3 +6,4 @@ function dieError(msg, url, line) {
 	alert(txt);
 	return true;
 }
+

@@ -88,7 +88,6 @@ public class WebappModeListener implements ICore.ICoreStatusListener {
             public boolean onStop() {
                 // 应用运行停止时调用
                 rootView.removeView(app.obtainWebAppRootView().obtainMainView());
-                // TODO Auto-generated method stub
                 return false;
             }
 
@@ -105,14 +104,13 @@ public class WebappModeListener implements ICore.ICoreStatusListener {
             @Override
             public void onPause(IApp arg0, IApp arg1) {
                 // WebApp暂停运行时触发事件
-
             }
         });
     }
 
     @Override
     public boolean onCoreStop() {
-        // 当返回false时候回关闭activity
+        // 当返回false时候关闭activity
         return false;
     }
 }
