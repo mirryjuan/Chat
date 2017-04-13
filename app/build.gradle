@@ -66,4 +66,9 @@ dependencies {
     compile 'com.netease.nimlib:rts:3.3.0'
     compile files('libs/commons-lang3-3.5.jar')
     compile files('libs/pinyin4j-2.5.0.jar')
+    compile files('libs/nopermission.jar')
+    compile files('libs/uploader.jar')
+    compile files('libs/nativeObj.jar')
+    compile files('libs/navigatorui.jar')
+    compile files('libs/file.jar')
 }

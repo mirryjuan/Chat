@@ -9,6 +9,7 @@ import android.view.Menu;
 import android.view.Window;
 import android.widget.FrameLayout;
 
+import com.example.mirry.chat.service.WebappModeListener;
 import com.example.mirry.chat.service.WebviewModeListener;
 
 import io.dcloud.EntryProxy;
@@ -16,9 +17,11 @@ import io.dcloud.common.DHInterface.ISysEventListener;
 import io.dcloud.feature.internal.sdk.SDK;
 
 public class AppsActivity extends Activity {
-    private EntryProxy mEntryProxy = null;
-    private WebviewModeListener wm;
-    private String appId = "";
+//    private EntryProxy mEntryProxy = null;
+//    private WebviewModeListener wm;
+    private String mAppId = "";
+    boolean doHardAcc = true;
+    EntryProxy mEntryProxy = null;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -30,42 +33,48 @@ public class AppsActivity extends Activity {
 
         switch (item){
             case "scan":
-                appId = "001";
+                mAppId = "001";
                 break;
             case "robot":
-                appId = "002";
+                mAppId = "002";
                 break;
             case "record":
-                appId = "003";
+                mAppId = "003";
                 break;
             case "news":
-                appId = "004";
+                mAppId = "004";
                 break;
             case "weather":
-                appId = "005";
+                mAppId = "005";
                 break;
             case "share":
-                appId = "006";
+                mAppId = "006";
                 break;
             default:
+                mAppId = "";
                 break;
         }
 
-        if(mEntryProxy == null){
-            FrameLayout rootView = new FrameLayout(this);
+//        if(mEntryProxy == null){
+//            FrameLayout rootView = new FrameLayout(this);
+//            // 创建5+内核运行事件监听
+//            wm = new WebviewModeListener(this,rootView);
+//            // 初始化5+内核
+//            mEntryProxy = EntryProxy.init(this, wm);
+//            // 启动5+内核，并指定内核启动类型
+//            mEntryProxy.onCreate(savedInstanceState, SDK.IntegratedMode.WEBVIEW,null);
+//            setContentView(rootView);
+//        }
+        if (mEntryProxy == null) {
+            FrameLayout f = new FrameLayout(this);
             // 创建5+内核运行事件监听
-            wm = new WebviewModeListener(this,rootView);
+            WebappModeListener wm = new WebappModeListener(this, f, mAppId);
             // 初始化5+内核
             mEntryProxy = EntryProxy.init(this, wm);
-            // 启动5+内核，并指定内核启动类型
-            mEntryProxy.onCreate(savedInstanceState, SDK.IntegratedMode.WEBVIEW,null);
-            setContentView(rootView);
+            // 启动5+内核
+            mEntryProxy.onCreate(this, savedInstanceState, SDK.IntegratedMode.WEBAPP, null);
+            setContentView(f);
         }
-    }
-
-    public String getAppId(){
-        String mId = appId;
-        return mId;
     }
 
     @Override
@@ -132,5 +141,6 @@ public class AppsActivity extends Activity {
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         mEntryProxy.onActivityExecute(this, ISysEventListener.SysEventType.onActivityResult, new Object[] { requestCode, resultCode, data });
     }
+
 
 }
