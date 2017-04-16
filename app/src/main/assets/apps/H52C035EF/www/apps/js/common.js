@@ -1,3 +1,10 @@
+(function($) {
+	$.init();
+	$.plusReady(function() {
+        window.activity = plus.android.runtimeMainActivity();
+	});
+})(mui);
+
 window.onerror = dieError;
 function dieError(msg, url, line) {
 	var txt = "ERROR: " + msg + "\n";
@@ -7,3 +14,9 @@ function dieError(msg, url, line) {
 	return true;
 }
 
+var back = document.getElementsByClassName("back");
+for(var i = 0; i < back.length ; i++){
+	back[i].addEventListener('tap',function(){
+		plus.android.invoke(window.activity,"backToActivity");
+	});
+}

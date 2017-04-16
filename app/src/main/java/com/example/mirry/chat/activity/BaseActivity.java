@@ -26,10 +26,6 @@ public class BaseActivity extends Activity implements NetBroadcastReceiver.NetEv
 
     }
 
-    public void initData(){
-
-    }
-
     public boolean inspectNet() {
         netType = NetUtil.getNetWorkState(BaseActivity.this);
         return isNetConnect(netType);

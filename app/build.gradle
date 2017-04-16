@@ -71,4 +71,5 @@ dependencies {
     compile files('libs/nativeObj.jar')
     compile files('libs/navigatorui.jar')
     compile files('libs/file.jar')
+    compile files('libs/invocation.jar')
 }

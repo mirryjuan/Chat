@@ -49,7 +49,7 @@ import java.util.TimerTask;
 import butterknife.ButterKnife;
 import butterknife.InjectView;
 
-public class LoginActivity extends Activity implements View.OnClickListener, View.OnFocusChangeListener {
+public class LoginActivity extends BaseActivity implements View.OnClickListener, View.OnFocusChangeListener {
 
     @InjectView(R.id.username)
     EditText username;
@@ -200,7 +200,11 @@ public class LoginActivity extends Activity implements View.OnClickListener, Vie
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.login:
-                doLogin();
+                if(isNetConnected){
+                    doLogin();
+                }else{
+                    Toast.makeText(this, "网络异常,请检查网络连接", Toast.LENGTH_SHORT).show();
+                }
                 break;
             case R.id.forget:
                 startActivity(new Intent(LoginActivity.this,ResetPwdActivity.class));
@@ -357,5 +361,10 @@ public class LoginActivity extends Activity implements View.OnClickListener, Vie
     protected void onDestroy() {
         super.onDestroy();
         NIMClient.getService(AuthServiceObserver.class).observeOnlineStatus(observer, false);
+    }
+
+    @Override
+    public void onNetChange(int netType) {
+        isNetConnected = isNetConnect(netType);
     }
 }

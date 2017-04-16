@@ -6,7 +6,9 @@
     android:layout_height="match_parent"
     tools:context="com.example.mirry.chat.activity.InfoSetActivity"
     android:orientation="vertical"
-    android:background="@color/bgBlue">
+    android:background="@color/bgBlue"
+    android:focusable="true"
+    android:focusableInTouchMode="true">
 
     <RelativeLayout
         android:layout_width="match_parent"
