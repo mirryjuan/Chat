@@ -1,6 +1,7 @@
 package com.example.mirry.chat.activity;
 
 import android.app.Activity;
+import android.content.Intent;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
@@ -69,6 +70,8 @@ public class ChatActivity extends Activity implements View.OnClickListener, Text
                     }
                 }
             };
+    private String curAccount;
+    private String curUsername;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -76,6 +79,8 @@ public class ChatActivity extends Activity implements View.OnClickListener, Text
         requestWindowFeature(Window.FEATURE_NO_TITLE);
         setContentView(R.layout.activity_chat);
         ButterKnife.inject(this);
+
+        initData();
 
         back.setOnClickListener(this);
         userinfo.setOnClickListener(this);
@@ -93,6 +98,14 @@ public class ChatActivity extends Activity implements View.OnClickListener, Text
                 .observeReceiveMessage(incomingMessageObserver, true);
     }
 
+    private void initData() {
+        Intent intent = getIntent();
+        curAccount = intent.getStringExtra("curAccount");
+        curUsername = intent.getStringExtra("curUsername");
+
+        username.setText(curUsername);
+    }
+
     @Override
     public void onClick(View v) {
         switch (v.getId()) {
@@ -105,7 +118,7 @@ public class ChatActivity extends Activity implements View.OnClickListener, Text
             case R.id.add:
                 break;
             case R.id.send:
-                sendMsg("15732136540");
+                sendMsg(curAccount);
                 break;
         }
     }

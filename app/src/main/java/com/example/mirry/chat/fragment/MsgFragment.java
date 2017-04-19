@@ -35,8 +35,6 @@ public class MsgFragment extends Fragment implements AdapterView.OnItemClickList
 
     @InjectView(R.id.msgList)
     ListView msgList;
-    @InjectView(R.id.btn)
-    Button btn;
     @InjectView(R.id.emptyView)
     LinearLayout emptyView;
     private MainActivity mActivity;
@@ -70,14 +68,6 @@ public class MsgFragment extends Fragment implements AdapterView.OnItemClickList
         ButterKnife.inject(this, view);
 
         initData();
-
-        btn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                startActivity(new Intent(mActivity, ChatActivity.class));
-
-            }
-        });
 
         msgList.setAdapter(new MsgAdapter(mActivity, msgData));
         msgList.setEmptyView(emptyView);

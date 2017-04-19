@@ -13,6 +13,7 @@ import android.widget.AdapterView;
 import android.widget.LinearLayout;
 import android.widget.ListView;
 
+import com.example.mirry.chat.activity.ChatActivity;
 import com.example.mirry.chat.common.Common;
 import com.example.mirry.chat.R;
 import com.example.mirry.chat.activity.MainActivity;
@@ -42,6 +43,8 @@ public class ContactFragment extends Fragment implements AdapterView.OnItemClick
     private ContactAdapter adapter;
     private LinearLayout emptyView;
 
+    private List<String> accounts;
+
     private Handler handler = new Handler() {
         @Override
         public void handleMessage(Message msg) {
@@ -55,7 +58,7 @@ public class ContactFragment extends Fragment implements AdapterView.OnItemClick
             }
         }
     };
-
+    private List<NimUserInfo> users;
 
     public Handler getHandler(){
         return handler;
@@ -104,9 +107,11 @@ public class ContactFragment extends Fragment implements AdapterView.OnItemClick
     }
 
     private void fillAndSortData(List<Friend> friendList) {
-        List<String> accounts = NIMClient.getService(FriendService.class).getFriendAccounts(); // 获取所有好友帐号
+        // 获取所有好友帐号
+        accounts = NIMClient.getService(FriendService.class).getFriendAccounts();
         if(accounts.size() != 0){
-            List<NimUserInfo> users = NIMClient.getService(UserService.class).getUserInfoList(accounts); // 获取所有好友用户资料
+            // 获取所有好友用户资料
+            users = NIMClient.getService(UserService.class).getUserInfoList(accounts);
             for (NimUserInfo user : users) {
                 if(!TextUtils.equals(user.getName(),"")){
                     friendList.add(new Friend(user.getName()));
@@ -114,46 +119,18 @@ public class ContactFragment extends Fragment implements AdapterView.OnItemClick
                     friendList.add(new Friend(user.getAccount()));
                 }
             }
-            addElse();
             //进行排序
             Collections.sort(friendList);
         }
     }
 
-    private void addElse() {
-        friendList.add(new Friend("安吉"));
-        friendList.add(new Friend("看风景"));
-        friendList.add(new Friend("水滴"));
-        friendList.add(new Friend("付冬"));
-        friendList.add(new Friend("粉丝"));
-        friendList.add(new Friend("师傅"));
-        friendList.add(new Friend("大师"));
-        friendList.add(new Friend("设备"));
-        friendList.add(new Friend("花粉管"));
-        friendList.add(new Friend("方法"));
-        friendList.add(new Friend("动画"));
-        friendList.add(new Friend("监听"));
-        friendList.add(new Friend("他"));
-        friendList.add(new Friend("热"));
-        friendList.add(new Friend("弟弟"));
-        friendList.add(new Friend("动感"));
-        friendList.add(new Friend("风格"));
-        friendList.add(new Friend("♥"));
-        friendList.add(new Friend("付东"));
-        friendList.add(new Friend("面积"));
-        friendList.add(new Friend("统一"));
-        friendList.add(new Friend("功能"));
-        friendList.add(new Friend("浮动"));
-        friendList.add(new Friend("很大"));
-        friendList.add(new Friend("和"));
-        friendList.add(new Friend("给"));
-        friendList.add(new Friend("他"));
-        friendList.add(new Friend("返回"));
-    }
-
     @Override
     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-
+        String curAccount = accounts.get(position);
+        Intent intent = new Intent(mActivity, ChatActivity.class);
+        intent.putExtra("curAccount",curAccount);
+        intent.putExtra("curUsername",friendList.get(position).getName());
+        startActivity(intent);
     }
 
     @Override

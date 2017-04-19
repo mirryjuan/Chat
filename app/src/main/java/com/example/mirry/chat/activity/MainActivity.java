@@ -76,7 +76,7 @@ public class MainActivity extends Activity implements RadioGroup.OnCheckedChange
 
     private List<Map<String,String>> newFriendList = new ArrayList<>();
 
-    Observer<List<IMMessage>> incomingMessageObserver =
+    private Observer<List<IMMessage>> incomingMessageObserver =
             new Observer<List<IMMessage>>() {
                 @Override
                 public void onEvent(List<IMMessage> messages) {
@@ -132,6 +132,8 @@ public class MainActivity extends Activity implements RadioGroup.OnCheckedChange
 
         }
     };
+
+    private long exitTime = 0;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -272,7 +274,13 @@ public class MainActivity extends Activity implements RadioGroup.OnCheckedChange
         if(menu.isMenuShowing()){
             menu.toggle();
         }else {
-            super.onBackPressed();
+            if((System.currentTimeMillis() - exitTime) > 2000){
+                Toast.makeText(MainActivity.this, "再按一次退出程序", Toast.LENGTH_SHORT).show();
+                exitTime = System.currentTimeMillis();
+            } else {
+                finish();
+                System.exit(0);
+            }
         }
     }
 

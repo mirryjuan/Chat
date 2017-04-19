@@ -6,12 +6,6 @@
     android:orientation="vertical"
     android:background="@color/white">
 
-    <Button
-        android:id="@+id/btn"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="进入"/>
-
     <LinearLayout
         android:id="@+id/emptyView"
         android:layout_width="match_parent"
