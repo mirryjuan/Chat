@@ -1,9 +1,40 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/activity_reset_pwd"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="com.example.mirry.chat.activity.ResetPwdActivity">
+    tools:context="com.example.mirry.chat.activity.ResetPwdActivity"
+    android:orientation="vertical"
+    android:gravity="center"
+    android:background="@drawable/bg"
+    android:focusable="true"
+    android:focusableInTouchMode="true"
+    android:padding="10dp">
 
-</RelativeLayout>
+
+    <EditText
+        android:id="@+id/pwd_old"
+        android:layout_width="match_parent"
+        android:layout_height="40dp"
+        style="@style/UserInfoTheme"
+        android:background="@drawable/bg_et_user"
+        android:hint="@string/pwd_old" />
+
+    <EditText
+        android:id="@+id/pwd_new"
+        android:layout_width="match_parent"
+        android:layout_height="40dp"
+        style="@style/UserInfoTheme"
+        android:layout_marginTop="0.8dp"
+        android:background="@drawable/bg_et_pwd"
+        android:inputType="textPassword"
+        android:hint="@string/pwd_new" />
+
+        <Button
+            android:id="@+id/reset"
+            style="@style/BtnTheme"
+            android:layout_marginTop="20dp"
+            android:text="@string/reset" />
+
+</LinearLayout>

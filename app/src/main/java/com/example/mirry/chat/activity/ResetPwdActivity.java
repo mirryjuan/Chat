@@ -1,13 +1,19 @@
 package com.example.mirry.chat.activity;
 
+import android.content.ContentValues;
 import android.content.Intent;
+import android.database.sqlite.SQLiteDatabase;
 import android.os.AsyncTask;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.view.View;
+import android.widget.Button;
+import android.widget.EditText;
 import android.widget.Toast;
 
 import com.example.mirry.chat.R;
 import com.example.mirry.chat.common.CheckSumBuilder;
+import com.example.mirry.chat.common.Common;
+import com.example.mirry.chat.common.MyOpenHelper;
 import com.example.mirry.chat.utils.PreferencesUtil;
 
 import org.apache.http.HttpResponse;
@@ -29,27 +35,62 @@ import java.util.List;
 import java.util.Timer;
 import java.util.TimerTask;
 
-public class ResetPwdActivity extends BaseActivity {
+import butterknife.ButterKnife;
+import butterknife.InjectView;
 
+public class ResetPwdActivity extends BaseActivity implements View.OnClickListener {
+
+    @InjectView(R.id.pwd_old)
+    EditText oldPwd;
+    @InjectView(R.id.pwd_new)
+    EditText newPwd;
+    @InjectView(R.id.reset)
+    Button reset;
     private String mAccid;
+    private String mPwd;
+    private String mOldPwd;
+    private String mNewPwd;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_reset_pwd);
-        mAccid = PreferencesUtil.getString(ResetPwdActivity.this,"config","account","");
-        if(isNetConnected){
-            try {
-                resetPwd(mAccid);
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
+        ButterKnife.inject(this);
+
+        reset.setOnClickListener(this);
+
+    }
+
+
+    @Override
+    public void onClick(View v) {
+        mPwd = PreferencesUtil.getString(ResetPwdActivity.this, "config", "password", "");
+        mAccid = PreferencesUtil.getString(ResetPwdActivity.this, "config", "account", "");
+        mOldPwd = oldPwd.getText().toString();
+        mNewPwd = newPwd.getText().toString();
+        if(mOldPwd.equals("")||mNewPwd.equals("")){
+            Toast.makeText(this, "原密码或新密码不能为空", Toast.LENGTH_SHORT).show();
+        }else if(!mOldPwd.equals(mPwd)){
+            Toast.makeText(this, "原密码不正确，请重新输入", Toast.LENGTH_SHORT).show();
+            oldPwd.setText("");
+            newPwd.setText("");
+        }else if(mNewPwd.equals(mPwd)) {
+            Toast.makeText(this, "新密码不能与原密码相同", Toast.LENGTH_SHORT).show();
+            newPwd.setText("");
         }else{
-            Toast.makeText(this, "网络异常,请检查网络连接", Toast.LENGTH_SHORT).show();
+            if (isNetConnected) {
+                try {
+                    resetPwd(mAccid,mNewPwd);
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+            } else {
+                Toast.makeText(this, "网络异常,请检查网络连接", Toast.LENGTH_SHORT).show();
+            }
         }
     }
 
-    public void resetPwd(String accid) throws Exception{
+    public void resetPwd(String accid,String mNewPwd) throws Exception {
         AsyncTask<String, Integer, String> asyncTask = new AsyncTask<String, Integer, String>() {
             @Override
             protected void onPostExecute(String resultStr) {
@@ -60,11 +101,13 @@ public class ResetPwdActivity extends BaseActivity {
                         String code = jsonObject.getString("code");
                         if (code.equals("200")) {
                             Toast.makeText(ResetPwdActivity.this, "密码修改成功", Toast.LENGTH_SHORT).show();
+                            // 更新数据库的数据
+                            updateUserPwd();
                             new Timer().schedule(new TimerTask() {
                                 @Override
                                 public void run() {
-                                    startActivity(new Intent(ResetPwdActivity.this,LoginActivity.class));
-                                    ResetPwdActivity.this.finish();
+                                    startActivity(new Intent(ResetPwdActivity.this, LoginActivity.class));
+                                    finish();
                                 }
                             }, 1500);
                         } else {
@@ -81,7 +124,7 @@ public class ResetPwdActivity extends BaseActivity {
             @Override
             protected String doInBackground(String... params) {
                 DefaultHttpClient httpClient = new DefaultHttpClient();
-                String url = "https://api.netease.im/nimserver/user/refreshToken.action";
+                String url = "https://api.netease.im/nimserver/user/update.action";
                 HttpPost httpPost = new HttpPost(url);
 
                 String appKey = "f12752f14a1ed52eb6e6a0f024015a70";
@@ -101,6 +144,7 @@ public class ResetPwdActivity extends BaseActivity {
                 // 设置请求的参数
                 List<NameValuePair> nvps = new ArrayList<>();
                 nvps.add(new BasicNameValuePair("accid", params[0]));
+                nvps.add(new BasicNameValuePair("token", params[1]));
 
                 try {
                     httpPost.setEntity(new UrlEncodedFormEntity(nvps, "utf-8"));
@@ -118,6 +162,17 @@ public class ResetPwdActivity extends BaseActivity {
                 return resultStr;
             }
         };
-        asyncTask.execute(accid);
+        asyncTask.execute(accid,mNewPwd);
     }
+
+    private void updateUserPwd() {
+        MyOpenHelper helper = new MyOpenHelper(ResetPwdActivity.this);
+        SQLiteDatabase db = helper.getWritableDatabase();
+        ContentValues values = new ContentValues();
+        values.put("password", mNewPwd);
+        db.update("users",values,"account = ?",new String[]{ mAccid });
+        db.close();
+    }
+
+
 }

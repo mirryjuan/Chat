@@ -47,7 +47,7 @@ public class MsgAdapter extends BaseAdapter {
             holder = new ViewHolder();
 
             holder.head = (CircleImageView) convertView.findViewById(R.id.head);
-            holder.remark = (TextView) convertView.findViewById(R.id.remark);
+            holder.username = (TextView) convertView.findViewById(R.id.username);
             holder.msg = (TextView) convertView.findViewById(R.id.msg);
             holder.msgCount = (TextView) convertView.findViewById(R.id.count_msg);
 
@@ -56,14 +56,18 @@ public class MsgAdapter extends BaseAdapter {
             holder = (ViewHolder) convertView.getTag();
         }
 
-//        holder.head.setImageResource(R.drawable.head);
+        Msg msg = mData.get(position);
+        holder.head.setImageResource(R.drawable.head);
+        holder.username.setText(msg.getUsername());
+        holder.msg.setText(msg.getMsg());
+        holder.msgCount.setText(""+msg.getCount());
 
         return convertView;
     }
 
     private class ViewHolder {
         CircleImageView head;
-        TextView remark;
+        TextView username;
         TextView msg;
         TextView msgCount;
     }

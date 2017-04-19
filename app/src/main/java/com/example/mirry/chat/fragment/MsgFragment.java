@@ -40,11 +40,33 @@ public class MsgFragment extends Fragment implements AdapterView.OnItemClickList
     private MainActivity mActivity;
     private List<Msg> msgData = null;
 
+    private String account;
+    private String content;
+    private String nickname;
+
+    private MsgAdapter adapter;
+
     private Handler handler = new Handler() {
         @Override
         public void handleMessage(Message msg) {
             switch (msg.what) {
-
+                case Common.MSG_COMING:
+                    Bundle data = msg.getData();
+                    account = data.getString("fromAccount");
+                    nickname = data.getString("fromNick");
+                    content = data.getString("content");
+                    Msg message = new Msg();
+                    message.setAccount(account);
+                    if(!nickname.equals("")){
+                        message.setUsername(nickname);
+                    }else{
+                        message.setUsername(account);
+                    }
+                    message.setMsg(content);
+                    message.setCount(1);
+                    msgData.add(message);
+                    adapter.notifyDataSetChanged();
+                    break;
             }
 
         }
@@ -69,7 +91,8 @@ public class MsgFragment extends Fragment implements AdapterView.OnItemClickList
 
         initData();
 
-        msgList.setAdapter(new MsgAdapter(mActivity, msgData));
+        adapter = new MsgAdapter(mActivity,msgData);
+        msgList.setAdapter(adapter);
         msgList.setEmptyView(emptyView);
         //消息列表单击事件
         msgList.setOnItemClickListener(this);

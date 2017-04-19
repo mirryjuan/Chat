@@ -14,6 +14,11 @@
     <string name="confirmPwd">确认密码</string>
     <string name="register">注册</string>
 
+    <!--修改密码界面-->
+    <string name="pwd_old">原密码</string>
+    <string name="pwd_new">新密码</string>
+    <string name="reset">重置</string>
+
     <!-- 个人信息界面 -->
     <string name="info">个人信息</string>
     <string name="nickname">昵称</string>

@@ -85,8 +85,10 @@ public class MainActivity extends Activity implements RadioGroup.OnCheckedChange
                         Handler handler = msgFragment.getHandler();
                         Message msg = handler.obtainMessage();
                         msg.what = Common.MSG_COMING;
+                        Log.e("nick",message.getFromNick());
                         Bundle bundle = new Bundle();
                         bundle.putString("fromAccount",message.getFromAccount());
+                        bundle.putString("fromNick",message.getFromNick());
                         bundle.putString("content",message.getContent());
                         msg.setData(bundle);
                         handler.sendMessage(msg);

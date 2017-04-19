@@ -86,14 +86,23 @@ public class InfoSetActivity extends Activity implements View.OnClickListener, R
         mPhone = phone.getText().toString();
         switch (v.getId()) {
             case R.id.next:
-                updateRemoteData(mNickname, mBirthday, mPhone);
+                if(mPhone.equals("")){
+                    Toast.makeText(this, "手机号码不能为空", Toast.LENGTH_SHORT).show();
+                }else{
+                    updateRemoteData(mNickname, mBirthday, mPhone);
+                }
                 finish();
                 break;
             case R.id.accomplish:
-                //更新本地数据库信息
-                updateDatabaseInfo(mNickname, mBirthday, mPhone);
-                //更新服务器用户信息
-                updateRemoteData(mNickname, mBirthday, mPhone);
+                if(mPhone.equals("")){
+                    Toast.makeText(this, "手机号码不能为空", Toast.LENGTH_SHORT).show();
+                }else{
+                    //更新本地数据库信息
+                    updateDatabaseInfo(mNickname, mBirthday, mPhone);
+                    //更新服务器用户信息
+                    updateRemoteData(mNickname, mBirthday, mPhone);
+                }
+
                 finish();
                 break;
         }

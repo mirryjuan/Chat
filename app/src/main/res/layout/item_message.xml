@@ -10,7 +10,6 @@
         android:id="@+id/head"
         android:layout_width="48dp"
         android:layout_height="48dp"
-        android:src="@drawable/head"
         android:layout_margin="10dp"/>
 
     <LinearLayout
@@ -20,10 +19,9 @@
         android:gravity="center_vertical">
 
         <TextView
-            android:id="@+id/remark"
+            android:id="@+id/username"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Mirry"
             android:textColor="@color/black"
             android:textSize="14sp"
             android:layout_margin="3dp"/>
@@ -40,7 +38,6 @@
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:layout_margin="3dp"
-                android:text="MirryMirryMirryMirry"
                 android:textSize="12sp"
                 android:maxLines="2"
                 android:ellipsize="end"
@@ -54,7 +51,6 @@
                 android:layout_marginLeft="8dp"
                 android:layout_marginRight="8dp"
                 android:layout_gravity="center"
-                android:text="9"
                 android:gravity="center"
                 android:textColor="@color/white"
                 android:textSize="10sp" />
