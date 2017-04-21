@@ -25,6 +25,7 @@ import com.netease.nimlib.sdk.uinfo.UserService;
 import com.netease.nimlib.sdk.uinfo.model.NimUserInfo;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 import butterknife.ButterKnife;
@@ -82,6 +83,7 @@ public class MsgFragment extends Fragment implements AdapterView.OnItemClickList
         ButterKnife.inject(this, view);
 
         msgData = new ArrayList<>();
+        Collections.reverse(msgData);
         adapter = new MsgAdapter(mActivity,msgData);
         msgList.setAdapter(adapter);
         msgList.setEmptyView(emptyView);
@@ -125,6 +127,7 @@ public class MsgFragment extends Fragment implements AdapterView.OnItemClickList
         message.setMsg(content);
         message.setCount(1);
         msgData.add(message);
+        Collections.reverse(msgData);
         adapter.notifyDataSetChanged();
     }
 
