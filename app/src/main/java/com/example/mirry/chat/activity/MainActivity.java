@@ -37,6 +37,7 @@ import com.jeremyfeinstein.slidingmenu.lib.SlidingMenu;
 import com.netease.nimlib.sdk.NIMClient;
 import com.netease.nimlib.sdk.Observer;
 import com.netease.nimlib.sdk.friend.model.AddFriendNotify;
+import com.netease.nimlib.sdk.msg.MsgServiceObserve;
 import com.netease.nimlib.sdk.msg.SystemMessageObserver;
 import com.netease.nimlib.sdk.msg.constant.SystemMessageType;
 import com.netease.nimlib.sdk.msg.model.IMMessage;
@@ -51,7 +52,7 @@ import java.util.Map;
 import butterknife.ButterKnife;
 import butterknife.InjectView;
 
-public class MainActivity extends Activity implements RadioGroup.OnCheckedChangeListener, View.OnClickListener {
+public class MainActivity extends BaseActivity implements RadioGroup.OnCheckedChangeListener, View.OnClickListener {
 
     @InjectView(R.id.content)
     FrameLayout content;
@@ -81,17 +82,20 @@ public class MainActivity extends Activity implements RadioGroup.OnCheckedChange
                 @Override
                 public void onEvent(List<IMMessage> messages) {
                     for (IMMessage message : messages) {
+                        if(msgBundle == null){
+                            msgBundle = new Bundle();
+                        }
+                        msgBundle.putString("fromAccount",message.getFromAccount());
+                        msgBundle.putString("fromNick",message.getFromNick());
+                        msgBundle.putString("content",message.getContent());
                         MsgFragment msgFragment = (MsgFragment) getCurrentFragment("message");
-                        Handler handler = msgFragment.getHandler();
-                        Message msg = handler.obtainMessage();
-                        msg.what = Common.MSG_COMING;
-                        Log.e("nick",message.getFromNick());
-                        Bundle bundle = new Bundle();
-                        bundle.putString("fromAccount",message.getFromAccount());
-                        bundle.putString("fromNick",message.getFromNick());
-                        bundle.putString("content",message.getContent());
-                        msg.setData(bundle);
-                        handler.sendMessage(msg);
+                        if(msgFragment != null){
+                            Handler handler = msgFragment.getHandler();
+                            Message msg = handler.obtainMessage();
+                            msg.what = Common.MSG_COMING;
+                            msg.setData(msgBundle);
+                            handler.sendMessage(msg);
+                        }
                     }
                 }
             };
@@ -109,11 +113,13 @@ public class MainActivity extends Activity implements RadioGroup.OnCheckedChange
                     } else if (attachData.getEvent() == AddFriendNotify.Event.RECV_AGREE_ADD_FRIEND) {
                         // 对方通过了你的好友验证请求
                         ContactFragment contactFragment = (ContactFragment) getCurrentFragment("contact");
-                        Handler handler = contactFragment.getHandler();
-                        Message msg = handler.obtainMessage();
-                        msg.what = Common.FRIEND_ADD;
-                        msg.obj = message.getFromAccount();
-                        handler.sendMessage(msg);
+                        if(contactFragment != null){
+                            Handler handler = contactFragment.getHandler();
+                            Message msg = handler.obtainMessage();
+                            msg.what = Common.FRIEND_ADD;
+                            msg.obj = message.getFromAccount();
+                            handler.sendMessage(msg);
+                        }
                     } else if (attachData.getEvent() == AddFriendNotify.Event.RECV_REJECT_ADD_FRIEND) {
                         // 对方拒绝了你的好友验证请求
                     } else if (attachData.getEvent() == AddFriendNotify.Event.RECV_ADD_FRIEND_VERIFY_REQUEST) {
@@ -137,14 +143,14 @@ public class MainActivity extends Activity implements RadioGroup.OnCheckedChange
 
     private long exitTime = 0;
 
+    private Bundle msgBundle;
+    private Bundle contactBundle;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         requestWindowFeature(Window.FEATURE_NO_TITLE);
         setContentView(R.layout.activity_main);
-
-        NIMClient.getService(SystemMessageObserver.class).observeReceiveSystemMsg(messageObserver,true);
-        NIMClient.getService(SystemMessageObserver.class).observeUnreadCountChange(countObserver,true);
 
         menu = new SlidingMenu(this);
         menu.setMode(SlidingMenu.LEFT);
@@ -170,6 +176,10 @@ public class MainActivity extends Activity implements RadioGroup.OnCheckedChange
 
         initData();
 
+        NIMClient.getService(SystemMessageObserver.class).observeReceiveSystemMsg(messageObserver,true);
+        NIMClient.getService(MsgServiceObserve.class).observeReceiveMessage(incomingMessageObserver, true);
+        NIMClient.getService(SystemMessageObserver.class).observeUnreadCountChange(countObserver,true);
+
         add.setOnClickListener(this);
         head.setOnClickListener(this);
         tabsGroup.setOnCheckedChangeListener(this);
@@ -185,7 +195,7 @@ public class MainActivity extends Activity implements RadioGroup.OnCheckedChange
         FragmentManager fragmentManager = getFragmentManager();
         //开启事务
         FragmentTransaction transaction = fragmentManager.beginTransaction();
-        transaction.replace(R.id.content, new MsgFragment());
+        transaction.replace(R.id.content, new MsgFragment(),"message");
         transaction.commit();
     }
 
@@ -197,14 +207,18 @@ public class MainActivity extends Activity implements RadioGroup.OnCheckedChange
         switch (checkedId) {
             case R.id.message:
                 title.setText("消息");
-                transaction.replace(R.id.content, new MsgFragment(),"message");
+                MsgFragment msgFragment = new MsgFragment();
+                msgFragment.setArguments(msgBundle);
+                transaction.replace(R.id.content, msgFragment,"message");
                 break;
             case R.id.contact:
                 title.setText("联系人");
                 ContactFragment contactFragment = new ContactFragment();
-                Bundle bundle = new Bundle();
-                bundle.putSerializable("newFriend", (Serializable) newFriendList);
-                contactFragment.setArguments(bundle);
+                if(contactBundle == null){
+                    contactBundle = new Bundle();
+                }
+                contactBundle.putSerializable("newFriend", (Serializable) newFriendList);
+                contactFragment.setArguments(contactBundle);
                 transaction.replace(R.id.content, contactFragment,"contact");
                 break;
             case R.id.miniApps:
@@ -290,6 +304,7 @@ public class MainActivity extends Activity implements RadioGroup.OnCheckedChange
     public void onDestroy() {
         super.onDestroy();
         NIMClient.getService(SystemMessageObserver.class).observeReceiveSystemMsg(messageObserver,false);
+        NIMClient.getService(MsgServiceObserve.class).observeReceiveMessage(incomingMessageObserver, false);
         NIMClient.getService(SystemMessageObserver.class).observeUnreadCountChange(countObserver,false);
     }
 

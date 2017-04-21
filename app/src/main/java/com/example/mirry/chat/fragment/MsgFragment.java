@@ -40,6 +40,8 @@ public class MsgFragment extends Fragment implements AdapterView.OnItemClickList
     private MainActivity mActivity;
     private List<Msg> msgData = null;
 
+    private Bundle newMsg;
+
     private String account;
     private String content;
     private String nickname;
@@ -51,21 +53,11 @@ public class MsgFragment extends Fragment implements AdapterView.OnItemClickList
         public void handleMessage(Message msg) {
             switch (msg.what) {
                 case Common.MSG_COMING:
-                    Bundle data = msg.getData();
-                    account = data.getString("fromAccount");
-                    nickname = data.getString("fromNick");
-                    content = data.getString("content");
-                    Msg message = new Msg();
-                    message.setAccount(account);
-                    if(!nickname.equals("")){
-                        message.setUsername(nickname);
-                    }else{
-                        message.setUsername(account);
+                    if(newMsg == null){
+                        newMsg = new Bundle();
                     }
-                    message.setMsg(content);
-                    message.setCount(1);
-                    msgData.add(message);
-                    adapter.notifyDataSetChanged();
+                    newMsg = msg.getData();
+                    updateMsgList(newMsg);
                     break;
             }
 
@@ -89,11 +81,13 @@ public class MsgFragment extends Fragment implements AdapterView.OnItemClickList
 
         ButterKnife.inject(this, view);
 
-        initData();
-
+        msgData = new ArrayList<>();
         adapter = new MsgAdapter(mActivity,msgData);
         msgList.setAdapter(adapter);
         msgList.setEmptyView(emptyView);
+
+        initData();
+
         //消息列表单击事件
         msgList.setOnItemClickListener(this);
 
@@ -101,12 +95,48 @@ public class MsgFragment extends Fragment implements AdapterView.OnItemClickList
     }
 
     private void initData() {
-        msgData = new ArrayList<>();
+        if(newMsg == null){
+            newMsg = new Bundle();
+        }
+        newMsg = getArguments();
+        if(newMsg != null){
+            updateMsgList(newMsg);
+        }
+    }
+
+
+    private void updateMsgList(Bundle data) {
+        account = data.getString("fromAccount");
+        nickname = data.getString("fromNick");
+        content = data.getString("content");
+        for (Msg message:msgData) {
+            if(message.getAccount().equals(account)){
+                msgData.remove(message);
+            }
+        }
+        Msg message = new Msg();
+        message.setAccount(account);
+        if(!nickname.equals("")){
+            message.setUsername(nickname);
+        }else{
+            message.setUsername(account);
+        }
+
+        message.setMsg(content);
+        message.setCount(1);
+        msgData.add(message);
+        adapter.notifyDataSetChanged();
     }
 
     @Override
     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-
+        Msg msg = msgData.get(position);
+        String curAccount = msg.getAccount();
+        String curUsername = msg.getUsername();
+        Intent intent = new Intent(mActivity, ChatActivity.class);
+        intent.putExtra("curAccount",curAccount);
+        intent.putExtra("curUsername",curUsername);
+        startActivity(intent);
     }
 
     @Override
@@ -115,3 +145,5 @@ public class MsgFragment extends Fragment implements AdapterView.OnItemClickList
         ButterKnife.reset(this);
     }
 }
+
+

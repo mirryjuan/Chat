@@ -11,6 +11,7 @@ import android.view.WindowManager;
 
 import com.example.mirry.chat.R;
 import com.example.mirry.chat.activity.ChatActivity;
+import com.example.mirry.chat.activity.MainActivity;
 import com.example.mirry.chat.utils.PreferencesUtil;
 import com.example.mirry.chat.utils.SystemUtil;
 import com.netease.nimlib.sdk.NIMClient;
@@ -46,7 +47,7 @@ public class NimApplication extends Application {
 
         // 如果将新消息通知提醒托管给 SDK 完成，需要添加以下配置。否则无需设置。
         StatusBarNotificationConfig config = new StatusBarNotificationConfig();
-        config.notificationEntrance = ChatActivity.class;  // 点击通知栏跳转到该Activity
+        config.notificationEntrance = MainActivity.class;  // 点击通知栏跳转到该Activity
         config.notificationSmallIconId = R.drawable.head;
         // 呼吸灯配置
         config.ledARGB = Color.GREEN;

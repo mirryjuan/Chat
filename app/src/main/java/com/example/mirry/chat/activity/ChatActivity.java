@@ -35,7 +35,7 @@ import java.util.List;
 import butterknife.ButterKnife;
 import butterknife.InjectView;
 
-public class ChatActivity extends Activity implements View.OnClickListener, TextWatcher {
+public class ChatActivity extends BaseActivity implements View.OnClickListener, TextWatcher {
 
     @InjectView(R.id.back)
     IconFontTextView back;
@@ -55,6 +55,9 @@ public class ChatActivity extends Activity implements View.OnClickListener, Text
     private static final int TYPE_ME = 0;
     private static final int TYPE_FRIEND = 1;
 
+    private String curAccount;
+    private String curUsername;
+
     private List<Object> list = new ArrayList<>();
 
     Observer<List<IMMessage>> incomingMessageObserver =
@@ -62,7 +65,12 @@ public class ChatActivity extends Activity implements View.OnClickListener, Text
                 @Override
                 public void onEvent(List<IMMessage> messages) {
                     for (IMMessage message : messages) {
-                        Friend obj = new Friend(message.getFromNick());
+                        Friend obj = null;
+                        if(!message.getFromNick().equals("")){
+                            obj = new Friend(message.getFromNick());
+                        }else{
+                            obj = new Friend(message.getFromAccount());
+                        }
                         obj.setMsg(message.getContent());
                         obj.setType(TYPE_FRIEND);
                         list.add(obj);
@@ -70,8 +78,6 @@ public class ChatActivity extends Activity implements View.OnClickListener, Text
                     }
                 }
             };
-    private String curAccount;
-    private String curUsername;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -99,11 +105,18 @@ public class ChatActivity extends Activity implements View.OnClickListener, Text
     }
 
     private void initData() {
+        chatList.setTranscriptMode(ListView.TRANSCRIPT_MODE_ALWAYS_SCROLL);
         Intent intent = getIntent();
         curAccount = intent.getStringExtra("curAccount");
         curUsername = intent.getStringExtra("curUsername");
 
         username.setText(curUsername);
+
+        if(isNetConnected){
+            // TODO: 2017/4/21 获取离线消息
+        }else{
+            // TODO: 2017/4/21 加载本地消息
+        }
     }
 
     @Override
@@ -184,5 +197,13 @@ public class ChatActivity extends Activity implements View.OnClickListener, Text
         //false表示注销消息接收观察者
         NIMClient.getService(MsgServiceObserve.class)
                 .observeReceiveMessage(incomingMessageObserver, false);
+    }
+
+    @Override
+    public void onNetChange(int netType) {
+        isNetConnected = isNetConnect(netType);
+        if(isNetConnected){
+            // TODO: 2017/4/21 刷新消息列表
+        }
     }
 }
