@@ -110,7 +110,11 @@ public class ChatActivity extends BaseActivity implements View.OnClickListener, 
         curAccount = intent.getStringExtra("curAccount");
         curUsername = intent.getStringExtra("curUsername");
 
-        username.setText(curUsername);
+        if(curUsername.equals("")){
+            username.setText(curAccount);
+        }else{
+            username.setText(curUsername);
+        }
 
         if(isNetConnected){
             // TODO: 2017/4/21 获取离线消息

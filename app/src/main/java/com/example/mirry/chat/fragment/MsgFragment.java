@@ -17,16 +17,13 @@ import com.example.mirry.chat.R;
 import com.example.mirry.chat.activity.ChatActivity;
 import com.example.mirry.chat.activity.MainActivity;
 import com.example.mirry.chat.adapter.MsgAdapter;
-import com.example.mirry.chat.bean.Friend;
 import com.example.mirry.chat.bean.Msg;
 import com.example.mirry.chat.common.Common;
-import com.netease.nimlib.sdk.NIMClient;
-import com.netease.nimlib.sdk.uinfo.UserService;
-import com.netease.nimlib.sdk.uinfo.model.NimUserInfo;
 
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import java.util.Map;
 
 import butterknife.ButterKnife;
 import butterknife.InjectView;
@@ -48,6 +45,7 @@ public class MsgFragment extends Fragment implements AdapterView.OnItemClickList
     private String nickname;
 
     private MsgAdapter adapter;
+    private List<Map<String,String>> messages = new ArrayList<>();
 
     private Handler handler = new Handler() {
         @Override
@@ -58,7 +56,12 @@ public class MsgFragment extends Fragment implements AdapterView.OnItemClickList
                         newMsg = new Bundle();
                     }
                     newMsg = msg.getData();
-                    updateMsgList(newMsg);
+                    account = newMsg.getString("fromAccount");
+                    nickname = newMsg.getString("fromNick");
+                    content = newMsg.getString("content");
+                    updateMsgList(account,nickname,content);
+                    Collections.reverse(msgData);
+                    adapter.notifyDataSetChanged();
                     break;
             }
 
@@ -83,7 +86,6 @@ public class MsgFragment extends Fragment implements AdapterView.OnItemClickList
         ButterKnife.inject(this, view);
 
         msgData = new ArrayList<>();
-        Collections.reverse(msgData);
         adapter = new MsgAdapter(mActivity,msgData);
         msgList.setAdapter(adapter);
         msgList.setEmptyView(emptyView);
@@ -97,23 +99,25 @@ public class MsgFragment extends Fragment implements AdapterView.OnItemClickList
     }
 
     private void initData() {
-        if(newMsg == null){
-            newMsg = new Bundle();
-        }
-        newMsg = getArguments();
-        if(newMsg != null){
-            updateMsgList(newMsg);
+        messages = (List<Map<String, String>>) getArguments().getSerializable("messages");
+        if(messages.size() > 0 ){
+            for (Map<String, String> message:messages){
+                account = message.get("fromAccount");
+                nickname = message.get("fromNick");
+                content = message.get("content");
+                updateMsgList(account,nickname,content);
+            }
+            Collections.reverse(msgData);
+            adapter.notifyDataSetChanged();
         }
     }
 
 
-    private void updateMsgList(Bundle data) {
-        account = data.getString("fromAccount");
-        nickname = data.getString("fromNick");
-        content = data.getString("content");
+    private void updateMsgList(String account, String nickname, String content) {
         for (Msg message:msgData) {
             if(message.getAccount().equals(account)){
                 msgData.remove(message);
+                break;
             }
         }
         Msg message = new Msg();
@@ -127,8 +131,6 @@ public class MsgFragment extends Fragment implements AdapterView.OnItemClickList
         message.setMsg(content);
         message.setCount(1);
         msgData.add(message);
-        Collections.reverse(msgData);
-        adapter.notifyDataSetChanged();
     }
 
     @Override

@@ -76,26 +76,46 @@ public class MainActivity extends BaseActivity implements RadioGroup.OnCheckedCh
     private PopupWindow popupWindow;
 
     private List<Map<String,String>> newFriendList = new ArrayList<>();
+    private List<Map<String,String>> msgList = new ArrayList<>();
+
+    private Handler handler = new Handler() {
+        @Override
+        public void handleMessage(Message msg) {
+            switch (msg.what) {
+                case Common.MSG_SEND:
+
+                    break;
+            }
+
+        }
+    };
+
+    public Handler getHandler(){
+        return handler;
+    }
 
     private Observer<List<IMMessage>> incomingMessageObserver =
             new Observer<List<IMMessage>>() {
                 @Override
                 public void onEvent(List<IMMessage> messages) {
                     for (IMMessage message : messages) {
-                        if(msgBundle == null){
-                            msgBundle = new Bundle();
-                        }
-                        msgBundle.putString("fromAccount",message.getFromAccount());
-                        msgBundle.putString("fromNick",message.getFromNick());
-                        msgBundle.putString("content",message.getContent());
+                        Bundle bundle = new Bundle();
+                        bundle.putString("fromAccount",message.getFromAccount());
+                        bundle.putString("fromNick",message.getFromNick());
+                        bundle.putString("content",message.getContent());
                         MsgFragment msgFragment = (MsgFragment) getCurrentFragment("message");
                         if(msgFragment != null){
                             Handler handler = msgFragment.getHandler();
                             Message msg = handler.obtainMessage();
                             msg.what = Common.MSG_COMING;
-                            msg.setData(msgBundle);
+                            msg.setData(bundle);
                             handler.sendMessage(msg);
                         }
+                        Map<String,String> msg = new HashMap<>();
+                        msg.put("fromAccount",message.getFromAccount());
+                        msg.put("fromNick",message.getFromNick());
+                        msg.put("content",message.getContent());
+                        msgList.add(msg);
                     }
                 }
             };
@@ -187,6 +207,7 @@ public class MainActivity extends BaseActivity implements RadioGroup.OnCheckedCh
 
     private void initData() {
         tabsGroup.check(R.id.message);
+        // TODO: 2017/4/24 获取消息列表
         setDefaultFragment();
     }
 
@@ -195,7 +216,13 @@ public class MainActivity extends BaseActivity implements RadioGroup.OnCheckedCh
         FragmentManager fragmentManager = getFragmentManager();
         //开启事务
         FragmentTransaction transaction = fragmentManager.beginTransaction();
-        transaction.replace(R.id.content, new MsgFragment(),"message");
+        MsgFragment msgFragment = new MsgFragment();
+        if(msgBundle == null){
+            msgBundle = new Bundle();
+        }
+        msgBundle.putSerializable("messages",(Serializable)msgList);
+        msgFragment.setArguments(msgBundle);
+        transaction.replace(R.id.content, msgFragment,"message");
         transaction.commit();
     }
 
@@ -208,6 +235,10 @@ public class MainActivity extends BaseActivity implements RadioGroup.OnCheckedCh
             case R.id.message:
                 title.setText("消息");
                 MsgFragment msgFragment = new MsgFragment();
+                if(msgBundle == null){
+                    msgBundle = new Bundle();
+                }
+                msgBundle.putSerializable("messages",(Serializable)msgList);
                 msgFragment.setArguments(msgBundle);
                 transaction.replace(R.id.content, msgFragment,"message");
                 break;
