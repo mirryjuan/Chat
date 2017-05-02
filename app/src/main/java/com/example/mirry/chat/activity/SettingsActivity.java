@@ -1,6 +1,7 @@
 package com.example.mirry.chat.activity;
 
 import android.app.Activity;
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.view.Window;
@@ -10,6 +11,8 @@ import android.widget.Toast;
 
 import com.example.mirry.chat.R;
 import com.example.mirry.chat.view.CircleImageView;
+import com.netease.nimlib.sdk.NIMClient;
+import com.netease.nimlib.sdk.auth.AuthService;
 
 import butterknife.ButterKnife;
 import butterknife.InjectView;
@@ -22,6 +25,8 @@ public class SettingsActivity extends Activity implements View.OnClickListener {
     EditText nickname;
     @InjectView(R.id.account)
     TextView account;
+    @InjectView(R.id.editPwd)
+    TextView editPwd;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -33,6 +38,7 @@ public class SettingsActivity extends Activity implements View.OnClickListener {
         initData();
         head.setOnClickListener(this);
         nickname.setOnClickListener(this);
+        editPwd.setOnClickListener(this);
     }
 
     private void initData() {
@@ -41,14 +47,16 @@ public class SettingsActivity extends Activity implements View.OnClickListener {
 
     @Override
     public void onClick(View v) {
-        switch (v.getId()){
+        switch (v.getId()) {
             case R.id.head:
                 Toast.makeText(this, "更换头像", Toast.LENGTH_SHORT).show();
                 break;
             case R.id.nickName:
                 Toast.makeText(this, "修改昵称", Toast.LENGTH_SHORT).show();
                 break;
-            
+            case R.id.editPwd:
+                startActivity(new Intent(SettingsActivity.this,ResetPwdActivity.class));
+                break;
         }
     }
 }

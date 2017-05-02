@@ -19,6 +19,8 @@ import com.example.mirry.chat.activity.MainActivity;
 import com.example.mirry.chat.adapter.MsgAdapter;
 import com.example.mirry.chat.bean.Msg;
 import com.example.mirry.chat.common.Common;
+import com.netease.nimlib.sdk.NIMClient;
+import com.netease.nimlib.sdk.msg.MsgService;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -43,6 +45,7 @@ public class MsgFragment extends Fragment implements AdapterView.OnItemClickList
     private String account;
     private String content;
     private String nickname;
+    private int count;
 
     private MsgAdapter adapter;
     private List<Map<String,String>> messages = new ArrayList<>();
@@ -59,7 +62,8 @@ public class MsgFragment extends Fragment implements AdapterView.OnItemClickList
                     account = newMsg.getString("fromAccount");
                     nickname = newMsg.getString("fromNick");
                     content = newMsg.getString("content");
-                    updateMsgList(account,nickname,content);
+                    count = newMsg.getInt("count");
+                    updateMsgList(account,nickname,content,count);
                     Collections.reverse(msgData);
                     adapter.notifyDataSetChanged();
                     break;
@@ -105,7 +109,8 @@ public class MsgFragment extends Fragment implements AdapterView.OnItemClickList
                 account = message.get("fromAccount");
                 nickname = message.get("fromNick");
                 content = message.get("content");
-                updateMsgList(account,nickname,content);
+                count = Integer.parseInt(message.get("count"));
+                updateMsgList(account,nickname,content,count);
             }
             Collections.reverse(msgData);
             adapter.notifyDataSetChanged();
@@ -113,7 +118,7 @@ public class MsgFragment extends Fragment implements AdapterView.OnItemClickList
     }
 
 
-    private void updateMsgList(String account, String nickname, String content) {
+    private void updateMsgList(String account, String nickname, String content,int count) {
         for (Msg message:msgData) {
             if(message.getAccount().equals(account)){
                 msgData.remove(message);
@@ -129,7 +134,7 @@ public class MsgFragment extends Fragment implements AdapterView.OnItemClickList
         }
 
         message.setMsg(content);
-        message.setCount(1);
+        message.setCount(count);
         msgData.add(message);
     }
 
@@ -138,6 +143,8 @@ public class MsgFragment extends Fragment implements AdapterView.OnItemClickList
         Msg msg = msgData.get(position);
         String curAccount = msg.getAccount();
         String curUsername = msg.getUsername();
+        msg.setCount(0);
+        adapter.notifyDataSetChanged();
         Intent intent = new Intent(mActivity, ChatActivity.class);
         intent.putExtra("curAccount",curAccount);
         intent.putExtra("curUsername",curUsername);

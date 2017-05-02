@@ -10,8 +10,8 @@
 
     <com.example.mirry.chat.view.CircleImageView
         android:id="@+id/head"
-        android:layout_width="80dp"
-        android:layout_height="80dp"
+        android:layout_width="70dp"
+        android:layout_height="70dp"
         android:src="@drawable/head"/>
 
     <EditText
@@ -22,10 +22,11 @@
         android:layout_toEndOf="@+id/head"
         android:layout_marginLeft="10dp"
         android:layout_marginStart="10dp"
-        android:padding="10dp"
+        android:padding="8dp"
         android:textSize="16sp"
         android:background="@null"
-        android:editable="false"/>
+        android:editable="false"
+        android:text="sss"/>
 
     <TextView
         android:id="@+id/account"
@@ -36,9 +37,18 @@
         android:layout_below="@+id/nickname"
         android:layout_marginLeft="10dp"
         android:layout_marginStart="10dp"
-        android:padding="10dp"
+        android:padding="8dp"
         android:textSize="16sp"
-        android:background="@null" />
+        android:background="@null"
+        android:text="qqq"/>
 
+    <TextView
+        android:id="@+id/editPwd"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/head"
+        style="@style/settingsTheme"
+        android:layout_marginTop="20dp"
+        android:text="修改密码" />
 
 </RelativeLayout>

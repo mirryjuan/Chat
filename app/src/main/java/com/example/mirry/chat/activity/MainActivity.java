@@ -32,16 +32,27 @@ import com.example.mirry.chat.fragment.ContactFragment;
 import com.example.mirry.chat.fragment.MeFragment;
 import com.example.mirry.chat.fragment.MsgFragment;
 import com.example.mirry.chat.utils.DrawableUtil;
+import com.example.mirry.chat.utils.PreferencesUtil;
 import com.example.mirry.chat.view.CircleImageView;
 import com.jeremyfeinstein.slidingmenu.lib.SlidingMenu;
 import com.netease.nimlib.sdk.NIMClient;
 import com.netease.nimlib.sdk.Observer;
+import com.netease.nimlib.sdk.RequestCallback;
+import com.netease.nimlib.sdk.RequestCallbackWrapper;
 import com.netease.nimlib.sdk.friend.model.AddFriendNotify;
+import com.netease.nimlib.sdk.msg.MessageBuilder;
+import com.netease.nimlib.sdk.msg.MsgService;
 import com.netease.nimlib.sdk.msg.MsgServiceObserve;
 import com.netease.nimlib.sdk.msg.SystemMessageObserver;
+import com.netease.nimlib.sdk.msg.constant.SessionTypeEnum;
 import com.netease.nimlib.sdk.msg.constant.SystemMessageType;
 import com.netease.nimlib.sdk.msg.model.IMMessage;
+import com.netease.nimlib.sdk.msg.model.MessageReceipt;
+import com.netease.nimlib.sdk.msg.model.QueryDirectionEnum;
+import com.netease.nimlib.sdk.msg.model.RecentContact;
 import com.netease.nimlib.sdk.msg.model.SystemMessage;
+import com.netease.nimlib.sdk.uinfo.UserService;
+import com.netease.nimlib.sdk.uinfo.model.NimUserInfo;
 
 import java.io.Serializable;
 import java.util.ArrayList;
@@ -78,31 +89,48 @@ public class MainActivity extends BaseActivity implements RadioGroup.OnCheckedCh
     private List<Map<String,String>> newFriendList = new ArrayList<>();
     private List<Map<String,String>> msgList = new ArrayList<>();
 
-    private Handler handler = new Handler() {
+    private Observer<List<MessageReceipt>> messageReceiptObserver = new Observer<List<MessageReceipt>>() {
         @Override
-        public void handleMessage(Message msg) {
-            switch (msg.what) {
-                case Common.MSG_SEND:
+        public void onEvent(List<MessageReceipt> messageReceipts) {
+            for (MessageReceipt receipt:messageReceipts) {
 
-                    break;
             }
-
         }
     };
 
-    public Handler getHandler(){
-        return handler;
-    }
-
-    private Observer<List<IMMessage>> incomingMessageObserver =
-            new Observer<List<IMMessage>>() {
+    private Observer<List<RecentContact>> recentObserver =
+            new Observer<List<RecentContact>>() {
                 @Override
-                public void onEvent(List<IMMessage> messages) {
-                    for (IMMessage message : messages) {
+                public void onEvent(List<RecentContact> messages) {
+                    for (RecentContact message : messages) {
                         Bundle bundle = new Bundle();
-                        bundle.putString("fromAccount",message.getFromAccount());
-                        bundle.putString("fromNick",message.getFromNick());
-                        bundle.putString("content",message.getContent());
+                        if(!message.getFromAccount().equals(mAccount)){
+                            bundle.putString("fromAccount",message.getFromAccount());
+                            bundle.putString("fromNick",message.getFromNick());
+                            bundle.putString("content",message.getContent());
+                            bundle.putInt("count",message.getUnreadCount());
+
+                            Map<String,String> msg = new HashMap<>();
+                            msg.put("fromAccount",message.getFromAccount());
+                            msg.put("fromNick",message.getFromNick());
+                            msg.put("content",message.getContent());
+                            msg.put("count", String.valueOf(message.getUnreadCount()));
+                            msgList.add(msg);
+                        }else{
+                            NimUserInfo user = NIMClient.getService(UserService.class).getUserInfo(message.getContactId());
+                            bundle.putString("fromAccount",message.getContactId());
+                            bundle.putString("fromNick",user.getName());
+                            bundle.putString("content",message.getContent());
+                            bundle.putInt("count",message.getUnreadCount());
+
+                            Map<String,String> msg = new HashMap<>();
+                            msg.put("fromAccount",message.getContactId());
+                            msg.put("fromNick",user.getName());
+                            msg.put("content",message.getContent());
+                            msg.put("count", String.valueOf(message.getUnreadCount()));
+                            msgList.add(msg);
+                        }
+
                         MsgFragment msgFragment = (MsgFragment) getCurrentFragment("message");
                         if(msgFragment != null){
                             Handler handler = msgFragment.getHandler();
@@ -111,11 +139,6 @@ public class MainActivity extends BaseActivity implements RadioGroup.OnCheckedCh
                             msg.setData(bundle);
                             handler.sendMessage(msg);
                         }
-                        Map<String,String> msg = new HashMap<>();
-                        msg.put("fromAccount",message.getFromAccount());
-                        msg.put("fromNick",message.getFromNick());
-                        msg.put("content",message.getContent());
-                        msgList.add(msg);
                     }
                 }
             };
@@ -124,7 +147,6 @@ public class MainActivity extends BaseActivity implements RadioGroup.OnCheckedCh
 
         @Override
         public void onEvent(SystemMessage message) {
-            Log.e("message",message.getFromAccount());
             if (message.getType() == SystemMessageType.AddFriend) {
                 AddFriendNotify attachData = (AddFriendNotify) message.getAttachObject();
                 if (attachData != null) {
@@ -165,6 +187,7 @@ public class MainActivity extends BaseActivity implements RadioGroup.OnCheckedCh
 
     private Bundle msgBundle;
     private Bundle contactBundle;
+    private String mAccount;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -197,8 +220,9 @@ public class MainActivity extends BaseActivity implements RadioGroup.OnCheckedCh
         initData();
 
         NIMClient.getService(SystemMessageObserver.class).observeReceiveSystemMsg(messageObserver,true);
-        NIMClient.getService(MsgServiceObserve.class).observeReceiveMessage(incomingMessageObserver, true);
         NIMClient.getService(SystemMessageObserver.class).observeUnreadCountChange(countObserver,true);
+        NIMClient.getService(MsgServiceObserve.class).observeRecentContact(recentObserver,true);
+        NIMClient.getService(MsgServiceObserve.class).observeMessageReceipt(messageReceiptObserver, true);
 
         add.setOnClickListener(this);
         head.setOnClickListener(this);
@@ -206,9 +230,33 @@ public class MainActivity extends BaseActivity implements RadioGroup.OnCheckedCh
     }
 
     private void initData() {
+        mAccount = PreferencesUtil.getString(MainActivity.this,"config","account","");
         tabsGroup.check(R.id.message);
-        // TODO: 2017/4/24 获取消息列表
-        setDefaultFragment();
+        NIMClient.getService(MsgService.class).queryRecentContacts()
+                .setCallback(new RequestCallbackWrapper<List<RecentContact>>() {
+                    @Override
+                    public void onResult(int code, List<RecentContact> recents, Throwable e) {
+                        for (RecentContact recent:recents) {
+                            if(!recent.getFromAccount().equals(mAccount)) {
+                                Map<String, String> msg = new HashMap<>();
+                                msg.put("fromAccount", recent.getFromAccount());
+                                msg.put("fromNick", recent.getFromNick());
+                                msg.put("content", recent.getContent());
+                                msg.put("count", String.valueOf(recent.getUnreadCount()));
+                                msgList.add(msg);
+                            }else{
+                                NimUserInfo user = NIMClient.getService(UserService.class).getUserInfo(recent.getContactId());
+                                Map<String,String> msg = new HashMap<>();
+                                msg.put("fromAccount",recent.getContactId());
+                                msg.put("fromNick",user.getName());
+                                msg.put("content",recent.getContent());
+                                msg.put("count", String.valueOf(recent.getUnreadCount()));
+                                msgList.add(msg);
+                            }
+                        }
+                        setDefaultFragment();
+                    }
+                });
     }
 
     private void setDefaultFragment() {
@@ -335,8 +383,9 @@ public class MainActivity extends BaseActivity implements RadioGroup.OnCheckedCh
     public void onDestroy() {
         super.onDestroy();
         NIMClient.getService(SystemMessageObserver.class).observeReceiveSystemMsg(messageObserver,false);
-        NIMClient.getService(MsgServiceObserve.class).observeReceiveMessage(incomingMessageObserver, false);
         NIMClient.getService(SystemMessageObserver.class).observeUnreadCountChange(countObserver,false);
+        NIMClient.getService(MsgServiceObserve.class).observeRecentContact(recentObserver,false);
+        NIMClient.getService(MsgServiceObserve.class).observeMessageReceipt(messageReceiptObserver, false);
     }
 
     public Fragment getCurrentFragment(String tag){

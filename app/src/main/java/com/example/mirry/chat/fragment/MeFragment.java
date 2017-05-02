@@ -48,8 +48,8 @@ public class MeFragment extends Fragment implements View.OnClickListener {
     Button diary;
     @InjectView(R.id.share)
     Button share;
-    @InjectView(R.id.exist)
-    Button exist;
+    @InjectView(R.id.exit)
+    Button exit;
     @InjectView(R.id.info_user)
     LinearLayout userInfo;
     private MainActivity mActivity;
@@ -85,7 +85,7 @@ public class MeFragment extends Fragment implements View.OnClickListener {
         diary.setOnClickListener(this);
         share.setOnClickListener(this);
 
-        exist.setOnClickListener(this);
+        exit.setOnClickListener(this);
         return view;
     }
 
@@ -127,16 +127,17 @@ public class MeFragment extends Fragment implements View.OnClickListener {
             case R.id.head:
             case R.id.nickname:
             case R.id.info_user:
-                mInfo = new HashMap<>();
-                // TODO: 2017/4/12 头像
-                mInfo.put("nickname",mNickname);
-                mInfo.put("account",mAccount);
-                mInfo.put("phone",mPhone);
-                mInfo.put("birthday",mBirthday);
-                mInfo.put("sex",mSex);
-                Intent intent = new Intent(mActivity, MyInfoActivity.class);
-                intent.putExtra("info", (Serializable) mInfo);
-                startActivity(intent);
+                Toast.makeText(mActivity, "个人信息界面，暂未实现", Toast.LENGTH_SHORT).show();
+//                mInfo = new HashMap<>();
+//                // TODO: 2017/4/12 头像
+//                mInfo.put("nickname",mNickname);
+//                mInfo.put("account",mAccount);
+//                mInfo.put("phone",mPhone);
+//                mInfo.put("birthday",mBirthday);
+//                mInfo.put("sex",mSex);
+//                Intent intent = new Intent(mActivity, MyInfoActivity.class);
+//                intent.putExtra("info", (Serializable) mInfo);
+//                startActivity(intent);
                 break;
             case R.id.gallery:
                 openGallery();
@@ -150,7 +151,7 @@ public class MeFragment extends Fragment implements View.OnClickListener {
             case R.id.share:
                 shareMyApp();
                 break;
-            case R.id.exist:
+            case R.id.exit:
                 NIMClient.getService(AuthService.class).logout();
                 startActivity(new Intent(mActivity, LoginActivity.class));
                 mActivity.finish();
@@ -161,15 +162,15 @@ public class MeFragment extends Fragment implements View.OnClickListener {
     }
 
     private void shareMyApp() {
-        Toast.makeText(mActivity, "分享APP", Toast.LENGTH_SHORT).show();
+        Toast.makeText(mActivity, "分享APP，暂未实现", Toast.LENGTH_SHORT).show();
     }
 
     private void openDiary() {
-        Toast.makeText(mActivity, "打开日记本", Toast.LENGTH_SHORT).show();
+        Toast.makeText(mActivity, "打开日记本，暂未实现", Toast.LENGTH_SHORT).show();
     }
 
     private void openGallery() {
-        Toast.makeText(mActivity, "打开相册", Toast.LENGTH_SHORT).show();
+        Toast.makeText(mActivity, "打开相册，暂未实现", Toast.LENGTH_SHORT).show();
     }
 
     @Override

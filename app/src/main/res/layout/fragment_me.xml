@@ -93,7 +93,7 @@
         android:background="@color/slideLine"/>
 
     <Button
-        android:id="@+id/exist"
+        android:id="@+id/exit"
         android:layout_width="match_parent"
         android:layout_height="35dp"
         style="@style/meItemsTheme"

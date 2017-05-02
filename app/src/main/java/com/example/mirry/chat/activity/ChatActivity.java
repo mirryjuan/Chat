@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
+import android.util.Log;
 import android.view.View;
 import android.view.Window;
 import android.widget.Button;
@@ -17,7 +18,9 @@ import com.example.mirry.chat.R;
 import com.example.mirry.chat.adapter.ChatAdapter;
 import com.example.mirry.chat.bean.Friend;
 import com.example.mirry.chat.bean.Me;
+import com.example.mirry.chat.utils.PreferencesUtil;
 import com.example.mirry.chat.view.IconFontTextView;
+import com.netease.nimlib.sdk.InvocationFuture;
 import com.netease.nimlib.sdk.NIMClient;
 import com.netease.nimlib.sdk.Observer;
 import com.netease.nimlib.sdk.RequestCallback;
@@ -26,10 +29,12 @@ import com.netease.nimlib.sdk.msg.MsgService;
 import com.netease.nimlib.sdk.msg.MsgServiceObserve;
 import com.netease.nimlib.sdk.msg.constant.SessionTypeEnum;
 import com.netease.nimlib.sdk.msg.model.IMMessage;
+import com.netease.nimlib.sdk.msg.model.QueryDirectionEnum;
 
 import org.apache.commons.lang3.StringUtils;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 import butterknife.ButterKnife;
@@ -51,12 +56,14 @@ public class ChatActivity extends BaseActivity implements View.OnClickListener, 
     EditText msg;
     @InjectView(R.id.send)
     Button send;
-    private ChatAdapter adapter;
+    private ChatAdapter adapter = null;
     private static final int TYPE_ME = 0;
     private static final int TYPE_FRIEND = 1;
+    private static final int LIMIT = 50;
 
     private String curAccount;
     private String curUsername;
+    private String mAccount;
 
     private List<Object> list = new ArrayList<>();
 
@@ -65,15 +72,15 @@ public class ChatActivity extends BaseActivity implements View.OnClickListener, 
                 @Override
                 public void onEvent(List<IMMessage> messages) {
                     for (IMMessage message : messages) {
-                        Friend obj = null;
+                        Friend friend = null;
                         if(!message.getFromNick().equals("")){
-                            obj = new Friend(message.getFromNick());
+                            friend = new Friend(message.getFromNick());
                         }else{
-                            obj = new Friend(message.getFromAccount());
+                            friend = new Friend(message.getFromAccount());
                         }
-                        obj.setMsg(message.getContent());
-                        obj.setType(TYPE_FRIEND);
-                        list.add(obj);
+                        friend.setMsg(message.getContent());
+                        friend.setType(TYPE_FRIEND);
+                        list.add(friend);
                         adapter.notifyDataSetChanged();
                     }
                 }
@@ -105,7 +112,7 @@ public class ChatActivity extends BaseActivity implements View.OnClickListener, 
     }
 
     private void initData() {
-        chatList.setTranscriptMode(ListView.TRANSCRIPT_MODE_ALWAYS_SCROLL);
+        mAccount = PreferencesUtil.getString(ChatActivity.this,"config","account","");
         Intent intent = getIntent();
         curAccount = intent.getStringExtra("curAccount");
         curUsername = intent.getStringExtra("curUsername");
@@ -117,7 +124,51 @@ public class ChatActivity extends BaseActivity implements View.OnClickListener, 
         }
 
         if(isNetConnected){
-            // TODO: 2017/4/21 获取离线消息
+            list.clear();
+            long time = System.currentTimeMillis()+10000;
+            NIMClient.getService(MsgService.class).queryMessageListEx(
+                    MessageBuilder.createEmptyMessage(curAccount, SessionTypeEnum.P2P, time),
+                    QueryDirectionEnum.QUERY_OLD, LIMIT, true)
+                    .setCallback(new RequestCallback<List<IMMessage>>() {
+                @Override
+                public void onSuccess(List<IMMessage> allMessages) {
+                    for (IMMessage message :allMessages) {
+                        NIMClient.getService(MsgService.class).sendMessageReceipt(curAccount,message);
+                        String account = message.getFromAccount();
+                        String content = message.getContent();
+                        if(account.equals(curAccount)){
+                            Friend friend = null;
+                            if(!message.getFromNick().equals("")){
+                                friend = new Friend(message.getFromNick());
+                            }else{
+                                friend = new Friend(account);
+                            }
+
+                            friend.setMsg(content);
+                            friend.setType(TYPE_FRIEND);
+                            list.add(friend);
+                        }else if(account.equals(mAccount)){
+                            Me me = new Me();
+                            me.setMsg(content);
+                            me.setType(TYPE_ME);
+                            list.add(me);
+                        }
+                    }
+                    if(adapter != null){
+                        adapter.notifyDataSetChanged();
+                    }
+                }
+
+                @Override
+                public void onFailed(int code) {
+
+                }
+
+                @Override
+                public void onException(Throwable exception) {
+
+                }
+            });
         }else{
             // TODO: 2017/4/21 加载本地消息
         }
@@ -148,10 +199,10 @@ public class ChatActivity extends BaseActivity implements View.OnClickListener, 
                 SessionTypeEnum.P2P, // 单聊
                 content // 文本内容
         );
-        Me obj = new Me();
-        obj.setMsg(content);
-        obj.setType(TYPE_ME);
-        list.add(obj);
+        Me me = new Me();
+        me.setMsg(content);
+        me.setType(TYPE_ME);
+        list.add(me);
         adapter.notifyDataSetChanged();
 
         msg.setText("");
