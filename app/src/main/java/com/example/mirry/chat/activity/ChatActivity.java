@@ -18,6 +18,7 @@ import com.example.mirry.chat.R;
 import com.example.mirry.chat.adapter.ChatAdapter;
 import com.example.mirry.chat.bean.Friend;
 import com.example.mirry.chat.bean.Me;
+import com.example.mirry.chat.common.Common;
 import com.example.mirry.chat.utils.PreferencesUtil;
 import com.example.mirry.chat.view.IconFontTextView;
 import com.netease.nimlib.sdk.InvocationFuture;
@@ -33,6 +34,7 @@ import com.netease.nimlib.sdk.msg.model.QueryDirectionEnum;
 
 import org.apache.commons.lang3.StringUtils;
 
+import java.io.File;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -122,6 +124,7 @@ public class ChatActivity extends BaseActivity implements View.OnClickListener, 
         }else{
             username.setText(curUsername);
         }
+        NIMClient.getService(MsgService.class).setChattingAccount(curAccount,SessionTypeEnum.P2P);
 
         if(isNetConnected){
             list.clear();
@@ -133,7 +136,6 @@ public class ChatActivity extends BaseActivity implements View.OnClickListener, 
                 @Override
                 public void onSuccess(List<IMMessage> allMessages) {
                     for (IMMessage message :allMessages) {
-                        NIMClient.getService(MsgService.class).sendMessageReceipt(curAccount,message);
                         String account = message.getFromAccount();
                         String content = message.getContent();
                         if(account.equals(curAccount)){
@@ -186,19 +188,69 @@ public class ChatActivity extends BaseActivity implements View.OnClickListener, 
             case R.id.add:
                 break;
             case R.id.send:
-                sendMsg(curAccount);
+                sendMsg(curAccount,Common.MSG_TEXT);
                 break;
         }
     }
 
-    private void sendMsg(String id) {
+    private void sendMsg(String id,int type) {
+        IMMessage message = null;
         final String content = msg.getText().toString();
-        // 创建文本消息
-        IMMessage message = MessageBuilder.createTextMessage(
-                id,             //接收者ID
-                SessionTypeEnum.P2P, // 单聊
-                content // 文本内容
-        );
+        final File file = null;
+        final double latitude = 0; // 纬度
+        final double longitude = 0; // 经度
+
+        switch (type){
+            case Common.MSG_TEXT:
+                // 创建文本消息
+                message = MessageBuilder.createTextMessage(
+                        id,             //接收者ID
+                        SessionTypeEnum.P2P, // 单聊
+                        content // 文本内容
+                );
+                break;
+            case Common.MSG_IMG:
+                //创建图片消息
+                message = MessageBuilder.createImageMessage(
+                        id,             //接收者ID
+                        SessionTypeEnum.P2P, // 单聊
+                        file, // 图片文件对象
+                        null // 文件显示名字，如果第三方 APP 不关注，可以为 null
+                );
+                break;
+            case Common.MSG_FILE:
+
+                break;
+            case Common.MSG_LOCATION:
+                message = MessageBuilder.createLocationMessage(
+                        id, // 用户帐号
+                        SessionTypeEnum.P2P, // 单聊
+                        latitude, // 纬度
+                        longitude, // 经度
+                        "" // 地址信息描述
+                );
+                break;
+            case Common.MSG_AUDIO:
+                message = MessageBuilder.createAudioMessage(
+                        id, //用户帐号
+                        SessionTypeEnum.P2P, // 单聊
+                        file, // 音频文件
+                        0 // 音频持续时间，单位是ms
+                );
+                break;
+            case Common.MSG_VIDEO:
+                message = MessageBuilder.createVideoMessage(
+                        id, // 用户帐号
+                        SessionTypeEnum.P2P, //单聊
+                        file, // 视频文件
+                        0, // 视频持续时间
+                        200, // 视频宽度
+                        100, // 视频高度
+                        null // 视频显示名，可为空
+                );
+                break;
+        }
+
         Me me = new Me();
         me.setMsg(content);
         me.setType(TYPE_ME);

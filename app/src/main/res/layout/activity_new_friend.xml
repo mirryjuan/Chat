@@ -6,6 +6,29 @@
     android:layout_height="match_parent"
     tools:context="com.example.mirry.chat.activity.NewFriendActivity">
 
+    <LinearLayout
+        android:id="@+id/emptyView"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_below="@+id/addFriend"
+        android:orientation="vertical"
+        android:gravity="center"
+        android:visibility="visible">
+
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/empty"/>
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/friendHint"
+            android:textColor="@color/hintGray"
+            android:gravity="center"/>
+
+    </LinearLayout>
+
     <ListView
         android:id="@+id/friend_list"
         android:layout_width="match_parent"

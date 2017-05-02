@@ -20,7 +20,9 @@ import com.example.mirry.chat.adapter.MsgAdapter;
 import com.example.mirry.chat.bean.Msg;
 import com.example.mirry.chat.common.Common;
 import com.netease.nimlib.sdk.NIMClient;
+import com.netease.nimlib.sdk.RequestCallbackWrapper;
 import com.netease.nimlib.sdk.msg.MsgService;
+import com.netease.nimlib.sdk.msg.model.RecentContact;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -31,7 +33,7 @@ import butterknife.ButterKnife;
 import butterknife.InjectView;
 
 
-public class MsgFragment extends Fragment implements AdapterView.OnItemClickListener {
+public class MsgFragment extends Fragment implements AdapterView.OnItemClickListener, AdapterView.OnItemLongClickListener {
 
     @InjectView(R.id.msgList)
     ListView msgList;
@@ -98,6 +100,7 @@ public class MsgFragment extends Fragment implements AdapterView.OnItemClickList
 
         //消息列表单击事件
         msgList.setOnItemClickListener(this);
+        msgList.setOnItemLongClickListener(this);
 
         return view;
     }
@@ -143,8 +146,6 @@ public class MsgFragment extends Fragment implements AdapterView.OnItemClickList
         Msg msg = msgData.get(position);
         String curAccount = msg.getAccount();
         String curUsername = msg.getUsername();
-        msg.setCount(0);
-        adapter.notifyDataSetChanged();
         Intent intent = new Intent(mActivity, ChatActivity.class);
         intent.putExtra("curAccount",curAccount);
         intent.putExtra("curUsername",curUsername);
@@ -152,10 +153,33 @@ public class MsgFragment extends Fragment implements AdapterView.OnItemClickList
     }
 
     @Override
+    public boolean onItemLongClick(AdapterView<?> parent, View view, int position, long id) {
+        //长按删除最近联系人
+        Msg msg = msgData.get(position);
+        final String curAccount = msg.getAccount();
+        NIMClient.getService(MsgService.class).queryRecentContacts()
+                .setCallback(new RequestCallbackWrapper<List<RecentContact>>() {
+                    @Override
+                    public void onResult(int code, List<RecentContact> recents, Throwable e) {
+                        for (RecentContact recent:recents) {
+                            if(recent.getFromAccount().equals(curAccount)){
+                                NIMClient.getService(MsgService.class).deleteRecentContact(recent);
+                            }
+                        }
+                    }
+                });
+        msgData.remove(msg);
+        Collections.reverse(msgData);
+        adapter.notifyDataSetChanged();
+        return false;
+    }
+
+    @Override
     public void onDestroyView() {
         super.onDestroyView();
         ButterKnife.reset(this);
     }
+
 }
 
 

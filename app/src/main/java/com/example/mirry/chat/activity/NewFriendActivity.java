@@ -7,21 +7,18 @@ import android.util.Log;
 import android.view.View;
 import android.view.Window;
 import android.widget.AdapterView;
+import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.Toast;
 
 import com.example.mirry.chat.R;
 import com.example.mirry.chat.adapter.NewFriendAdapter;
 import com.example.mirry.chat.utils.NimUserInfoCache;
-import com.netease.nimlib.sdk.NIMClient;
 import com.netease.nimlib.sdk.RequestCallback;
-import com.netease.nimlib.sdk.uinfo.UserInfoProvider;
-import com.netease.nimlib.sdk.uinfo.UserService;
 import com.netease.nimlib.sdk.uinfo.model.NimUserInfo;
 
 import java.io.Serializable;
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -33,8 +30,10 @@ public class NewFriendActivity extends Activity {
 
     @InjectView(R.id.friend_list)
     ListView friendList;
-    private List<Map<String,Object>> list = new ArrayList<>();
-    private List<Map<String,Object>> listAll = new ArrayList<>();
+    @InjectView(R.id.emptyView)
+    LinearLayout emptyView;
+    private List<Map<String, Object>> list = new ArrayList<>();
+    private List<Map<String, Object>> listAll = new ArrayList<>();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -47,15 +46,16 @@ public class NewFriendActivity extends Activity {
 
         ButterKnife.inject(this);
 
-        final NewFriendAdapter adapter = new NewFriendAdapter(NewFriendActivity.this,listAll,true);
+        final NewFriendAdapter adapter = new NewFriendAdapter(NewFriendActivity.this, listAll, true);
         friendList.setAdapter(adapter);
+        friendList.setEmptyView(emptyView);
 
         friendList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 Intent intent = new Intent(NewFriendActivity.this, FriendInfoActivity.class);
                 intent.putExtra("info", (Serializable) listAll.get(position));
-                intent.putExtra("isRequest",false);
+                intent.putExtra("isRequest", false);
                 startActivity(intent);
             }
         });
@@ -70,14 +70,12 @@ public class NewFriendActivity extends Activity {
                     if (param == null) {
                         Toast.makeText(NewFriendActivity.this, "没有用户信息", Toast.LENGTH_SHORT).show();
                     } else {
-//                    Map<String, Object> extensionMap = param.getExtensionMap();
-//                    Log.e("info",extensionMap.toString());
                         Map<String, Object> info = new HashMap<>();
                         info.put("account", param.getAccount());
-                        info.put("content",content);
-                        info.put("head",param.getAvatar());
-                        info.put("nickname",param.getName());
-                        info.put("sex",param.getGenderEnum().getValue());
+                        info.put("content", content);
+                        info.put("head", param.getAvatar());
+                        info.put("nickname", param.getName());
+                        info.put("sex", param.getGenderEnum().getValue());
                         info.put("birthday", param.getBirthday());
                         info.put("mobile", param.getMobile());
                         listAll.add(info);

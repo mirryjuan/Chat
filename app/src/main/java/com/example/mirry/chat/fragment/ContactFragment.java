@@ -12,6 +12,7 @@ import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.LinearLayout;
 import android.widget.ListView;
+import android.widget.Toast;
 
 import com.example.mirry.chat.activity.ChatActivity;
 import com.example.mirry.chat.common.Common;
@@ -22,7 +23,10 @@ import com.example.mirry.chat.adapter.ContactAdapter;
 import com.example.mirry.chat.bean.Friend;
 import com.example.mirry.chat.view.QuickIndexBar;
 import com.netease.nimlib.sdk.NIMClient;
+import com.netease.nimlib.sdk.RequestCallback;
 import com.netease.nimlib.sdk.friend.FriendService;
+import com.netease.nimlib.sdk.msg.SystemMessageService;
+import com.netease.nimlib.sdk.msg.constant.SystemMessageType;
 import com.netease.nimlib.sdk.uinfo.UserService;
 import com.netease.nimlib.sdk.uinfo.model.NimUserInfo;
 
@@ -32,7 +36,7 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 
-public class ContactFragment extends Fragment implements AdapterView.OnItemClickListener, View.OnClickListener {
+public class ContactFragment extends Fragment implements AdapterView.OnItemClickListener, View.OnClickListener, AdapterView.OnItemLongClickListener {
 
     private ListView contactList;
     private MainActivity mActivity;
@@ -103,6 +107,7 @@ public class ContactFragment extends Fragment implements AdapterView.OnItemClick
         contactList.setAdapter(adapter);
         contactList.setEmptyView(emptyView);
         contactList.setOnItemClickListener(this);
+        contactList.setOnItemLongClickListener(this);
         return view;
     }
 
@@ -113,10 +118,13 @@ public class ContactFragment extends Fragment implements AdapterView.OnItemClick
             // 获取所有好友用户资料
             users = NIMClient.getService(UserService.class).getUserInfoList(accounts);
             for (NimUserInfo user : users) {
+                Friend friend = null;
                 if(!TextUtils.equals(user.getName(),"")){
-                    friendList.add(new Friend(user.getName()));
+                    friend = new Friend(user.getName());
+                    friendList.add(friend);
                 }else{
-                    friendList.add(new Friend(user.getAccount()));
+                    friend = new Friend(user.getAccount());
+                    friendList.add(friend);
                 }
             }
             //进行排序
@@ -126,7 +134,7 @@ public class ContactFragment extends Fragment implements AdapterView.OnItemClick
 
     @Override
     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-        String curAccount = accounts.get(position);
+        String curAccount = friendList.get(position).getName();
         Intent intent = new Intent(mActivity, ChatActivity.class);
         intent.putExtra("curAccount",curAccount);
         intent.putExtra("curUsername",friendList.get(position).getName());
@@ -137,6 +145,11 @@ public class ContactFragment extends Fragment implements AdapterView.OnItemClick
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.addFriend:
+                List<SystemMessageType> types = new ArrayList<>();
+                types.add(SystemMessageType.AddFriend);
+                // 将“添加好友”类型的系统通知设为已读
+                NIMClient.getService(SystemMessageService.class).resetSystemMessageUnreadCount();
+
                 Intent intent = new Intent(mActivity, NewFriendActivity.class);
                 intent.putExtra("newFriend", (Serializable) newFriendList);
                 startActivity(intent);
@@ -144,5 +157,30 @@ public class ContactFragment extends Fragment implements AdapterView.OnItemClick
             default:
                 break;
         }
+    }
+
+    @Override
+    public boolean onItemLongClick(AdapterView<?> parent, View view, final int position, long id) {
+        String curAccount = friendList.get(position).getName();
+        NIMClient.getService(FriendService.class).deleteFriend(curAccount)
+                .setCallback(new RequestCallback<Void>() {
+
+                    @Override
+                    public void onSuccess(Void param) {
+                        friendList.remove(position);
+                        adapter.notifyDataSetChanged();
+                    }
+
+                    @Override
+                    public void onFailed(int code) {
+                        Toast.makeText(mActivity, "删除好友失败", Toast.LENGTH_SHORT).show();
+                    }
+
+                    @Override
+                    public void onException(Throwable exception) {
+                        Toast.makeText(mActivity, "系统异常，请稍后重试", Toast.LENGTH_SHORT).show();
+                    }
+                });
+        return false;
     }
 }

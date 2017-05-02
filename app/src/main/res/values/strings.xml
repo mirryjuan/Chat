@@ -69,6 +69,7 @@
     <!--添加好友界面-->
     <string name="search">搜索</string>
     <string name="content">好友附言</string>
+    <string name="friendHint">暂时没有新的好友请求</string>
 
     <!--字体图标-->
     <string name="img_picture">&#xe632;</string>

@@ -39,11 +39,15 @@ import com.netease.nimlib.sdk.NIMClient;
 import com.netease.nimlib.sdk.Observer;
 import com.netease.nimlib.sdk.RequestCallback;
 import com.netease.nimlib.sdk.RequestCallbackWrapper;
+import com.netease.nimlib.sdk.friend.FriendServiceObserve;
 import com.netease.nimlib.sdk.friend.model.AddFriendNotify;
+import com.netease.nimlib.sdk.friend.model.Friend;
+import com.netease.nimlib.sdk.friend.model.FriendChangedNotify;
 import com.netease.nimlib.sdk.msg.MessageBuilder;
 import com.netease.nimlib.sdk.msg.MsgService;
 import com.netease.nimlib.sdk.msg.MsgServiceObserve;
 import com.netease.nimlib.sdk.msg.SystemMessageObserver;
+import com.netease.nimlib.sdk.msg.SystemMessageService;
 import com.netease.nimlib.sdk.msg.constant.SessionTypeEnum;
 import com.netease.nimlib.sdk.msg.constant.SystemMessageType;
 import com.netease.nimlib.sdk.msg.model.IMMessage;
@@ -88,15 +92,6 @@ public class MainActivity extends BaseActivity implements RadioGroup.OnCheckedCh
 
     private List<Map<String,String>> newFriendList = new ArrayList<>();
     private List<Map<String,String>> msgList = new ArrayList<>();
-
-    private Observer<List<MessageReceipt>> messageReceiptObserver = new Observer<List<MessageReceipt>>() {
-        @Override
-        public void onEvent(List<MessageReceipt> messageReceipts) {
-            for (MessageReceipt receipt:messageReceipts) {
-
-            }
-        }
-    };
 
     private Observer<List<RecentContact>> recentObserver =
             new Observer<List<RecentContact>>() {
@@ -176,10 +171,11 @@ public class MainActivity extends BaseActivity implements RadioGroup.OnCheckedCh
         }
     };
 
-    private Observer<Integer> countObserver = new Observer<Integer>() {
+    private Observer<FriendChangedNotify> friendChangedNotifyObserver = new Observer<FriendChangedNotify>() {
         @Override
-        public void onEvent(Integer integer) {
-
+        public void onEvent(FriendChangedNotify friendChangedNotify) {
+            List<Friend> addedOrUpdatedFriends = friendChangedNotify.getAddedOrUpdatedFriends(); // 新增的好友
+            List<String> deletedFriendAccounts = friendChangedNotify.getDeletedFriends(); // 删除好友或者被解除好友
         }
     };
 
@@ -220,9 +216,8 @@ public class MainActivity extends BaseActivity implements RadioGroup.OnCheckedCh
         initData();
 
         NIMClient.getService(SystemMessageObserver.class).observeReceiveSystemMsg(messageObserver,true);
-        NIMClient.getService(SystemMessageObserver.class).observeUnreadCountChange(countObserver,true);
         NIMClient.getService(MsgServiceObserve.class).observeRecentContact(recentObserver,true);
-        NIMClient.getService(MsgServiceObserve.class).observeMessageReceipt(messageReceiptObserver, true);
+        NIMClient.getService(FriendServiceObserve.class).observeFriendChangedNotify(friendChangedNotifyObserver, true);
 
         add.setOnClickListener(this);
         head.setOnClickListener(this);
@@ -232,6 +227,21 @@ public class MainActivity extends BaseActivity implements RadioGroup.OnCheckedCh
     private void initData() {
         mAccount = PreferencesUtil.getString(MainActivity.this,"config","account","");
         tabsGroup.check(R.id.message);
+
+        List<SystemMessageType> types = new ArrayList<>();
+        types.add(SystemMessageType.AddFriend);
+
+        // 查询“添加好友”类型的系统通知
+        List<SystemMessage> temps = NIMClient.getService(SystemMessageService.class)
+                .querySystemMessageByTypeBlock(types, 0, LOAD_MESSAGE_COUNT);
+        for (SystemMessage temp:temps) {
+            Map<String,String> newFriendInfo = new HashMap<>();
+            newFriendInfo.put("account",temp.getFromAccount());
+            newFriendInfo.put("content",temp.getContent());
+            newFriendList.add(newFriendInfo);
+        }
+
+        //查询最近联系人列表
         NIMClient.getService(MsgService.class).queryRecentContacts()
                 .setCallback(new RequestCallbackWrapper<List<RecentContact>>() {
                     @Override
@@ -357,12 +367,7 @@ public class MainActivity extends BaseActivity implements RadioGroup.OnCheckedCh
         popupWindow.showAsDropDown(titleBar, xoff, 20);
     }
 
-    public int getScreenWidth() {
-        WindowManager windowManager = (WindowManager) getSystemService(WINDOW_SERVICE);
-        DisplayMetrics metrics = new DisplayMetrics();
-        windowManager.getDefaultDisplay().getMetrics(metrics);
-        return metrics.widthPixels;
-    }
+
 
     @Override
     public void onBackPressed() {
@@ -383,9 +388,8 @@ public class MainActivity extends BaseActivity implements RadioGroup.OnCheckedCh
     public void onDestroy() {
         super.onDestroy();
         NIMClient.getService(SystemMessageObserver.class).observeReceiveSystemMsg(messageObserver,false);
-        NIMClient.getService(SystemMessageObserver.class).observeUnreadCountChange(countObserver,false);
         NIMClient.getService(MsgServiceObserve.class).observeRecentContact(recentObserver,false);
-        NIMClient.getService(MsgServiceObserve.class).observeMessageReceipt(messageReceiptObserver, false);
+        NIMClient.getService(FriendServiceObserve.class).observeFriendChangedNotify(friendChangedNotifyObserver, false);
     }
 
     public Fragment getCurrentFragment(String tag){

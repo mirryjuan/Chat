@@ -2,7 +2,9 @@ package com.example.mirry.chat.activity;
 
 import android.app.Activity;
 import android.os.Bundle;
+import android.util.DisplayMetrics;
 import android.view.Window;
+import android.view.WindowManager;
 
 import com.example.mirry.chat.common.Common;
 import com.example.mirry.chat.service.NetBroadcastReceiver;
@@ -40,5 +42,12 @@ public class BaseActivity extends Activity implements NetBroadcastReceiver.NetEv
             return false;
         }
         return false;
+    }
+
+    public int getScreenWidth() {
+        WindowManager windowManager = (WindowManager) getSystemService(WINDOW_SERVICE);
+        DisplayMetrics metrics = new DisplayMetrics();
+        windowManager.getDefaultDisplay().getMetrics(metrics);
+        return metrics.widthPixels;
     }
 }

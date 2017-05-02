@@ -60,12 +60,12 @@ public class MsgAdapter extends BaseAdapter {
         holder.head.setImageResource(R.drawable.head);
         holder.username.setText(msg.getUsername());
         holder.msg.setText(msg.getMsg());
-//        if(msg.getCount() == 0){
-//            holder.msgCount.setVisibility(View.GONE);
-//        }else{
-//            holder.msgCount.setVisibility(View.GONE);
-//            holder.msgCount.setText(""+msg.getCount());
-//        }
+        if(msg.getCount() == 0){
+            holder.msgCount.setVisibility(View.GONE);
+        }else{
+            holder.msgCount.setVisibility(View.VISIBLE);
+            holder.msgCount.setText(""+msg.getCount());
+        }
 
         return convertView;
     }

@@ -12,6 +12,7 @@ public class Friend implements Comparable<Friend>{
     private String id;
     private int type;
     private String msg;
+    private String alias;
 
     public int getType() {
         return type;

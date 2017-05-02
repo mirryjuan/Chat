@@ -53,8 +53,7 @@
                 android:layout_gravity="center"
                 android:gravity="center"
                 android:textColor="@color/white"
-                android:textSize="10sp"
-                android:visibility="gone"/>
+                android:textSize="10sp" />
 
         </LinearLayout>
 
