@@ -10,10 +10,11 @@ import android.util.DisplayMetrics;
 import android.view.WindowManager;
 
 import com.example.mirry.chat.R;
-import com.example.mirry.chat.activity.ChatActivity;
 import com.example.mirry.chat.activity.MainActivity;
 import com.example.mirry.chat.utils.PreferencesUtil;
 import com.example.mirry.chat.utils.SystemUtil;
+import com.iflytek.cloud.SpeechConstant;
+import com.iflytek.cloud.SpeechUtility;
 import com.netease.nimlib.sdk.NIMClient;
 import com.netease.nimlib.sdk.SDKOptions;
 import com.netease.nimlib.sdk.StatusBarNotificationConfig;
@@ -34,6 +35,7 @@ public class NimApplication extends Application {
         super.onCreate();
         NimApplication.context = getApplicationContext();
         NIMClient.init(this, loginInfo(), options());
+        SpeechUtility.createUtility(context, SpeechConstant.APPID +"=5909d23e");
 
         if (inMainProcess(context)) {
             // 1、UI相关初始化操作

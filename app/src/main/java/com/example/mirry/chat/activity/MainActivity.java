@@ -93,6 +93,8 @@ public class MainActivity extends BaseActivity implements RadioGroup.OnCheckedCh
     private List<Map<String,String>> newFriendList = new ArrayList<>();
     private List<Map<String,String>> msgList = new ArrayList<>();
 
+    private static final int LOAD_MESSAGE_COUNT = 10;
+
     private Observer<List<RecentContact>> recentObserver =
             new Observer<List<RecentContact>>() {
                 @Override

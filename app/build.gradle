@@ -72,4 +72,5 @@ dependencies {
     compile files('libs/navigatorui.jar')
     compile files('libs/file.jar')
     compile files('libs/invocation.jar')
+    compile files('libs/Sunflower.jar')
 }

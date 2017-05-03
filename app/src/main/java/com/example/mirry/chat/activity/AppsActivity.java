@@ -4,11 +4,13 @@ import android.app.Activity;
 import android.content.Intent;
 import android.content.res.Configuration;
 import android.os.Bundle;
-import android.view.KeyEvent;
 import android.view.Menu;
 import android.view.Window;
 import android.widget.FrameLayout;
 
+import com.example.mirry.chat.apps.JokeUtil;
+import com.example.mirry.chat.apps.NewsUtil;
+import com.example.mirry.chat.apps.WeatherUtil;
 import com.example.mirry.chat.service.WebappModeListener;
 
 import io.dcloud.EntryProxy;
@@ -19,6 +21,8 @@ public class AppsActivity extends Activity {
     private String mAppId = "";
     boolean doHardAcc = true;
     EntryProxy mEntryProxy = null;
+
+    private String result = null;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -115,5 +119,35 @@ public class AppsActivity extends Activity {
 
     public void backToActivity(){
         SDK.stopWebApp(SDK.obtainCurrentApp());
+    }
+
+    public String getNews(){
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                result = NewsUtil.getNewsData();
+            }
+        }).start();
+        return result;
+    }
+
+    public String getWeather(final String cityName){
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                result = WeatherUtil.getWeatherData(cityName);
+            }
+        }).start();
+        return result;
+    }
+
+    public String getJoke(){
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                result = JokeUtil.getJokeData();
+            }
+        }).start();
+        return result;
     }
 }

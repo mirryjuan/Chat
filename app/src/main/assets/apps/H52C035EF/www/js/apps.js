@@ -1,15 +1,21 @@
 (function($) {
 	$.init();
 	$.plusReady(function() {
-         var args = plus.runtime.arguments;
-//         var curTitle = getTitle(args);
-//         document.getElementById('title').innerHTML = curTitle;
+         var result = plus.android.invoke(window.activity, "getNews");
+         result = JSON.parse(result);
+         alert(result);
+         var data = result.result.data;
+         alert(data);
 
-         var pagePath = getPagePath(args);
-
-         if (!!pagePath) {
-             $j("#container").load(pagePath);
-         }
+//         var args = plus.runtime.arguments;
+////         var curTitle = getTitle(args);
+////         document.getElementById('title').innerHTML = curTitle;
+//
+//         var pagePath = getPagePath(args);
+//
+//         if (!!pagePath) {
+//             $j("#container").load(pagePath);
+//         }
 	});
 })(mui);
 
