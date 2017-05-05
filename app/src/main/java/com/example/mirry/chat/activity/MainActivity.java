@@ -322,6 +322,9 @@ public class MainActivity extends BaseActivity implements RadioGroup.OnCheckedCh
 
     @Override
     public void onClick(View view) {
+        if(popupWindow != null && popupWindow.isShowing()){
+            popupWindow.dismiss();
+        }
         switch (view.getId()) {
             case R.id.head:
                 menu.toggle();
@@ -330,14 +333,73 @@ public class MainActivity extends BaseActivity implements RadioGroup.OnCheckedCh
                 showPopupWindow();
                 break;
             case R.id.addFriend:
-                if(popupWindow.isShowing()){
-                    popupWindow.dismiss();
-                }
                 startActivity(new Intent(MainActivity.this,AddFriendActivity.class));
                 break;
             case R.id.scan:
                 Toast.makeText(this, "扫一扫", Toast.LENGTH_SHORT).show();
                 break;
+            case R.id.voice:
+                String text = null;
+                openPage(text);
+                break;
+        }
+    }
+
+    private void openPage(String text) {
+        if(popupWindow.isShowing()){
+            popupWindow.dismiss();
+        }
+        Intent intent = null;
+        if(text != null){
+             if(text.contains(getResources().getString(R.string.addFriend))){
+                 intent = new Intent(MainActivity.this,AddFriendActivity.class);
+                 startActivity(intent);
+                 return;
+             }
+
+            if(text.contains(getResources().getString(R.string.scan))){
+                intent = new Intent(MainActivity.this,AppsActivity.class);
+                intent.putExtra("item","001");
+                startActivity(intent);
+                return;
+            }
+
+            if(text.contains(getResources().getString(R.string.robot))){
+                intent = new Intent(MainActivity.this,AppsActivity.class);
+                intent.putExtra("item","002");
+                startActivity(intent);
+                return;
+            }
+
+            if(text.contains(getResources().getString(R.string.record))){
+                intent = new Intent(MainActivity.this,AppsActivity.class);
+                intent.putExtra("item","003");
+                startActivity(intent);
+                return;
+            }
+
+            if(text.contains(getResources().getString(R.string.news))){
+                intent = new Intent(MainActivity.this,AppsActivity.class);
+                intent.putExtra("item","004");
+                startActivity(intent);
+                return;
+            }
+
+            if(text.contains(getResources().getString(R.string.weather))){
+                intent = new Intent(MainActivity.this,AppsActivity.class);
+                intent.putExtra("item","005");
+                startActivity(intent);
+                return;
+            }
+
+            if(text.contains(getResources().getString(R.string.joke))){
+                intent = new Intent(MainActivity.this,AppsActivity.class);
+                intent.putExtra("item","006");
+                startActivity(intent);
+                return;
+            }
+        }else{
+            Toast.makeText(this, "未能识别到语音", Toast.LENGTH_SHORT).show();
         }
     }
 
@@ -345,9 +407,11 @@ public class MainActivity extends BaseActivity implements RadioGroup.OnCheckedCh
         View popupView = View.inflate(this, R.layout.popup_add, null);
         Button addFriend = (Button) popupView.findViewById(R.id.addFriend);
         Button scan = (Button) popupView.findViewById(R.id.scan);
+        Button voice = (Button) popupView.findViewById(R.id.voice);
 
         addFriend.setOnClickListener(this);
         scan.setOnClickListener(this);
+        voice.setOnClickListener(this);
 
         popupWindow = new PopupWindow(popupView, ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT, true);
         popupWindow.setContentView(popupView);

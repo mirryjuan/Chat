@@ -25,6 +25,7 @@
     <color name="scan">#2cbcfa</color>
     <color name="robot">#42db87</color>
     <color name="record">#fa9c4f</color>
-    <color name="news">#f23165</color>
+    <color name="news">#f42b20</color>
     <color name="weather">#40d6ff</color>
+    <color name="joke">#ef2e9f</color>
 </resources>

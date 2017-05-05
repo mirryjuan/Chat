@@ -5,12 +5,27 @@
 
 .iconfont {
   font-family:"iconfont" !important;
-  font-size: 20px;
+  font-size: 15px;
   font-style:normal;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }
 
+.icon-joke:before { content: "\e640"; }
+
+.icon-refuse:before { content: "\e639"; }
+
+.icon-sex_female:before { content: "\e638"; }
+
+.icon-sex_male:before { content: "\e637"; }
+
+.icon-exist:before { content: "\e636"; }
+
+.icon-male:before { content: "\e635"; }
+
+.icon-female:before { content: "\e634"; }
+
+.icon-icon:before { content: "\e633"; }
 
 .icon-picture:before { content: "\e632"; }
 
@@ -36,7 +51,7 @@
 
 .icon-news:before { content: "\e621"; }
 
-.icon-love:before { content: "\e620"; }
+.icon-chat:before { content: "\e620"; }
 
 .icon-password:before { content: "\e619"; }
 
@@ -75,5 +90,3 @@
 .icon-message:before { content: "\e602"; }
 
 .icon-voice:before { content: "\e601"; }
-
-

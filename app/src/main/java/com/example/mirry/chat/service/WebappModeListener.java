@@ -60,20 +60,20 @@ public class WebappModeListener implements ICore.ICoreStatusListener {
                         rootView.addView(view, 0);
                         break;
                     case IWebviewStateListener.ON_PAGE_STARTED:
-                        pd = ProgressDialog.show(activity, "加载中", "0/100");
+//                        pd = ProgressDialog.show(activity, "加载中", "0/100");
                         break;
                     case IWebviewStateListener.ON_PROGRESS_CHANGED:
                         // WebApp首页面加载进度变化事件
-                        if (pd != null) {
-                            pd.setMessage(pArgs + "/100");
-                        }
+//                        if (pd != null) {
+//                            pd.setMessage(pArgs + "/100");
+//                        }
                         break;
                     case IWebviewStateListener.ON_PAGE_FINISHED:
                         // WebApp首页面加载完成事件
-                        if (pd != null) {
-                            pd.dismiss();
-                            pd = null;
-                        }
+//                        if (pd != null) {
+//                            pd.dismiss();
+//                            pd = null;
+//                        }
                         // 页面加载完毕，设置显示webview
                         app.obtainWebAppRootView().obtainMainView().setVisibility(View.VISIBLE);
                         break;

@@ -21,13 +21,12 @@ import java.util.List;
  */
 
 public class NewsUtil {
-    private static String appKey = "f55fd954bc1848289667d5e85a4977a2";
-    private static int rows = 5;
-    private static String url = "http://api.avatardata.cn/GuoNeiNews/Query";
+    private static String appKey = "afd68648ac1e4105938196aa9e8970d1";
+    private static String url = "http://api.avatardata.cn/ActNews/LookUp";
     private static String result = null;
 
     public static String getNewsData(){
-        String mUrl = url + "?key=" + appKey + "&rows=" + rows;
+        String mUrl = url + "?key=" + appKey;
         HttpPost httppost=new HttpPost(mUrl);
         HttpResponse response = null;
         try {

@@ -1,22 +1,66 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:orientation="vertical"
     android:background="@drawable/bg_popup">
 
+    <com.example.mirry.chat.view.IconFontTextView
+        android:id="@+id/img_add"
+        android:layout_width="wrap_content"
+        android:layout_height="40dp"
+        android:text="@string/img_add_friend"
+        android:textColor="@color/white"
+        android:textSize="16sp"
+        android:gravity="center_vertical"
+        android:padding="10dp"/>
+
     <Button
         android:id="@+id/addFriend"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
+        android:layout_height="40dp"
         style="@style/popupTheme"
-        android:text="@string/addFriend"/>
+        android:text="@string/addFriend"
+        android:layout_toRightOf="@+id/img_add"/>
+
+    <com.example.mirry.chat.view.IconFontTextView
+        android:id="@+id/img_scan"
+        android:layout_width="wrap_content"
+        android:layout_height="40dp"
+        android:text="@string/img_scan"
+        android:textColor="@color/white"
+        android:textSize="16sp"
+        android:gravity="center_vertical"
+        android:padding="10dp"
+        android:layout_below="@+id/img_add"/>
 
     <Button
         android:id="@+id/scan"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
+        android:layout_height="40dp"
         style="@style/popupTheme"
-        android:text="@string/scan"/>
+        android:text="@string/scan"
+        android:layout_below="@+id/addFriend"
+        android:layout_toRightOf="@+id/img_scan"/>
 
-</LinearLayout>
+    <com.example.mirry.chat.view.IconFontTextView
+        android:id="@+id/img_voice"
+        android:layout_width="wrap_content"
+        android:layout_height="40dp"
+        android:text="@string/img_voice"
+        android:textColor="@color/white"
+        android:textSize="16sp"
+        android:gravity="center_vertical"
+        android:padding="10dp"
+        android:layout_below="@+id/img_scan"/>
+
+    <Button
+        android:id="@+id/voice"
+        android:layout_width="match_parent"
+        android:layout_height="40dp"
+        style="@style/popupTheme"
+        android:text="@string/voice"
+        android:layout_below="@+id/scan"
+        android:layout_toRightOf="@+id/img_voice"/>
+
+</RelativeLayout>

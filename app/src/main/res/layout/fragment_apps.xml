@@ -131,4 +131,29 @@
 
     </LinearLayout>
 
+    <LinearLayout
+        android:id="@+id/joke"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        style="@style/appsTheme"
+        android:layout_marginTop="20dp">
+
+        <com.example.mirry.chat.view.IconFontTextView
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:text="@string/img_joke"
+            android:textSize="20sp"
+            android:textColor="@color/joke"
+            android:gravity="center_vertical"/>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:text="@string/joke"
+            android:layout_marginLeft="20dp"
+            android:layout_marginStart="20dp"
+            android:gravity="center_vertical"/>
+
+    </LinearLayout>
+
 </LinearLayout>

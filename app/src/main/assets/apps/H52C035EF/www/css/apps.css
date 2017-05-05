@@ -3,3 +3,31 @@ body{
 	margin: 0px;
 	background: #ebf3fb;
 }
+
+.mui-table-view{
+	margin-top: -20px;
+}
+a{
+	color: #FFFFFF;
+}
+
+.mui-bar{
+	background-color:#01ABF4;
+}
+
+p.mui-title{
+    color: #FFFFFF;
+    font-size: 14px;
+    height: 44px;
+    line-height: 44px;
+}
+
+#back{
+	font-size: 15px;
+	height: 44px;
+	line-height: 44px;
+}
+
+#container{
+	background: #ebf3fb;
+}

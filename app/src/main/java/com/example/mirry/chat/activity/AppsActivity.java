@@ -1,8 +1,8 @@
 package com.example.mirry.chat.activity;
 
-import android.app.Activity;
 import android.content.Intent;
 import android.content.res.Configuration;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.Window;
@@ -12,17 +12,18 @@ import com.example.mirry.chat.apps.JokeUtil;
 import com.example.mirry.chat.apps.NewsUtil;
 import com.example.mirry.chat.apps.WeatherUtil;
 import com.example.mirry.chat.service.WebappModeListener;
+import com.example.mirry.chat.utils.PreferencesUtil;
+
+import java.util.concurrent.ExecutionException;
 
 import io.dcloud.EntryProxy;
 import io.dcloud.common.DHInterface.ISysEventListener;
 import io.dcloud.feature.internal.sdk.SDK;
 
-public class AppsActivity extends Activity {
+public class AppsActivity extends BaseActivity {
     private String mAppId = "";
     boolean doHardAcc = true;
     EntryProxy mEntryProxy = null;
-
-    private String result = null;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -47,6 +48,9 @@ public class AppsActivity extends Activity {
                 break;
             case "weather":
                 mAppId = "005";
+                break;
+            case "joke":
+                mAppId = "006";
                 break;
             default:
                 mAppId = "";
@@ -121,33 +125,48 @@ public class AppsActivity extends Activity {
         SDK.stopWebApp(SDK.obtainCurrentApp());
     }
 
-    public String getNews(){
-        new Thread(new Runnable() {
+    public String getData(final String appid){
+        AsyncTask<String, Integer, String> asyncTask = new AsyncTask<String, Integer, String>() {
             @Override
-            public void run() {
-                result = NewsUtil.getNewsData();
+            protected String doInBackground(String... params) {
+                String resultStr = null;
+                switch (appid){
+                    case "004":
+                        resultStr = NewsUtil.getNewsData();
+                        break;
+                    case "005":
+//                        String cityName = getCurrentCityName();
+                        String cityName = "石家庄";
+                        resultStr = WeatherUtil.getWeatherData(cityName);
+                        break;
+                    case "006":
+                        resultStr = JokeUtil.getJokeData();
+                        break;
+                    default:
+                        break;
+                }
+                return resultStr;
             }
-        }).start();
-        return result;
+        };
+
+        try {
+            return asyncTask.execute().get();
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        } catch (ExecutionException e) {
+            e.printStackTrace();
+        }
+        return null;
     }
 
-    public String getWeather(final String cityName){
-        new Thread(new Runnable() {
-            @Override
-            public void run() {
-                result = WeatherUtil.getWeatherData(cityName);
-            }
-        }).start();
-        return result;
-    }
-
-    public String getJoke(){
-        new Thread(new Runnable() {
-            @Override
-            public void run() {
-                result = JokeUtil.getJokeData();
-            }
-        }).start();
-        return result;
+    private String getCurrentCityName() {
+        String curCityName = null;
+        if(isNetConnected){
+            //定位当前城市
+            PreferencesUtil.setString(AppsActivity.this,"config","city",curCityName);
+        }else{
+            curCityName = PreferencesUtil.getString(AppsActivity.this,"config","city",null);
+        }
+        return curCityName;
     }
 }

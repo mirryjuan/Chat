@@ -39,6 +39,7 @@
     <string name="record">心情日志</string>
     <string name="news">新闻</string>
     <string name="weather">天气</string>
+    <string name="joke">笑话大全</string>
     <string name="scan">扫一扫</string>
 
     <!--我的界面-->
@@ -50,6 +51,7 @@
 
     <!--添加界面popupWindow-->
     <string name="addFriend">加好友</string>
+    <string name="voice">语音操作</string>
 
     <!--聊天界面-->
     <string name="send">发送</string>
@@ -72,37 +74,46 @@
     <string name="friendHint">暂时没有新的好友请求</string>
 
     <!--字体图标-->
-    <string name="img_picture">&#xe632;</string>
-    <string name="img_app">&#xe631;</string>
-    <string name="img_contact">&#xe630;</string>
-    <string name="img_add_friend">&#xe629;</string>
-    <string name="img_head">&#xe628;</string>
-    <string name="img_add">&#xe627;</string>
-    <string name="img_menu">&#xe626;</string>
-    <string name="img_share">&#xe625;</string>
-    <string name="img_robot">&#xe624;</string>
-    <string name="img_record">&#xe623;</string>
-    <string name="img_weather">&#xe622;</string>
-    <string name="img_news">&#xe621;</string>
-    <string name="img_pwd">&#xe619;</string>
-    <string name="img_user">&#xe618;</string>
-    <string name="img_QR">&#xe617;</string>
-    <string name="img_delete">&#xe616;</string>
-    <string name="img_scan">&#xe615;</string>
-    <string name="img_setting">&#xe614;</string>
-    <string name="img_refresh">&#xe613;</string>
-    <string name="img_search">&#xe612;</string>
-    <string name="img_accomplish">&#xe611;</string>
-    <string name="img_orders">&#xe610;</string>
-    <string name="img_envelope">&#xe609;</string>
-    <string name="img_down">&#xe608;</string>
-    <string name="img_merge">&#xe607;</string>
-    <string name="img_expend">&#xe606;</string>
-    <string name="img_next">&#xe605;</string>
-    <string name="img_back">&#xe604;</string>
-    <string name="img_camera">&#xe603;</string>
-    <string name="img_message">&#xe602;</string>
     <string name="img_voice">&#xe601;</string>
+    <string name="img_message">&#xe602;</string>
+    <string name="img_camera">&#xe603;</string>
+    <string name="img_back">&#xe604;</string>
+    <string name="img_next">&#xe605;</string>
+    <string name="img_expend">&#xe606;</string>
+    <string name="img_merge">&#xe607;</string>
+    <string name="img_down">&#xe608;</string>
+    <string name="img_envelope">&#xe609;</string>
+    <string name="img_orders">&#xe610;</string>
+    <string name="img_accomplish">&#xe611;</string>
+    <string name="img_search">&#xe612;</string>
+    <string name="img_refresh">&#xe613;</string>
+    <string name="img_setting">&#xe614;</string>
+    <string name="img_scan">&#xe615;</string>
+    <string name="img_delete">&#xe616;</string>
+    <string name="img_QR">&#xe617;</string>
+    <string name="img_user">&#xe618;</string>
+    <string name="img_pwd">&#xe619;</string>
+    <string name="img_chat">&#xe620;</string>
+    <string name="img_news">&#xe621;</string>
+    <string name="img_weather">&#xe622;</string>
+    <string name="img_record">&#xe623;</string>
+    <string name="img_robot">&#xe624;</string>
+    <string name="img_share">&#xe625;</string>
+    <string name="img_menu">&#xe626;</string>
+    <string name="img_add">&#xe627;</string>
+    <string name="img_head">&#xe628;</string>
+    <string name="img_add_friend">&#xe629;</string>
+    <string name="img_contact">&#xe630;</string>
+    <string name="img_app">&#xe631;</string>
+    <string name="img_pic">&#xe632;</string>
+    <string name="img_icon">&#xe633;</string>
+    <string name="img_female">&#xe634;</string>
+    <string name="img_male">&#xe635;</string>
+    <string name="img_exit">&#xe636;</string>
+    <string name="img_sex_female">&#xe637;</string>
+    <string name="img_sex_male">&#xe638;</string>
+    <string name="img_refuse">&#xe639;</string>
+    <string name="img_joke">&#xe640;</string>
 
 
     <item name="Tag_Me" type="id"></item>

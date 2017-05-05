@@ -200,7 +200,8 @@
 					"css/apps.css",
 					"css/iconfont.css",
 					"fonts/iconfont.ttf",
-					"js/apps.js"
+					"js/apps.js",
+					"js/jquery-1.11.1.min.js"
 				],
 				"refer": [
 					"apps/html/scan.html",
