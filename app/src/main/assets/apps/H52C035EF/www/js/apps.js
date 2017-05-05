@@ -13,10 +13,10 @@
             plus.android.invoke(window.activity,"backToActivity");
  	 	});
 
-        var pagePath = getPagePath(args);
-        if (!!pagePath) {
-            $j("#container").load(pagePath);
-        }
+//        var pagePath = getPagePath(args);
+//        if (!!pagePath) {
+//            $j("#container").load(pagePath);
+//        }
 
         var jsPath = getJsPath(args);
         if(!!jsPath){
@@ -32,7 +32,7 @@ function getJsPath(args){
         "001": "apps/js/scan.js",
         "002": "apps/js/robot.js",
         "003": "apps/js/record.js",
-        "004": "apps/js/news.js",
+        "004": "apps/js/hotnews.js",
         "005": "apps/js/weather.js",
         "006": "apps/js/joke.js"
     }
