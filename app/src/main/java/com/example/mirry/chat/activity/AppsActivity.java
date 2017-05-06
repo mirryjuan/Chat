@@ -2,19 +2,14 @@ package com.example.mirry.chat.activity;
 
 import android.content.Intent;
 import android.content.res.Configuration;
-import android.os.AsyncTask;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.Window;
 import android.widget.FrameLayout;
+import android.widget.Toast;
 
-import com.example.mirry.chat.apps.JokeUtil;
-import com.example.mirry.chat.apps.NewsUtil;
-import com.example.mirry.chat.apps.WeatherUtil;
 import com.example.mirry.chat.service.WebappModeListener;
 import com.example.mirry.chat.utils.PreferencesUtil;
-
-import java.util.concurrent.ExecutionException;
 
 import io.dcloud.EntryProxy;
 import io.dcloud.common.DHInterface.ISysEventListener;
@@ -53,7 +48,7 @@ public class AppsActivity extends BaseActivity {
                 mAppId = "006";
                 break;
             default:
-                mAppId = "";
+                Toast.makeText(this, "参数有误", Toast.LENGTH_SHORT).show();
                 break;
         }
 
@@ -123,40 +118,6 @@ public class AppsActivity extends BaseActivity {
 
     public void backToActivity(){
         SDK.stopWebApp(SDK.obtainCurrentApp());
-    }
-
-    public String getData(final String appid){
-        AsyncTask<String, Integer, String> asyncTask = new AsyncTask<String, Integer, String>() {
-            @Override
-            protected String doInBackground(String... params) {
-                String resultStr = null;
-                switch (appid){
-                    case "004":
-                        resultStr = NewsUtil.getNewsData();
-                        break;
-                    case "005":
-//                        String cityName = getCurrentCityName();
-                        String cityName = "石家庄";
-                        resultStr = WeatherUtil.getWeatherData(cityName);
-                        break;
-                    case "006":
-                        resultStr = JokeUtil.getJokeData();
-                        break;
-                    default:
-                        break;
-                }
-                return resultStr;
-            }
-        };
-
-        try {
-            return asyncTask.execute().get();
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        } catch (ExecutionException e) {
-            e.printStackTrace();
-        }
-        return null;
     }
 
     private String getCurrentCityName() {

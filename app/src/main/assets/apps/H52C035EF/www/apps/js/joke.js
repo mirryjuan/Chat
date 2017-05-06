@@ -3,7 +3,7 @@
 	$.plusReady(function() {
 	    var settings = {
             KEY: 'ebc4607ee9e348ccb1bec4fa39c4699d',
-            ROWS: 10
+            ROWS: 20
         }
         mui.post('http://api.avatardata.cn/Joke/NewstJoke',{
                 key: settings["KEY"],
