@@ -1,6 +1,5 @@
 package com.example.mirry.chat.activity;
 
-import android.app.Activity;
 import android.app.Fragment;
 import android.app.FragmentManager;
 import android.app.FragmentTransaction;
@@ -9,13 +8,10 @@ import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
-import android.util.DisplayMetrics;
-import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.Window;
-import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.FrameLayout;
 import android.widget.PopupWindow;
@@ -31,28 +27,23 @@ import com.example.mirry.chat.fragment.AppsFragment;
 import com.example.mirry.chat.fragment.ContactFragment;
 import com.example.mirry.chat.fragment.MeFragment;
 import com.example.mirry.chat.fragment.MsgFragment;
+import com.example.mirry.chat.service.IflyService;
 import com.example.mirry.chat.utils.DrawableUtil;
 import com.example.mirry.chat.utils.PreferencesUtil;
 import com.example.mirry.chat.view.CircleImageView;
 import com.jeremyfeinstein.slidingmenu.lib.SlidingMenu;
 import com.netease.nimlib.sdk.NIMClient;
 import com.netease.nimlib.sdk.Observer;
-import com.netease.nimlib.sdk.RequestCallback;
 import com.netease.nimlib.sdk.RequestCallbackWrapper;
 import com.netease.nimlib.sdk.friend.FriendServiceObserve;
 import com.netease.nimlib.sdk.friend.model.AddFriendNotify;
 import com.netease.nimlib.sdk.friend.model.Friend;
 import com.netease.nimlib.sdk.friend.model.FriendChangedNotify;
-import com.netease.nimlib.sdk.msg.MessageBuilder;
 import com.netease.nimlib.sdk.msg.MsgService;
 import com.netease.nimlib.sdk.msg.MsgServiceObserve;
 import com.netease.nimlib.sdk.msg.SystemMessageObserver;
 import com.netease.nimlib.sdk.msg.SystemMessageService;
-import com.netease.nimlib.sdk.msg.constant.SessionTypeEnum;
 import com.netease.nimlib.sdk.msg.constant.SystemMessageType;
-import com.netease.nimlib.sdk.msg.model.IMMessage;
-import com.netease.nimlib.sdk.msg.model.MessageReceipt;
-import com.netease.nimlib.sdk.msg.model.QueryDirectionEnum;
 import com.netease.nimlib.sdk.msg.model.RecentContact;
 import com.netease.nimlib.sdk.msg.model.SystemMessage;
 import com.netease.nimlib.sdk.uinfo.UserService;
@@ -67,7 +58,7 @@ import java.util.Map;
 import butterknife.ButterKnife;
 import butterknife.InjectView;
 
-public class MainActivity extends BaseActivity implements RadioGroup.OnCheckedChangeListener, View.OnClickListener {
+public class MainActivity extends BaseActivity implements RadioGroup.OnCheckedChangeListener, View.OnClickListener, IflyService.OnRecordFinishListener {
 
     @InjectView(R.id.content)
     FrameLayout content;
@@ -339,8 +330,9 @@ public class MainActivity extends BaseActivity implements RadioGroup.OnCheckedCh
                 Toast.makeText(this, "扫一扫", Toast.LENGTH_SHORT).show();
                 break;
             case R.id.voice:
-                String text = null;
-                openPage(text);
+                IflyService iflyService = new IflyService(MainActivity.this);
+                iflyService.getResultOnline();
+                iflyService.setListener(this);
                 break;
         }
     }
@@ -359,42 +351,42 @@ public class MainActivity extends BaseActivity implements RadioGroup.OnCheckedCh
 
             if(text.contains(getResources().getString(R.string.scan))){
                 intent = new Intent(MainActivity.this,AppsActivity.class);
-                intent.putExtra("item","001");
+                intent.putExtra("item","scan");
                 startActivity(intent);
                 return;
             }
 
             if(text.contains(getResources().getString(R.string.robot))){
                 intent = new Intent(MainActivity.this,AppsActivity.class);
-                intent.putExtra("item","002");
+                intent.putExtra("item","robot");
                 startActivity(intent);
                 return;
             }
 
             if(text.contains(getResources().getString(R.string.record))){
                 intent = new Intent(MainActivity.this,AppsActivity.class);
-                intent.putExtra("item","003");
+                intent.putExtra("item","record");
                 startActivity(intent);
                 return;
             }
 
             if(text.contains(getResources().getString(R.string.news))){
                 intent = new Intent(MainActivity.this,AppsActivity.class);
-                intent.putExtra("item","004");
+                intent.putExtra("item","news");
                 startActivity(intent);
                 return;
             }
 
             if(text.contains(getResources().getString(R.string.weather))){
                 intent = new Intent(MainActivity.this,AppsActivity.class);
-                intent.putExtra("item","005");
+                intent.putExtra("item","weather");
                 startActivity(intent);
                 return;
             }
 
             if(text.contains(getResources().getString(R.string.joke))){
                 intent = new Intent(MainActivity.this,AppsActivity.class);
-                intent.putExtra("item","006");
+                intent.putExtra("item","joke");
                 startActivity(intent);
                 return;
             }
@@ -428,7 +420,7 @@ public class MainActivity extends BaseActivity implements RadioGroup.OnCheckedCh
 
         popupWindow.setBackgroundDrawable(new ColorDrawable(0x00000000));    //要为popWindow设置一个背景才有效
 
-        int xoff = (int) (getScreenWidth() * 0.74);
+        int xoff = (int) (getScreenWidth() * 0.8);
 
         popupWindow.showAsDropDown(titleBar, xoff, 20);
     }
@@ -464,4 +456,9 @@ public class MainActivity extends BaseActivity implements RadioGroup.OnCheckedCh
         return fragment;
     }
 
+    @Override
+    public void onRecordFinish(String result) {
+        Toast.makeText(this, "识别到的文字："+result, Toast.LENGTH_SHORT).show();
+        openPage(result);
+    }
 }

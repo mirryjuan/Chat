@@ -121,9 +121,11 @@ public class ContactFragment extends Fragment implements AdapterView.OnItemClick
                 Friend friend = null;
                 if(!TextUtils.equals(user.getName(),"")){
                     friend = new Friend(user.getName());
+                    friend.setAccount(user.getAccount());
                     friendList.add(friend);
                 }else{
                     friend = new Friend(user.getAccount());
+                    friend.setAccount(user.getAccount());
                     friendList.add(friend);
                 }
             }
@@ -134,7 +136,7 @@ public class ContactFragment extends Fragment implements AdapterView.OnItemClick
 
     @Override
     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-        String curAccount = friendList.get(position).getName();
+        String curAccount = friendList.get(position).getAccount();
         Intent intent = new Intent(mActivity, ChatActivity.class);
         intent.putExtra("curAccount",curAccount);
         intent.putExtra("curUsername",friendList.get(position).getName());

@@ -8,11 +8,29 @@ import com.example.mirry.chat.utils.PinyinUtil;
 
 public class Friend implements Comparable<Friend>{
     private String name;
+    private String account;
     private String pinyin;
     private String id;
     private int type;
     private String msg;
     private String alias;
+
+    public String getAccount() {
+        return account;
+    }
+
+    public void setAccount(String account) {
+        this.account = account;
+    }
+
+    public String getAlias() {
+        return alias;
+    }
+
+    public void setAlias(String alias) {
+        this.alias = alias;
+    }
+
 
     public int getType() {
         return type;
