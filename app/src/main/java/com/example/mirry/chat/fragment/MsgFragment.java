@@ -19,9 +19,11 @@ import com.example.mirry.chat.activity.MainActivity;
 import com.example.mirry.chat.adapter.MsgAdapter;
 import com.example.mirry.chat.bean.Msg;
 import com.example.mirry.chat.common.Common;
+import com.example.mirry.chat.utils.PreferencesUtil;
 import com.netease.nimlib.sdk.NIMClient;
 import com.netease.nimlib.sdk.RequestCallbackWrapper;
 import com.netease.nimlib.sdk.msg.MsgService;
+import com.netease.nimlib.sdk.msg.constant.SessionTypeEnum;
 import com.netease.nimlib.sdk.msg.model.RecentContact;
 
 import java.util.ArrayList;
@@ -48,6 +50,8 @@ public class MsgFragment extends Fragment implements AdapterView.OnItemClickList
     private String content;
     private String nickname;
     private int count;
+
+    private String mAccount;
 
     private MsgAdapter adapter;
     private List<Map<String,String>> messages = new ArrayList<>();
@@ -106,6 +110,7 @@ public class MsgFragment extends Fragment implements AdapterView.OnItemClickList
     }
 
     private void initData() {
+        mAccount = PreferencesUtil.getString(mActivity,"config","account","");
         messages = (List<Map<String, String>>) getArguments().getSerializable("messages");
         if(messages.size() > 0 ){
             for (Map<String, String> message:messages){
@@ -156,20 +161,9 @@ public class MsgFragment extends Fragment implements AdapterView.OnItemClickList
     public boolean onItemLongClick(AdapterView<?> parent, View view, int position, long id) {
         //长按删除最近联系人
         Msg msg = msgData.get(position);
-        final String curAccount = msg.getAccount();
-        NIMClient.getService(MsgService.class).queryRecentContacts()
-                .setCallback(new RequestCallbackWrapper<List<RecentContact>>() {
-                    @Override
-                    public void onResult(int code, List<RecentContact> recents, Throwable e) {
-                        for (RecentContact recent:recents) {
-                            if(recent.getFromAccount().equals(curAccount)){
-                                NIMClient.getService(MsgService.class).deleteRecentContact(recent);
-                            }
-                        }
-                    }
-                });
+        String curAccount = msg.getAccount();
+        NIMClient.getService(MsgService.class).deleteRecentContact2(curAccount, SessionTypeEnum.P2P);
         msgData.remove(msg);
-        Collections.reverse(msgData);
         adapter.notifyDataSetChanged();
         return false;
     }

@@ -201,13 +201,10 @@
             android:name=".activity.FriendInfoActivity"
             android:screenOrientation="portrait" />
         <activity
-            android:name=".activity.MyInfoActivity"
-            android:screenOrientation="portrait" />
-        <activity
             android:name=".activity.SettingsActivity"
             android:screenOrientation="portrait" />
         <activity android:name=".activity.ResetPwdActivity" />
-        <activity android:name=".activity.BaseActivity"></activity>
+        <activity android:name=".activity.BaseActivity" />
     </application>
 
 </manifest>

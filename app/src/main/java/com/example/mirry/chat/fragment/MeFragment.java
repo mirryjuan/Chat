@@ -14,12 +14,12 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.example.mirry.chat.activity.ContactInfoActivity;
 import com.example.mirry.chat.common.Common;
 import com.example.mirry.chat.common.MyOpenHelper;
 import com.example.mirry.chat.R;
 import com.example.mirry.chat.activity.LoginActivity;
 import com.example.mirry.chat.activity.MainActivity;
-import com.example.mirry.chat.activity.MyInfoActivity;
 import com.example.mirry.chat.activity.SettingsActivity;
 import com.example.mirry.chat.utils.PreferencesUtil;
 import com.example.mirry.chat.view.CircleImageView;
@@ -28,8 +28,6 @@ import com.netease.nimlib.sdk.auth.AuthService;
 import com.netease.nimlib.sdk.uinfo.UserService;
 import com.netease.nimlib.sdk.uinfo.model.NimUserInfo;
 
-import java.io.Serializable;
-import java.util.HashMap;
 import java.util.Map;
 
 import butterknife.ButterKnife;
@@ -97,27 +95,13 @@ public class MeFragment extends Fragment implements View.OnClickListener {
     }
 
     private void queryUserData(String account) {
-        MyOpenHelper helper = new MyOpenHelper(mActivity);
-        SQLiteDatabase db = helper.getReadableDatabase();
-        Cursor cursor = db.query("users", null, "account = ?", new String[]{account}, null, null, null);
-        if(cursor.getCount() > 0){
-            cursor.moveToFirst();
-            mAccount = cursor.getString(cursor.getColumnIndex("account"));
-            mNickname = cursor.getString(cursor.getColumnIndex("nickname"));
-            mSex = cursor.getInt(cursor.getColumnIndex("sex"));
-            mPhone = cursor.getString(cursor.getColumnIndex("phone"));
-            mBirthday = cursor.getString(cursor.getColumnIndex("birthday"));
-            cursor.close();
-            db.close();
-        }else{
-            NimUserInfo mInfo = NIMClient.getService(UserService.class).getUserInfo(account);
-            if(mInfo != null){
-                mAccount = mInfo.getAccount();
-                mNickname = mInfo.getName();
-                mSex = mInfo.getGenderEnum().getValue();
-                mPhone = mInfo.getMobile();
-                mBirthday = mInfo.getBirthday();
-            }
+        NimUserInfo mInfo = NIMClient.getService(UserService.class).getUserInfo(account);
+        if(mInfo != null){
+            mAccount = mInfo.getAccount();
+            mNickname = mInfo.getName();
+            mSex = mInfo.getGenderEnum().getValue();
+            mPhone = mInfo.getMobile();
+            mBirthday = mInfo.getBirthday();
         }
     }
 
@@ -127,17 +111,9 @@ public class MeFragment extends Fragment implements View.OnClickListener {
             case R.id.head:
             case R.id.nickname:
             case R.id.info_user:
-                Toast.makeText(mActivity, "个人信息界面，暂未实现", Toast.LENGTH_SHORT).show();
-//                mInfo = new HashMap<>();
-//                // TODO: 2017/4/12 头像
-//                mInfo.put("nickname",mNickname);
-//                mInfo.put("account",mAccount);
-//                mInfo.put("phone",mPhone);
-//                mInfo.put("birthday",mBirthday);
-//                mInfo.put("sex",mSex);
-//                Intent intent = new Intent(mActivity, MyInfoActivity.class);
-//                intent.putExtra("info", (Serializable) mInfo);
-//                startActivity(intent);
+                Intent intent = new Intent(mActivity, ContactInfoActivity.class);
+                intent.putExtra("account", mAccount);
+                startActivity(intent);
                 break;
             case R.id.gallery:
                 openGallery();

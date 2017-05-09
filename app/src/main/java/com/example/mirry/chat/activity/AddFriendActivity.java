@@ -45,6 +45,8 @@ public class AddFriendActivity extends Activity implements TextView.OnEditorActi
     IconFontTextView clearSearch;
     @InjectView(R.id.search)
     IconFontTextView search;
+    @InjectView(R.id.back)
+    IconFontTextView back;
 
     private List<Map<String, Object>> list = new ArrayList<>();
     private NewFriendAdapter adapter;
@@ -60,6 +62,7 @@ public class AddFriendActivity extends Activity implements TextView.OnEditorActi
         searchText.addTextChangedListener(this);
         clearSearch.setOnClickListener(this);
         search.setOnClickListener(this);
+        back.setOnClickListener(this);
 
         adapter = new NewFriendAdapter(this, list, false);
 
@@ -69,7 +72,7 @@ public class AddFriendActivity extends Activity implements TextView.OnEditorActi
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 Intent intent = new Intent(AddFriendActivity.this, FriendInfoActivity.class);
                 intent.putExtra("info", (Serializable) list.get(position));
-                intent.putExtra("isRequest",true);
+                intent.putExtra("isRequest", true);
                 startActivity(intent);
             }
         });
@@ -100,9 +103,9 @@ public class AddFriendActivity extends Activity implements TextView.OnEditorActi
 //                    Log.e("info",extensionMap.toString());
                     Map<String, Object> info = new HashMap<>();
                     info.put("account", param.getAccount());
-                    info.put("head",param.getAvatar());
-                    info.put("nickname",param.getName());
-                    info.put("sex",param.getGenderEnum().getValue());
+                    info.put("head", param.getAvatar());
+                    info.put("nickname", param.getName());
+                    info.put("sex", param.getGenderEnum().getValue());
                     info.put("birthday", param.getBirthday());
                     info.put("mobile", param.getMobile());
                     list.add(info);
@@ -140,6 +143,9 @@ public class AddFriendActivity extends Activity implements TextView.OnEditorActi
                 list.clear();
                 searchFriend();
                 CommonUtil.hideKeyBoard(AddFriendActivity.this, searchText);
+                break;
+            case R.id.back:
+                finish();
                 break;
             default:
                 break;

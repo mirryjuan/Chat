@@ -9,11 +9,13 @@ import android.view.Window;
 import android.widget.AdapterView;
 import android.widget.LinearLayout;
 import android.widget.ListView;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.mirry.chat.R;
 import com.example.mirry.chat.adapter.NewFriendAdapter;
 import com.example.mirry.chat.utils.NimUserInfoCache;
+import com.example.mirry.chat.view.IconFontTextView;
 import com.netease.nimlib.sdk.RequestCallback;
 import com.netease.nimlib.sdk.uinfo.model.NimUserInfo;
 
@@ -26,12 +28,14 @@ import java.util.Map;
 import butterknife.ButterKnife;
 import butterknife.InjectView;
 
-public class NewFriendActivity extends Activity {
+public class NewFriendActivity extends Activity implements View.OnClickListener {
 
     @InjectView(R.id.friend_list)
     ListView friendList;
     @InjectView(R.id.emptyView)
     LinearLayout emptyView;
+    @InjectView(R.id.back)
+    IconFontTextView back;
     private List<Map<String, Object>> list = new ArrayList<>();
     private List<Map<String, Object>> listAll = new ArrayList<>();
 
@@ -46,6 +50,7 @@ public class NewFriendActivity extends Activity {
 
         ButterKnife.inject(this);
 
+        back.setOnClickListener(this);
         final NewFriendAdapter adapter = new NewFriendAdapter(NewFriendActivity.this, listAll, true);
         friendList.setAdapter(adapter);
         friendList.setEmptyView(emptyView);
@@ -100,5 +105,14 @@ public class NewFriendActivity extends Activity {
             });
         }
 
+    }
+
+    @Override
+    public void onClick(View v) {
+        switch (v.getId()){
+            case R.id.back:
+                finish();
+                break;
+        }
     }
 }

@@ -181,7 +181,9 @@ public class ChatActivity extends BaseActivity implements View.OnClickListener, 
                 this.finish();
                 break;
             case R.id.userinfo:
-                Toast.makeText(this, "联系人信息界面", Toast.LENGTH_SHORT).show();
+                Intent intent = new Intent(ChatActivity.this,ContactInfoActivity.class);
+                intent.putExtra("account",curAccount);
+                startActivity(intent);
                 break;
             case R.id.add:
                 break;

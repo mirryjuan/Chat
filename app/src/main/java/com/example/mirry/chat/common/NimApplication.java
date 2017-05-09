@@ -11,6 +11,7 @@ import android.view.WindowManager;
 
 import com.example.mirry.chat.R;
 import com.example.mirry.chat.activity.MainActivity;
+import com.example.mirry.chat.activity.SettingsActivity;
 import com.example.mirry.chat.utils.PreferencesUtil;
 import com.example.mirry.chat.utils.SystemUtil;
 import com.iflytek.cloud.SpeechConstant;
@@ -57,6 +58,10 @@ public class NimApplication extends Application {
         config.ledOffMs = 1500;
 
         // 通知铃声的uri字符串
+        boolean mVoice = PreferencesUtil.getBoolean(context, "config", "voice", true);
+        boolean mVibration = PreferencesUtil.getBoolean(context, "config", "vibration", true);
+        config.ring = mVoice;
+        config.vibrate = mVibration;
         config.notificationSound = "android.resource://com.netease.nim.demo/raw/msg";
         options.statusBarNotificationConfig = config;
 

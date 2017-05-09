@@ -47,7 +47,6 @@
     <string name="diary">我的日志</string>
     <string name="settings">设置</string>
     <string name="share">分享APP</string>
-    <string name="exist">退出账号</string>
 
     <!--添加界面popupWindow-->
     <string name="addFriend">加好友</string>
@@ -64,6 +63,8 @@
     <string name="chat">聊一聊</string>
     <string name="friendInfo">好友信息</string>
     <string name="conHint">您还没有联系人，快点击 + 添加</string>
+    <string name="birthHint">请选择生日</string>
+    <string name="phoneHint">请输入手机号</string>
 
     <!-- 消息界面-->
     <string name="msgHint">暂时没有新消息</string>
@@ -72,6 +73,11 @@
     <string name="search">搜索</string>
     <string name="content">好友附言</string>
     <string name="friendHint">暂时没有新的好友请求</string>
+    <!--设置界面-->
+    <string name="setVoice">声音</string>
+    <string name="setVibration">振动</string>
+    <string name="setPwd">修改密码</string>
+    <string name="exit">退出登录</string>
 
     <!--字体图标-->
     <string name="img_voice">&#xe601;</string>

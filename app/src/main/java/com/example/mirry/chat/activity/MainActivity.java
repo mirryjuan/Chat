@@ -21,6 +21,7 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.example.mirry.chat.bean.Msg;
 import com.example.mirry.chat.common.Common;
 import com.example.mirry.chat.R;
 import com.example.mirry.chat.fragment.AppsFragment;
@@ -52,6 +53,7 @@ import com.netease.nimlib.sdk.uinfo.model.NimUserInfo;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
@@ -85,6 +87,29 @@ public class MainActivity extends BaseActivity implements RadioGroup.OnCheckedCh
     private List<Map<String,String>> msgList = new ArrayList<>();
 
     private static final int LOAD_MESSAGE_COUNT = 10;
+
+    private Observer<RecentContact> deleteRecentObserver = new Observer<RecentContact>() {
+        @Override
+        public void onEvent(RecentContact recentContact) {
+            String deleteAccount = null;
+            String fromAccount = recentContact.getFromAccount();
+            String contactId = recentContact.getContactId();
+            if(mAccount.equals(fromAccount) || fromAccount == null){
+                deleteAccount = contactId;
+            }else{
+                deleteAccount = fromAccount;
+            }
+
+            if(deleteAccount != null){
+                Iterator<Map<String, String>> iterator = msgList.iterator();
+                while(iterator.hasNext()){
+                    if(iterator.next().get("fromAccount").equals(deleteAccount)){
+                        iterator.remove();
+                    }
+                }
+            }
+        }
+    };
 
     private Observer<List<RecentContact>> recentObserver =
             new Observer<List<RecentContact>>() {
@@ -210,6 +235,7 @@ public class MainActivity extends BaseActivity implements RadioGroup.OnCheckedCh
 
         NIMClient.getService(SystemMessageObserver.class).observeReceiveSystemMsg(messageObserver,true);
         NIMClient.getService(MsgServiceObserve.class).observeRecentContact(recentObserver,true);
+        NIMClient.getService(MsgServiceObserve.class).observeRecentContactDeleted(deleteRecentObserver,true);
         NIMClient.getService(FriendServiceObserve.class).observeFriendChangedNotify(friendChangedNotifyObserver, true);
 
         add.setOnClickListener(this);
@@ -447,6 +473,7 @@ public class MainActivity extends BaseActivity implements RadioGroup.OnCheckedCh
         super.onDestroy();
         NIMClient.getService(SystemMessageObserver.class).observeReceiveSystemMsg(messageObserver,false);
         NIMClient.getService(MsgServiceObserve.class).observeRecentContact(recentObserver,false);
+        NIMClient.getService(MsgServiceObserve.class).observeRecentContactDeleted(deleteRecentObserver,false);
         NIMClient.getService(FriendServiceObserve.class).observeFriendChangedNotify(friendChangedNotifyObserver, false);
     }
 

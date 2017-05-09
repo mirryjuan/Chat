@@ -5,12 +5,42 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context="com.example.mirry.chat.activity.ContactInfoActivity"
-    android:background="@color/bgBlue">
+    android:background="@color/bgBlue"
+    android:focusable="true"
+    android:focusableInTouchMode="true">
+
+    <RelativeLayout
+        android:id="@+id/titleBar"
+        android:layout_width="match_parent"
+        android:layout_height="48dp"
+        android:background="@color/darkBlue"
+        android:paddingLeft="10dp"
+        android:paddingRight="10dp">
+
+        <com.example.mirry.chat.view.IconFontTextView
+            android:id="@+id/back"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/img_back"
+            android:textSize="16sp"
+            android:padding="5dp"
+            android:textColor="@color/white"
+            android:layout_centerVertical="true"/>
+
+        <TextView
+            android:id="@+id/title"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textColor="@color/white"
+            android:layout_centerInParent="true" />
+
+    </RelativeLayout>
 
     <RelativeLayout
         android:id="@+id/rl_title"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/titleBar">
 
         <com.example.mirry.chat.view.CircleImageView
             android:id="@+id/head"
@@ -25,31 +55,42 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:textSize="20sp"
-            android:textColor="@color/darkBlue"
+            android:textColor="@color/darkGray"
             android:maxLines="1"
             android:ellipsize="end"
             android:padding="5dp"
             android:background="@null"
-            android:editable="false"
             android:layout_toRightOf="@id/head"
-            android:layout_toEndOf="@+id/head"
-            android:layout_toLeftOf="@+id/note"
-            android:layout_toStartOf="@+id/note" />
+            android:layout_toEndOf="@+id/head" />
 
         <EditText
             android:id="@+id/note"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:textSize="20sp"
-            android:textColor="@color/darkBlue"
+            android:textColor="@color/darkGray"
             android:maxLines="1"
             android:ellipsize="end"
             android:padding="5dp"
             android:background="@null"
-            android:editable="false"
             android:layout_toRightOf="@id/head"
             android:layout_toEndOf="@+id/head"
-            android:layout_below="@+id/nickname"/>
+            android:layout_below="@+id/nickname" />
+
+        <EditText
+            android:id="@+id/account"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textSize="20sp"
+            android:textColor="@color/darkGray"
+            android:maxLines="1"
+            android:ellipsize="end"
+            android:padding="5dp"
+            android:editable="false"
+            android:background="@null"
+            android:layout_toRightOf="@id/head"
+            android:layout_toEndOf="@+id/head"
+            android:layout_below="@+id/nickname" />
 
     </RelativeLayout>
 
@@ -60,9 +101,10 @@
         android:text="@string/phone"
         android:layout_below="@id/rl_title"
         android:layout_marginTop="10dp"
-        android:padding="10dp"/>
+        android:padding="10dp"
+        android:textColor="@color/darkGray"/>
 
-    <TextView
+    <EditText
         android:id="@+id/info_phone"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -71,7 +113,8 @@
         android:layout_toEndOf="@+id/phone"
         android:layout_marginTop="10dp"
         android:padding="10dp"
-        android:textColor="@color/darkBlue"/>
+        android:hint="@string/phoneHint"
+        android:textColorHint="@color/hintGray"/>
 
     <TextView
         android:id="@+id/birthday"
@@ -80,9 +123,11 @@
         android:text="@string/birthday"
         android:layout_below="@id/phone"
         android:layout_marginTop="5dp"
-        android:padding="10dp"/>
+        android:layout_marginRight="12dp"
+        android:padding="10dp"
+        android:textColor="@color/darkGray"/>
 
-    <TextView
+    <EditText
         android:id="@+id/info_birthday"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -91,7 +136,8 @@
         android:layout_toEndOf="@+id/birthday"
         android:layout_marginTop="5dp"
         android:padding="10dp"
-        android:textColor="@color/darkBlue"/>
+        android:hint="@string/birthHint"
+        android:textColorHint="@color/hintGray"/>
 
     <Button
         android:id="@+id/wechat"
