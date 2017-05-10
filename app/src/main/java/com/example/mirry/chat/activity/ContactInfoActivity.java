@@ -15,7 +15,9 @@ import com.example.mirry.chat.utils.PreferencesUtil;
 import com.example.mirry.chat.view.CircleImageView;
 import com.example.mirry.chat.view.IconFontTextView;
 import com.netease.nimlib.sdk.NIMClient;
+import com.netease.nimlib.sdk.RequestCallback;
 import com.netease.nimlib.sdk.RequestCallbackWrapper;
+import com.netease.nimlib.sdk.friend.FriendService;
 import com.netease.nimlib.sdk.uinfo.UserService;
 import com.netease.nimlib.sdk.uinfo.constant.UserInfoFieldEnum;
 import com.netease.nimlib.sdk.uinfo.model.NimUserInfo;
@@ -38,8 +40,8 @@ public class ContactInfoActivity extends Activity implements View.OnClickListene
     EditText phoneInfo;
     @InjectView(R.id.info_birthday)
     EditText birthdayInfo;
-    @InjectView(R.id.wechat)
-    Button chat;
+    @InjectView(R.id.delete)
+    Button delete;
     @InjectView(R.id.phone)
     TextView phone;
     @InjectView(R.id.birthday)
@@ -50,6 +52,8 @@ public class ContactInfoActivity extends Activity implements View.OnClickListene
     TextView title;
     @InjectView(R.id.account)
     EditText account;
+    @InjectView(R.id.chat)
+    Button chat;
     private String curAccount;
     private String mNickname;
     private int mSex;
@@ -76,21 +80,30 @@ public class ContactInfoActivity extends Activity implements View.OnClickListene
 
         initData(isMe);
 
-        chat.setOnClickListener(this);
+        delete.setOnClickListener(this);
         back.setOnClickListener(this);
+        chat.setOnClickListener(this);
     }
 
     private void initData(Boolean isMe) {
         if (isMe) {
             title.setText("个人信息");
-            chat.setVisibility(View.GONE);
+            delete.setVisibility(View.GONE);
             note.setVisibility(View.GONE);
             account.setVisibility(View.VISIBLE);
+            chat.setVisibility(View.GONE);
         } else {
             title.setText("好友信息");
-            chat.setVisibility(View.VISIBLE);
             note.setVisibility(View.VISIBLE);
             account.setVisibility(View.GONE);
+            boolean isMyFriend = NIMClient.getService(FriendService.class).isMyFriend(curAccount);
+            if(isMyFriend){
+                delete.setVisibility(View.VISIBLE);
+                chat.setVisibility(View.GONE);
+            }else{
+                delete.setVisibility(View.GONE);
+                chat.setVisibility(View.VISIBLE);
+            }
         }
         setVisibilities(isMe);
         NimUserInfo mInfo = NIMClient.getService(UserService.class).getUserInfo(curAccount);
@@ -109,6 +122,12 @@ public class ContactInfoActivity extends Activity implements View.OnClickListene
                 phone.setVisibility(View.VISIBLE);
                 birthday.setVisibility(View.VISIBLE);
                 account.setText(mAccount);
+                if (mPhone != null && !mPhone.equals("")) {
+                    phoneInfo.setText(mPhone);
+                }
+                if (mBirthday != null && !mBirthday.equals("")) {
+                    birthdayInfo.setText(mBirthday);
+                }
             } else {
                 if (mPhone == null || mPhone.equals("")) {
                     phone.setVisibility(View.GONE);
@@ -138,9 +157,25 @@ public class ContactInfoActivity extends Activity implements View.OnClickListene
     @Override
     public void onClick(View v) {
         switch (v.getId()) {
-            case R.id.wechat:
-                Intent intent = new Intent(ContactInfoActivity.this, ChatActivity.class);
-                startActivity(intent);
+            case R.id.delete:
+                NIMClient.getService(FriendService.class).deleteFriend(curAccount)
+                        .setCallback(new RequestCallback<Void>() {
+
+                            @Override
+                            public void onSuccess(Void param) {
+                                Toast.makeText(ContactInfoActivity.this, "删除好友成功", Toast.LENGTH_SHORT).show();
+                            }
+
+                            @Override
+                            public void onFailed(int code) {
+                                Toast.makeText(ContactInfoActivity.this, "删除好友失败", Toast.LENGTH_SHORT).show();
+                            }
+
+                            @Override
+                            public void onException(Throwable exception) {
+                                Toast.makeText(ContactInfoActivity.this, "系统异常，请稍后重试", Toast.LENGTH_SHORT).show();
+                            }
+                        });
                 break;
             case R.id.back:
                 if (isMe) {
@@ -149,17 +184,17 @@ public class ContactInfoActivity extends Activity implements View.OnClickListene
                     String curBirthday = birthdayInfo.getText().toString().trim();
 
                     Map<UserInfoFieldEnum, Object> fields = new HashMap<>(1);
-                    if(!curNick.equals(mNickname)){
+                    if (!curNick.equals(mNickname)) {
                         fields.put(UserInfoFieldEnum.Name, curNick);
                     }
-                    if(!curPhone.equals(mPhone)){
+                    if (!curPhone.equals(mPhone)) {
                         fields.put(UserInfoFieldEnum.MOBILE, curNick);
                     }
-                    if(!curBirthday.equals(mBirthday)){
+                    if (!curBirthday.equals(mBirthday)) {
                         fields.put(UserInfoFieldEnum.BIRTHDAY, curNick);
                     }
 
-                    if(!fields.isEmpty()){
+                    if (!fields.isEmpty()) {
                         NIMClient.getService(UserService.class).updateUserInfo(fields)
                                 .setCallback(new RequestCallbackWrapper<Void>() {
 
@@ -172,6 +207,12 @@ public class ContactInfoActivity extends Activity implements View.OnClickListene
 
                 }
                 finish();
+                break;
+            case R.id.chat:
+                Intent intent = new Intent(ContactInfoActivity.this, ChatActivity.class);
+                intent.putExtra("curAccount",curAccount);
+                intent.putExtra("curUsername",mNickname);
+                startActivity(intent);
                 break;
         }
     }

@@ -50,6 +50,8 @@ public class WebappModeListener implements ICore.ICoreStatusListener {
             // 设置Webview事件监听，可在监监听内获取WebIvew加载内容的进度
             @Override
             public Object onCallBack(int pType, Object pArgs) {
+                app.obtainWebAppRootView().obtainMainView().setHorizontalScrollBarEnabled(false);
+                app.obtainWebAppRootView().obtainMainView().setVerticalScrollBarEnabled(false);
                 switch (pType) {
                     case IWebviewStateListener.ON_WEBVIEW_READY:
                         // WebApp准备加载事件

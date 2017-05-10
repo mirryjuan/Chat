@@ -1,6 +1,7 @@
 package com.example.mirry.chat.adapter;
 
 import android.content.Context;
+import android.content.Intent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
@@ -10,6 +11,7 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.example.mirry.chat.R;
+import com.example.mirry.chat.common.Common;
 import com.example.mirry.chat.view.CircleImageView;
 import com.netease.nimlib.sdk.NIMClient;
 import com.netease.nimlib.sdk.friend.FriendService;
@@ -51,7 +53,7 @@ public class NewFriendAdapter extends BaseAdapter {
 
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
-        ViewHolder holder;
+        final ViewHolder holder;
         if (convertView == null) {
             holder = new ViewHolder();
             convertView = View.inflate(context, R.layout.item_friend_new, null);
@@ -64,6 +66,7 @@ public class NewFriendAdapter extends BaseAdapter {
             holder.addInfo = (LinearLayout) convertView.findViewById(R.id.info_add);
             holder.content = (TextView) convertView.findViewById(R.id.content);
             holder.add = (Button) convertView.findViewById(R.id.add);
+            holder.status = (TextView) convertView.findViewById(R.id.status);
             convertView.setTag(holder);
         } else {
             holder = (ViewHolder) convertView.getTag();
@@ -91,8 +94,17 @@ public class NewFriendAdapter extends BaseAdapter {
                 holder.add.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        NIMClient.getService(FriendService.class).ackAddFriendRequest(info.get("account").toString(), true); // 通过对方的好友请求
+                        String friendAccount = info.get("account").toString();
+                        NIMClient.getService(FriendService.class).ackAddFriendRequest(friendAccount, true); // 通过对方的好友请求
+
+                        holder.add.setVisibility(View.GONE);
+                        holder.status.setVisibility(View.VISIBLE);
+                        holder.status.setText("已添加");
                         // TODO: 2017/3/19 加入通讯录
+                        Intent intent = new Intent();
+                        intent.setAction(Common.ADD);
+                        intent.putExtra("account",friendAccount);
+                        context.sendBroadcast(intent);
                     }
                 });
             }else{
@@ -114,5 +126,6 @@ public class NewFriendAdapter extends BaseAdapter {
         TextView content;
         View line;
         LinearLayout addInfo;
+        TextView status;
     }
 }

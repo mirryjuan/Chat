@@ -1,35 +1,64 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/activity_reset_pwd"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context="com.example.mirry.chat.activity.ResetPwdActivity"
     android:orientation="vertical"
-    android:gravity="center"
-    android:background="@drawable/bg"
+    android:background="@color/bgBlue"
     android:focusable="true"
-    android:focusableInTouchMode="true"
-    android:padding="10dp">
+    android:focusableInTouchMode="true">
 
-
-    <EditText
-        android:id="@+id/pwd_old"
+    <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="40dp"
-        style="@style/UserInfoTheme"
-        android:background="@drawable/bg_et_user"
-        android:hint="@string/pwd_old" />
+        android:layout_height="48dp"
+        android:background="@color/darkBlue"
+        android:gravity="center_vertical"
+        android:padding="10dp">
 
-    <EditText
-        android:id="@+id/pwd_new"
+        <com.example.mirry.chat.view.IconFontTextView
+            android:id="@+id/back"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:text="@string/img_back"
+            android:textSize="20sp"
+            android:textColor="@color/white"/>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:text="@string/resetPwd"
+            android:textColor="@color/white"
+            android:gravity="center"
+            android:layout_centerInParent="true"/>
+
+    </RelativeLayout>
+
+    <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="40dp"
-        style="@style/UserInfoTheme"
-        android:layout_marginTop="0.8dp"
-        android:background="@drawable/bg_et_pwd"
-        android:inputType="textPassword"
-        android:hint="@string/pwd_new" />
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:layout_centerInParent="true"
+        android:padding="10dp">
+
+        <EditText
+            android:id="@+id/pwd_old"
+            android:layout_width="match_parent"
+            android:layout_height="40dp"
+            style="@style/UserInfoTheme"
+            android:background="@drawable/bg_et_user"
+            android:hint="@string/pwd_old" />
+
+        <EditText
+            android:id="@+id/pwd_new"
+            android:layout_width="match_parent"
+            android:layout_height="40dp"
+            style="@style/UserInfoTheme"
+            android:layout_marginTop="0.8dp"
+            android:background="@drawable/bg_et_pwd"
+            android:inputType="textPassword"
+            android:hint="@string/pwd_new" />
 
         <Button
             android:id="@+id/reset"
@@ -37,4 +66,6 @@
             android:layout_marginTop="20dp"
             android:text="@string/reset" />
 
-</LinearLayout>
+    </LinearLayout>
+
+</RelativeLayout>

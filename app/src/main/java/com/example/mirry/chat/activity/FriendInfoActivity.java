@@ -14,6 +14,9 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.mirry.chat.R;
+import com.example.mirry.chat.common.Common;
+import com.example.mirry.chat.utils.PreferencesUtil;
+import com.example.mirry.chat.view.CenterDialog;
 import com.example.mirry.chat.view.CircleImageView;
 import com.example.mirry.chat.view.IconFontTextView;
 import com.netease.nimlib.sdk.NIMClient;
@@ -29,7 +32,7 @@ import java.util.Map;
 import butterknife.ButterKnife;
 import butterknife.InjectView;
 
-public class FriendInfoActivity extends Activity implements View.OnClickListener {
+public class FriendInfoActivity extends Activity implements View.OnClickListener, CenterDialog.OnCenterItemClickListener {
 
     @InjectView(R.id.back)
     IconFontTextView back;
@@ -58,6 +61,9 @@ public class FriendInfoActivity extends Activity implements View.OnClickListener
     private Map<String, Object> info;
 
     private Boolean isRequest = true;
+    private CenterDialog centerDialog;
+    private String friendAccount;
+    private String mAccount;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -92,6 +98,8 @@ public class FriendInfoActivity extends Activity implements View.OnClickListener
 //            if(info.get("head") != null){
 //                head.setImageResource((Integer)info.get("head"));
 //            }
+        mAccount = PreferencesUtil.getString(FriendInfoActivity.this,"config","account","");
+        friendAccount = info.get("account").toString();
         nickName.setText(info.get("nickname") == null ? "" : info.get("nickname").toString());
         account.setText(info.get("account") == null ? "" : info.get("account").toString());
         if (info.get("sex").equals(GenderEnum.FEMALE)) {
@@ -113,58 +121,31 @@ public class FriendInfoActivity extends Activity implements View.OnClickListener
     }
 
 
-    private void addFriend(final String account) {
+    private void addFriend(String friendAccount) {
         if (isRequest) {
-            requestAddFriend(account);
+            centerDialog = new CenterDialog(this, R.layout.layout_dialog,
+                    new int[]{R.id.dialog_cancel, R.id.dialog_sure},R.id.dialog_text);
+            centerDialog.setOnCenterItemClickListener(this);
+            centerDialog.show();
         } else {
-            NIMClient.getService(FriendService.class).ackAddFriendRequest(account, true); // 通过对方的好友请求
+            NIMClient.getService(FriendService.class).ackAddFriendRequest(friendAccount, true); // 通过对方的好友请求
             refuse.setVisibility(View.GONE);
             sendMsg.setVisibility(View.VISIBLE);
             refuse.setClickable(false);
             sendMsg.setClickable(true);
             // TODO: 2017/3/19 加入通讯录
+            Intent intent = new Intent();
+            intent.setAction(Common.ADD);
+            intent.putExtra("account",friendAccount);
+            sendBroadcast(intent);
+
+            Toast.makeText(this, "已添加好友", Toast.LENGTH_SHORT).show();
+            Intent resultIntent = new Intent();
+            resultIntent.putExtra("status",Common.ADD);
+            resultIntent.putExtra("account",friendAccount);
+            setResult(Common.FRIEND_ADD, resultIntent);
+            finish();
         }
-    }
-
-    private void requestAddFriend(final String account) {
-        final EditText editText = new EditText(this);
-        AlertDialog.Builder builder = new AlertDialog.Builder(this);
-        builder.setTitle("验证信息")
-                .setView(editText)
-                .setNegativeButton("取消", new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-
-                    }
-                })
-                .setPositiveButton("发送", new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                        final VerifyType verifyType = VerifyType.VERIFY_REQUEST; // 发起好友验证请求
-                        String msg = editText.getText().toString();
-                        NIMClient.getService(FriendService.class).addFriend(new AddFriendData(account, verifyType, msg))
-                                .setCallback(new RequestCallback<Void>() {
-
-                                    @Override
-                                    public void onSuccess(Void param) {
-                                        // TODO: 2017/3/16  返回请求发送成功信息
-                                        Toast.makeText(FriendInfoActivity.this, "添加成功", Toast.LENGTH_SHORT).show();
-                                    }
-
-                                    @Override
-                                    public void onFailed(int code) {
-                                        // TODO: 2017/3/16 返回失败消息
-                                        Toast.makeText(FriendInfoActivity.this, "添加失败", Toast.LENGTH_SHORT).show();
-                                    }
-
-                                    @Override
-                                    public void onException(Throwable exception) {
-
-                                    }
-                                });
-                    }
-                });
-        builder.show();
     }
 
     @Override
@@ -174,7 +155,7 @@ public class FriendInfoActivity extends Activity implements View.OnClickListener
                 this.finish();
                 break;
             case R.id.add:
-                addFriend(info.get("account").toString());
+                addFriend(friendAccount);
                 break;
             case R.id.sendMsg:
                 Intent intent = new Intent(FriendInfoActivity.this, ChatActivity.class);
@@ -184,8 +165,45 @@ public class FriendInfoActivity extends Activity implements View.OnClickListener
             case R.id.refuse:
                 // 拒绝对方的好友请求
                 NIMClient.getService(FriendService.class).ackAddFriendRequest(info.get("account").toString(), false);
+                Toast.makeText(this, "已拒绝好友添加", Toast.LENGTH_SHORT).show();
+                Intent resultIntent = new Intent();
+                resultIntent.putExtra("status",Common.REFUSE);
+                resultIntent.putExtra("account",info.get("account").toString());
+                setResult(Common.FRIEND_ADD, resultIntent);
+                finish();
                 break;
             default:
+                break;
+        }
+    }
+
+    @Override
+    public void OnCenterItemClick(CenterDialog dialog, View view, String text) {
+        switch (view.getId()){
+            case R.id.dialog_cancel:
+                break;
+            case R.id.dialog_sure:
+                final VerifyType verifyType = VerifyType.VERIFY_REQUEST; // 发起好友验证请求
+                NIMClient.getService(FriendService.class).addFriend(new AddFriendData(friendAccount, verifyType, text))
+                        .setCallback(new RequestCallback<Void>() {
+
+                            @Override
+                            public void onSuccess(Void param) {
+                                // TODO: 2017/3/16  返回请求发送成功信息
+                                Toast.makeText(FriendInfoActivity.this, "添加成功", Toast.LENGTH_SHORT).show();
+                            }
+
+                            @Override
+                            public void onFailed(int code) {
+                                // TODO: 2017/3/16 返回失败消息
+                                Toast.makeText(FriendInfoActivity.this, "添加失败", Toast.LENGTH_SHORT).show();
+                            }
+
+                            @Override
+                            public void onException(Throwable exception) {
+
+                            }
+                        });
                 break;
         }
     }

@@ -99,6 +99,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="@string/phone"
+        android:textSize="14sp"
         android:layout_below="@id/rl_title"
         android:layout_marginTop="10dp"
         android:padding="10dp"
@@ -114,6 +115,9 @@
         android:layout_marginTop="10dp"
         android:padding="10dp"
         android:hint="@string/phoneHint"
+        android:textSize="14sp"
+        android:background="@null"
+        android:maxLines="1"
         android:textColorHint="@color/hintGray"/>
 
     <TextView
@@ -124,6 +128,7 @@
         android:layout_below="@id/phone"
         android:layout_marginTop="5dp"
         android:layout_marginRight="12dp"
+        android:textSize="14sp"
         android:padding="10dp"
         android:textColor="@color/darkGray"/>
 
@@ -136,19 +141,31 @@
         android:layout_toEndOf="@+id/birthday"
         android:layout_marginTop="5dp"
         android:padding="10dp"
+        android:textSize="14sp"
         android:hint="@string/birthHint"
+        android:background="@null"
+        android:maxLines="1"
         android:textColorHint="@color/hintGray"/>
 
     <Button
-        android:id="@+id/wechat"
+        android:id="@+id/delete"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="@string/chat"
+        android:text="@string/deleteFriend"
         android:textColor="@color/white"
         android:background="@drawable/bg_btn_login"
-        android:layout_below="@+id/birthday"
-        android:layout_marginTop="30dp"
-        android:layout_marginLeft="10dp"
-        android:layout_marginRight="10dp"/>
+        android:layout_alignParentBottom="true"
+        android:layout_margin="10dp"/>
+
+    <Button
+        android:id="@+id/chat"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/weChat"
+        android:textColor="@color/white"
+        android:background="@drawable/bg_btn_login"
+        android:layout_alignParentBottom="true"
+        android:layout_margin="10dp"
+        android:visibility="gone"/>
 
 </RelativeLayout>

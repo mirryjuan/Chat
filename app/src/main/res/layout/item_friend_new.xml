@@ -100,12 +100,12 @@
         android:orientation="horizontal"
         android:layout_below="@+id/line"
         android:visibility="visible"
-        android:paddingBottom="8dp">
+        android:paddingBottom="8dp"
+        android:gravity="center_vertical">
 
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_gravity="center_vertical"
             android:text="@string/content"
             android:textSize="16sp"
             android:padding="4dp" />
@@ -125,7 +125,7 @@
         <Button
             android:id="@+id/add"
             android:layout_width="60dp"
-            android:layout_height="40dp"
+            android:layout_height="35dp"
             android:text="@string/add"
             android:textColor="@color/white"
             android:background="@drawable/bg_btn_login"
@@ -133,6 +133,17 @@
             android:layout_marginLeft="5dp"
             android:layout_gravity="center_vertical"
             android:focusable="false" />
+
+        <TextView
+            android:id="@+id/status"
+            android:layout_width="60dp"
+            android:layout_height="35dp"
+            android:textColor="@color/darkGray"
+            android:background="@color/white"
+            android:layout_marginRight="5dp"
+            android:layout_marginLeft="5dp"
+            android:gravity="center"
+            android:visibility="gone"/>
 
     </LinearLayout>
 

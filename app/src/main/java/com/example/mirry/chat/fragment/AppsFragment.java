@@ -11,6 +11,7 @@ import android.widget.LinearLayout;
 import com.example.mirry.chat.R;
 import com.example.mirry.chat.activity.AppsActivity;
 import com.example.mirry.chat.activity.MainActivity;
+import com.example.mirry.chat.activity.RobotActivity;
 
 public class AppsFragment extends Fragment implements View.OnClickListener {
     private MainActivity mActivity;
@@ -59,8 +60,7 @@ public class AppsFragment extends Fragment implements View.OnClickListener {
                 startActivity(intent);
                 break;
             case R.id.robot:
-                intent.putExtra("item","robot");
-                startActivity(intent);
+                startActivity(new Intent(mActivity,RobotActivity.class));
                 break;
             case R.id.record:
                 intent.putExtra("item","record");

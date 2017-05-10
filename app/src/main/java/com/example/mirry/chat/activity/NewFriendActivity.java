@@ -9,11 +9,11 @@ import android.view.Window;
 import android.widget.AdapterView;
 import android.widget.LinearLayout;
 import android.widget.ListView;
-import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.mirry.chat.R;
 import com.example.mirry.chat.adapter.NewFriendAdapter;
+import com.example.mirry.chat.common.Common;
 import com.example.mirry.chat.utils.NimUserInfoCache;
 import com.example.mirry.chat.view.IconFontTextView;
 import com.netease.nimlib.sdk.RequestCallback;
@@ -22,6 +22,7 @@ import com.netease.nimlib.sdk.uinfo.model.NimUserInfo;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
@@ -38,6 +39,7 @@ public class NewFriendActivity extends Activity implements View.OnClickListener 
     IconFontTextView back;
     private List<Map<String, Object>> list = new ArrayList<>();
     private List<Map<String, Object>> listAll = new ArrayList<>();
+    private NewFriendAdapter adapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -51,7 +53,7 @@ public class NewFriendActivity extends Activity implements View.OnClickListener 
         ButterKnife.inject(this);
 
         back.setOnClickListener(this);
-        final NewFriendAdapter adapter = new NewFriendAdapter(NewFriendActivity.this, listAll, true);
+        adapter = new NewFriendAdapter(NewFriendActivity.this, listAll, true);
         friendList.setAdapter(adapter);
         friendList.setEmptyView(emptyView);
 
@@ -61,7 +63,7 @@ public class NewFriendActivity extends Activity implements View.OnClickListener 
                 Intent intent = new Intent(NewFriendActivity.this, FriendInfoActivity.class);
                 intent.putExtra("info", (Serializable) listAll.get(position));
                 intent.putExtra("isRequest", false);
-                startActivity(intent);
+                startActivityForResult(intent, Common.FRIEND_ADD);
             }
         });
 
@@ -83,6 +85,7 @@ public class NewFriendActivity extends Activity implements View.OnClickListener 
                         info.put("sex", param.getGenderEnum().getValue());
                         info.put("birthday", param.getBirthday());
                         info.put("mobile", param.getMobile());
+                        info.put("status",Common.NEW);
                         listAll.add(info);
                         adapter.notifyDataSetChanged();
                     }
@@ -112,6 +115,37 @@ public class NewFriendActivity extends Activity implements View.OnClickListener 
         switch (v.getId()){
             case R.id.back:
                 finish();
+                break;
+        }
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        String status = data.getStringExtra("status");
+        String account = data.getStringExtra("account");
+        Iterator<Map<String, Object>> iterator = listAll.iterator();
+        switch (requestCode){
+            case Common.FRIEND_ADD:
+                switch (status){
+                    case Common.ADD:
+                        if(iterator.hasNext()){
+                            Map<String, Object> next = iterator.next();
+                            if(next.get("account").equals(account)){
+                                next.put("status",Common.ADD);
+                            }
+                        }
+                        adapter.notifyDataSetChanged();
+                        break;
+                    case Common.REFUSE:
+                        if(iterator.hasNext()){
+                            Map<String, Object> next = iterator.next();
+                            if(next.get("account").equals(account)){
+                                next.put("status",Common.REFUSE);
+                            }
+                        }
+                        adapter.notifyDataSetChanged();
+                        break;
+                }
                 break;
         }
     }

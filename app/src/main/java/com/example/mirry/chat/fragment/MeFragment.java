@@ -16,7 +16,6 @@ import android.widget.Toast;
 
 import com.example.mirry.chat.activity.ContactInfoActivity;
 import com.example.mirry.chat.common.Common;
-import com.example.mirry.chat.common.MyOpenHelper;
 import com.example.mirry.chat.R;
 import com.example.mirry.chat.activity.LoginActivity;
 import com.example.mirry.chat.activity.MainActivity;

@@ -14,6 +14,12 @@ public class Common {
     public static final int MobileNet = 0;
     public static final int NoNet = -1;
 
+    public static final String ADD = "Add friend";
+    public static final String REFUSE = "Refuse friend";
+    public static final String NEW = "New friend";
+
+    public static final int UPDATE = 500;
+
     public static final int MSG_TEXT = 1;
     public static final int MSG_IMG = 2;
     public static final int MSG_FILE = 3;

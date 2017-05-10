@@ -369,48 +369,48 @@ public class MainActivity extends BaseActivity implements RadioGroup.OnCheckedCh
         }
         Intent intent = null;
         if(text != null){
-             if(text.contains(getResources().getString(R.string.addFriend))){
+             if(text.contains(getResources().getString(R.string.voice_friend_add))){
                  intent = new Intent(MainActivity.this,AddFriendActivity.class);
                  startActivity(intent);
                  return;
              }
 
-            if(text.contains(getResources().getString(R.string.scan))){
+            if(text.contains(getResources().getString(R.string.voice_scan))){
                 intent = new Intent(MainActivity.this,AppsActivity.class);
                 intent.putExtra("item","scan");
                 startActivity(intent);
                 return;
             }
 
-            if(text.contains(getResources().getString(R.string.robot))){
+            if(text.contains(getResources().getString(R.string.voice_robot))){
                 intent = new Intent(MainActivity.this,AppsActivity.class);
                 intent.putExtra("item","robot");
                 startActivity(intent);
                 return;
             }
 
-            if(text.contains(getResources().getString(R.string.record))){
+            if(text.contains(getResources().getString(R.string.voice_record))){
                 intent = new Intent(MainActivity.this,AppsActivity.class);
                 intent.putExtra("item","record");
                 startActivity(intent);
                 return;
             }
 
-            if(text.contains(getResources().getString(R.string.news))){
+            if(text.contains(getResources().getString(R.string.voice_news))){
                 intent = new Intent(MainActivity.this,AppsActivity.class);
                 intent.putExtra("item","news");
                 startActivity(intent);
                 return;
             }
 
-            if(text.contains(getResources().getString(R.string.weather))){
+            if(text.contains(getResources().getString(R.string.voice_weather))){
                 intent = new Intent(MainActivity.this,AppsActivity.class);
                 intent.putExtra("item","weather");
                 startActivity(intent);
                 return;
             }
 
-            if(text.contains(getResources().getString(R.string.joke))){
+            if(text.contains(getResources().getString(R.string.voice_joke))){
                 intent = new Intent(MainActivity.this,AppsActivity.class);
                 intent.putExtra("item","joke");
                 startActivity(intent);

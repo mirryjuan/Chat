@@ -21,7 +21,9 @@ import com.example.mirry.chat.adapter.NewFriendAdapter;
 import com.example.mirry.chat.utils.CommonUtil;
 import com.example.mirry.chat.utils.NimUserInfoCache;
 import com.example.mirry.chat.view.IconFontTextView;
+import com.netease.nimlib.sdk.NIMClient;
 import com.netease.nimlib.sdk.RequestCallback;
+import com.netease.nimlib.sdk.friend.FriendService;
 import com.netease.nimlib.sdk.uinfo.model.NimUserInfo;
 
 import org.apache.commons.lang3.StringUtils;
@@ -93,42 +95,47 @@ public class AddFriendActivity extends Activity implements TextView.OnEditorActi
 
     private void searchFriend() {
         String account = searchText.getText().toString();
-        NimUserInfoCache.getInstance().getUserInfoFromRemote(account, new RequestCallback<NimUserInfo>() {
-            @Override
-            public void onSuccess(NimUserInfo param) {
-                if (param == null) {
-                    Toast.makeText(AddFriendActivity.this, "没有找到用户", Toast.LENGTH_SHORT).show();
-                } else {
+        boolean isMyFriend = NIMClient.getService(FriendService.class).isMyFriend(account);
+        if(isMyFriend){
+            Toast.makeText(this, "该联系人已存在好友列表中", Toast.LENGTH_SHORT).show();
+        }else{
+            NimUserInfoCache.getInstance().getUserInfoFromRemote(account, new RequestCallback<NimUserInfo>() {
+                @Override
+                public void onSuccess(NimUserInfo param) {
+                    if (param == null) {
+                        Toast.makeText(AddFriendActivity.this, "没有找到用户", Toast.LENGTH_SHORT).show();
+                    } else {
 //                    Map<String, Object> extensionMap = param.getExtensionMap();
 //                    Log.e("info",extensionMap.toString());
-                    Map<String, Object> info = new HashMap<>();
-                    info.put("account", param.getAccount());
-                    info.put("head", param.getAvatar());
-                    info.put("nickname", param.getName());
-                    info.put("sex", param.getGenderEnum().getValue());
-                    info.put("birthday", param.getBirthday());
-                    info.put("mobile", param.getMobile());
-                    list.add(info);
-                    adapter.notifyDataSetChanged();
-                    Toast.makeText(AddFriendActivity.this, "成功添加到列表中", Toast.LENGTH_SHORT).show();
+                        Map<String, Object> info = new HashMap<>();
+                        info.put("account", param.getAccount());
+                        info.put("head", param.getAvatar());
+                        info.put("nickname", param.getName());
+                        info.put("sex", param.getGenderEnum().getValue());
+                        info.put("birthday", param.getBirthday());
+                        info.put("mobile", param.getMobile());
+                        list.add(info);
+                        adapter.notifyDataSetChanged();
+                        Toast.makeText(AddFriendActivity.this, "成功添加到列表中", Toast.LENGTH_SHORT).show();
+                    }
                 }
-            }
 
-            @Override
-            public void onFailed(int code) {
-                Log.e("code", "错误码：" + code);
-                switch (code) {
-                    case 408:
-                        Toast.makeText(AddFriendActivity.this, "请求超时，请稍候重试", Toast.LENGTH_SHORT).show();
-                        break;
+                @Override
+                public void onFailed(int code) {
+                    Log.e("code", "错误码：" + code);
+                    switch (code) {
+                        case 408:
+                            Toast.makeText(AddFriendActivity.this, "请求超时，请稍候重试", Toast.LENGTH_SHORT).show();
+                            break;
+                    }
                 }
-            }
 
-            @Override
-            public void onException(Throwable exception) {
+                @Override
+                public void onException(Throwable exception) {
 
-            }
-        });
+                }
+            });
+        }
     }
 
     @Override

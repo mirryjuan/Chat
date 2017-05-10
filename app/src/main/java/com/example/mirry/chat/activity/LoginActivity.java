@@ -203,6 +203,7 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener,
                 if(isNetConnected){
                     doLogin();
                 }else{
+                    NIMClient.getService(AuthService.class).logout();
                     Toast.makeText(this, "网络异常,请检查网络连接", Toast.LENGTH_SHORT).show();
                 }
                 break;

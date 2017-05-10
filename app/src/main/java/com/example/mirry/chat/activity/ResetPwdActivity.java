@@ -12,9 +12,11 @@ import android.widget.Toast;
 
 import com.example.mirry.chat.R;
 import com.example.mirry.chat.common.CheckSumBuilder;
-import com.example.mirry.chat.common.Common;
 import com.example.mirry.chat.common.MyOpenHelper;
 import com.example.mirry.chat.utils.PreferencesUtil;
+import com.example.mirry.chat.view.IconFontTextView;
+import com.netease.nimlib.sdk.NIMClient;
+import com.netease.nimlib.sdk.auth.AuthService;
 
 import org.apache.http.HttpResponse;
 import org.apache.http.NameValuePair;
@@ -46,6 +48,8 @@ public class ResetPwdActivity extends BaseActivity implements View.OnClickListen
     EditText newPwd;
     @InjectView(R.id.reset)
     Button reset;
+    @InjectView(R.id.back)
+    IconFontTextView back;
     private String mAccid;
     private String mPwd;
     private String mOldPwd;
@@ -58,39 +62,47 @@ public class ResetPwdActivity extends BaseActivity implements View.OnClickListen
         ButterKnife.inject(this);
 
         reset.setOnClickListener(this);
+        back.setOnClickListener(this);
 
     }
 
 
     @Override
     public void onClick(View v) {
-        mPwd = PreferencesUtil.getString(ResetPwdActivity.this, "config", "password", "");
-        mAccid = PreferencesUtil.getString(ResetPwdActivity.this, "config", "account", "");
-        mOldPwd = oldPwd.getText().toString();
-        mNewPwd = newPwd.getText().toString();
-        if(mOldPwd.equals("")||mNewPwd.equals("")){
-            Toast.makeText(this, "原密码或新密码不能为空", Toast.LENGTH_SHORT).show();
-        }else if(!mOldPwd.equals(mPwd)){
-            Toast.makeText(this, "原密码不正确，请重新输入", Toast.LENGTH_SHORT).show();
-            oldPwd.setText("");
-            newPwd.setText("");
-        }else if(mNewPwd.equals(mPwd)) {
-            Toast.makeText(this, "新密码不能与原密码相同", Toast.LENGTH_SHORT).show();
-            newPwd.setText("");
-        }else{
-            if (isNetConnected) {
-                try {
-                    resetPwd(mAccid,mNewPwd);
-                } catch (Exception e) {
-                    e.printStackTrace();
+        switch (v.getId()){
+            case R.id.reset:
+                mPwd = PreferencesUtil.getString(ResetPwdActivity.this, "config", "password", "");
+                mAccid = PreferencesUtil.getString(ResetPwdActivity.this, "config", "account", "");
+                mOldPwd = oldPwd.getText().toString();
+                mNewPwd = newPwd.getText().toString();
+                if (mOldPwd.equals("") || mNewPwd.equals("")) {
+                    Toast.makeText(this, "原密码或新密码不能为空", Toast.LENGTH_SHORT).show();
+                } else if (!mOldPwd.equals(mPwd)) {
+                    Toast.makeText(this, "原密码不正确，请重新输入", Toast.LENGTH_SHORT).show();
+                    oldPwd.setText("");
+                    newPwd.setText("");
+                } else if (mNewPwd.equals(mPwd)) {
+                    Toast.makeText(this, "新密码不能与原密码相同", Toast.LENGTH_SHORT).show();
+                    newPwd.setText("");
+                } else {
+                    if (isNetConnected) {
+                        try {
+                            resetPwd(mAccid, mNewPwd);
+                        } catch (Exception e) {
+                            e.printStackTrace();
+                        }
+                    } else {
+                        Toast.makeText(this, "网络异常,请检查网络连接", Toast.LENGTH_SHORT).show();
+                    }
                 }
-            } else {
-                Toast.makeText(this, "网络异常,请检查网络连接", Toast.LENGTH_SHORT).show();
-            }
+                break;
+            case R.id.back:
+                finish();
+                break;
         }
     }
 
-    public void resetPwd(String accid,String mNewPwd) throws Exception {
+    public void resetPwd(String accid, String mNewPwd) throws Exception {
         AsyncTask<String, Integer, String> asyncTask = new AsyncTask<String, Integer, String>() {
             @Override
             protected void onPostExecute(String resultStr) {
@@ -101,8 +113,8 @@ public class ResetPwdActivity extends BaseActivity implements View.OnClickListen
                         String code = jsonObject.getString("code");
                         if (code.equals("200")) {
                             Toast.makeText(ResetPwdActivity.this, "密码修改成功", Toast.LENGTH_SHORT).show();
-                            // 更新数据库的数据
-                            updateUserPwd();
+//                            updateUserPwd();
+                            NIMClient.getService(AuthService.class).logout();
                             new Timer().schedule(new TimerTask() {
                                 @Override
                                 public void run() {
@@ -162,7 +174,7 @@ public class ResetPwdActivity extends BaseActivity implements View.OnClickListen
                 return resultStr;
             }
         };
-        asyncTask.execute(accid,mNewPwd);
+        asyncTask.execute(accid, mNewPwd);
     }
 
     private void updateUserPwd() {
@@ -170,7 +182,7 @@ public class ResetPwdActivity extends BaseActivity implements View.OnClickListen
         SQLiteDatabase db = helper.getWritableDatabase();
         ContentValues values = new ContentValues();
         values.put("password", mNewPwd);
-        db.update("users",values,"account = ?",new String[]{ mAccid });
+        db.update("users", values, "account = ?", new String[]{mAccid});
         db.close();
     }
 

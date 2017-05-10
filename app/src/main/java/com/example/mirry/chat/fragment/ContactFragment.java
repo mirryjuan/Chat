@@ -2,6 +2,7 @@ package com.example.mirry.chat.fragment;
 
 import android.app.Fragment;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
@@ -21,6 +22,7 @@ import com.example.mirry.chat.activity.MainActivity;
 import com.example.mirry.chat.activity.NewFriendActivity;
 import com.example.mirry.chat.adapter.ContactAdapter;
 import com.example.mirry.chat.bean.Friend;
+import com.example.mirry.chat.service.AddBroadcastReceiver;
 import com.example.mirry.chat.view.QuickIndexBar;
 import com.netease.nimlib.sdk.NIMClient;
 import com.netease.nimlib.sdk.RequestCallback;
@@ -36,7 +38,7 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 
-public class ContactFragment extends Fragment implements AdapterView.OnItemClickListener, View.OnClickListener, AdapterView.OnItemLongClickListener {
+public class ContactFragment extends Fragment implements AdapterView.OnItemClickListener, View.OnClickListener, AdapterView.OnItemLongClickListener, AddBroadcastReceiver.OnFriendAddListener {
 
     private ListView contactList;
     private MainActivity mActivity;
@@ -48,6 +50,10 @@ public class ContactFragment extends Fragment implements AdapterView.OnItemClick
     private LinearLayout emptyView;
 
     private List<String> accounts;
+
+    private List<NimUserInfo> users;
+
+    private AddBroadcastReceiver receiver;
 
     private Handler handler = new Handler() {
         @Override
@@ -62,7 +68,6 @@ public class ContactFragment extends Fragment implements AdapterView.OnItemClick
             }
         }
     };
-    private List<NimUserInfo> users;
 
     public Handler getHandler(){
         return handler;
@@ -72,6 +77,13 @@ public class ContactFragment extends Fragment implements AdapterView.OnItemClick
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         mActivity = (MainActivity) getActivity();
+
+        receiver = new AddBroadcastReceiver();
+        IntentFilter filter = new IntentFilter();
+        filter.addAction(Common.ADD);
+        //注册广播
+        mActivity.registerReceiver(receiver, filter);
+        receiver.setOnFriendAddListener(this);
     }
 
     @Override
@@ -163,7 +175,7 @@ public class ContactFragment extends Fragment implements AdapterView.OnItemClick
 
     @Override
     public boolean onItemLongClick(AdapterView<?> parent, View view, final int position, long id) {
-        String curAccount = friendList.get(position).getName();
+        String curAccount = friendList.get(position).getAccount();
         NIMClient.getService(FriendService.class).deleteFriend(curAccount)
                 .setCallback(new RequestCallback<Void>() {
 
@@ -175,6 +187,7 @@ public class ContactFragment extends Fragment implements AdapterView.OnItemClick
 
                     @Override
                     public void onFailed(int code) {
+                        Toast.makeText(mActivity, "code:"+code, Toast.LENGTH_SHORT).show();
                         Toast.makeText(mActivity, "删除好友失败", Toast.LENGTH_SHORT).show();
                     }
 
@@ -184,5 +197,18 @@ public class ContactFragment extends Fragment implements AdapterView.OnItemClick
                     }
                 });
         return false;
+    }
+
+    @Override
+    public void onDestroy() {
+        mActivity.unregisterReceiver(receiver);
+        super.onDestroy();
+    }
+
+    @Override
+    public void onFriendAdd(String account) {
+        NimUserInfo userInfo = NIMClient.getService(UserService.class).getUserInfo(account);
+        friendList.add(new Friend(userInfo.getName()));
+        adapter.notifyDataSetChanged();
     }
 }

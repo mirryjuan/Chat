@@ -26,6 +26,6 @@ public class NetBroadcastReceiver extends BroadcastReceiver {
     }
 
     public interface NetEvent {
-        public void onNetChange(int netType);
+        void onNetChange(int netType);
     }
 }
