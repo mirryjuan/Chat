@@ -135,9 +135,28 @@
             android:screenOrientation="portrait" />
 
         <activity
-            android:name=".activity.RobotActivity"
+            android:name=".activity.FriendInfoActivity"
             android:launchMode="singleTask"
             android:screenOrientation="portrait" />
+
+        <activity
+            android:name=".activity.SettingsActivity"
+            android:launchMode="singleTask"
+            android:screenOrientation="portrait" />
+
+        <activity android:name=".activity.ResetPwdActivity"
+            android:launchMode="singleTask"
+            android:screenOrientation="portrait"/>
+
+        <activity android:name=".activity.BaseActivity"
+            android:launchMode="singleTask"
+            android:screenOrientation="portrait"/>
+
+        <activity
+            android:name=".activity.RobotActivity"
+            android:launchMode="singleTask"
+            android:screenOrientation="portrait"
+            android:windowSoftInputMode="stateHidden|adjustResize"/>
 
         <activity
             android:name="io.dcloud.PandoraEntry"
@@ -202,15 +221,6 @@
         <meta-data
             android:name="com.netease.cosine.target.receiver"
             android:value="com.netease.nimlib.service.NimReceiver" />
-
-        <activity
-            android:name=".activity.FriendInfoActivity"
-            android:screenOrientation="portrait" />
-        <activity
-            android:name=".activity.SettingsActivity"
-            android:screenOrientation="portrait" />
-        <activity android:name=".activity.ResetPwdActivity" />
-        <activity android:name=".activity.BaseActivity" />
     </application>
 
 </manifest>
