@@ -116,7 +116,7 @@ public class RobotActivity extends Activity implements TextWatcher {
 
     private void initData() {
         mData = new ArrayList<ChatMessage>();
-        mData.add(new ChatMessage("你好,我是机器人小微", ChatMessage.Type.INCOMING, new Date()));
+        mData.add(new ChatMessage("你好, 我是机器人小微", ChatMessage.Type.INCOMING, new Date()));
         mAdapter = new ChatMessageAdapter(this, mData);
         mMsgs.setAdapter(mAdapter);
     }

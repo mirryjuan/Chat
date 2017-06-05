@@ -47,7 +47,7 @@
         android:layout_marginRight="10dp"
         android:layout_marginTop="10dp"/>
 
-    <EditText
+    <TextView
         android:id="@+id/nickname"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -59,8 +59,7 @@
         android:layout_marginTop="10dp"
         android:padding="8dp"
         android:textSize="16sp"
-        android:background="@null"
-        android:text="sss"/>
+        android:background="@null" />
 
     <TextView
         android:id="@+id/account"
@@ -73,8 +72,7 @@
         android:layout_marginStart="10dp"
         android:padding="8dp"
         android:textSize="16sp"
-        android:background="@null"
-        android:text="qqq"/>
+        android:background="@null" />
 
     <Switch
         android:id="@+id/voice"

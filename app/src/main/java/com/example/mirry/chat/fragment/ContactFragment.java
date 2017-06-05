@@ -1,6 +1,9 @@
 package com.example.mirry.chat.fragment;
 
+import android.app.AlertDialog;
+import android.app.Dialog;
 import android.app.Fragment;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.os.Bundle;
@@ -175,28 +178,42 @@ public class ContactFragment extends Fragment implements AdapterView.OnItemClick
 
     @Override
     public boolean onItemLongClick(AdapterView<?> parent, View view, final int position, long id) {
-        String curAccount = friendList.get(position).getAccount();
-        NIMClient.getService(FriendService.class).deleteFriend(curAccount)
-                .setCallback(new RequestCallback<Void>() {
-
+        new AlertDialog.Builder(mActivity)
+                .setTitle("提示")
+                .setMessage("是否删除好友？")
+                .setPositiveButton("确定", new DialogInterface.OnClickListener() {
                     @Override
-                    public void onSuccess(Void param) {
-                        friendList.remove(position);
-                        adapter.notifyDataSetChanged();
-                    }
+                    public void onClick(DialogInterface dialog, int which) {
+                        String curAccount = friendList.get(position).getAccount();
+                        NIMClient.getService(FriendService.class).deleteFriend(curAccount)
+                                .setCallback(new RequestCallback<Void>() {
 
-                    @Override
-                    public void onFailed(int code) {
-                        Toast.makeText(mActivity, "code:"+code, Toast.LENGTH_SHORT).show();
-                        Toast.makeText(mActivity, "删除好友失败", Toast.LENGTH_SHORT).show();
-                    }
+                                    @Override
+                                    public void onSuccess(Void param) {
+                                        friendList.remove(position);
+                                        adapter.notifyDataSetChanged();
+                                    }
 
-                    @Override
-                    public void onException(Throwable exception) {
-                        Toast.makeText(mActivity, "系统异常，请稍后重试", Toast.LENGTH_SHORT).show();
+                                    @Override
+                                    public void onFailed(int code) {
+                                        Toast.makeText(mActivity, "code:"+code, Toast.LENGTH_SHORT).show();
+                                        Toast.makeText(mActivity, "删除好友失败", Toast.LENGTH_SHORT).show();
+                                    }
+
+                                    @Override
+                                    public void onException(Throwable exception) {
+                                        Toast.makeText(mActivity, "系统异常，请稍后重试", Toast.LENGTH_SHORT).show();
+                                    }
+                                });
                     }
-                });
-        return false;
+                })
+                .setNegativeButton("取消", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+
+                    }
+                }).show();
+        return true;
     }
 
     @Override

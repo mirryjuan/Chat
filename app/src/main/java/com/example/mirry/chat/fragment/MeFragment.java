@@ -15,6 +15,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.mirry.chat.activity.ContactInfoActivity;
+import com.example.mirry.chat.activity.ShareActivity;
 import com.example.mirry.chat.common.Common;
 import com.example.mirry.chat.R;
 import com.example.mirry.chat.activity.LoginActivity;
@@ -41,8 +42,6 @@ public class MeFragment extends Fragment implements View.OnClickListener {
     Button settings;
     @InjectView(R.id.gallery)
     Button gallery;
-    @InjectView(R.id.diary)
-    Button diary;
     @InjectView(R.id.share)
     Button share;
     @InjectView(R.id.exit)
@@ -79,7 +78,6 @@ public class MeFragment extends Fragment implements View.OnClickListener {
         userInfo.setOnClickListener(this);
 
         gallery.setOnClickListener(this);
-        diary.setOnClickListener(this);
         share.setOnClickListener(this);
 
         exit.setOnClickListener(this);
@@ -117,14 +115,11 @@ public class MeFragment extends Fragment implements View.OnClickListener {
             case R.id.gallery:
                 openGallery();
                 break;
-            case R.id.diary:
-                openDiary();
-                break;
             case R.id.settings:
                 startActivity(new Intent(mActivity,SettingsActivity.class));
                 break;
             case R.id.share:
-                shareMyApp();
+                startActivity(new Intent(mActivity, ShareActivity.class));
                 break;
             case R.id.exit:
                 NIMClient.getService(AuthService.class).logout();
@@ -134,14 +129,6 @@ public class MeFragment extends Fragment implements View.OnClickListener {
             default:
                 break;
         }
-    }
-
-    private void shareMyApp() {
-        Toast.makeText(mActivity, "分享APP，暂未实现", Toast.LENGTH_SHORT).show();
-    }
-
-    private void openDiary() {
-        Toast.makeText(mActivity, "打开日记本，暂未实现", Toast.LENGTH_SHORT).show();
     }
 
     private void openGallery() {

@@ -7,6 +7,7 @@ import android.view.View;
 import android.view.Window;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -54,6 +55,8 @@ public class ContactInfoActivity extends Activity implements View.OnClickListene
     EditText account;
     @InjectView(R.id.chat)
     Button chat;
+    @InjectView(R.id.done)
+    IconFontTextView done;
     private String curAccount;
     private String mNickname;
     private int mSex;
@@ -82,6 +85,7 @@ public class ContactInfoActivity extends Activity implements View.OnClickListene
 
         delete.setOnClickListener(this);
         back.setOnClickListener(this);
+        done.setOnClickListener(this);
         chat.setOnClickListener(this);
     }
 
@@ -97,10 +101,10 @@ public class ContactInfoActivity extends Activity implements View.OnClickListene
             note.setVisibility(View.VISIBLE);
             account.setVisibility(View.GONE);
             boolean isMyFriend = NIMClient.getService(FriendService.class).isMyFriend(curAccount);
-            if(isMyFriend){
+            if (isMyFriend) {
                 delete.setVisibility(View.VISIBLE);
                 chat.setVisibility(View.GONE);
-            }else{
+            } else {
                 delete.setVisibility(View.GONE);
                 chat.setVisibility(View.VISIBLE);
             }
@@ -178,6 +182,15 @@ public class ContactInfoActivity extends Activity implements View.OnClickListene
                         });
                 break;
             case R.id.back:
+                finish();
+                break;
+            case R.id.chat:
+                Intent intent = new Intent(ContactInfoActivity.this, ChatActivity.class);
+                intent.putExtra("curAccount", curAccount);
+                intent.putExtra("curUsername", mNickname);
+                startActivity(intent);
+                break;
+            case R.id.done:
                 if (isMe) {
                     String curNick = nickname.getText().toString().trim();
                     String curPhone = phoneInfo.getText().toString().trim();
@@ -197,7 +210,6 @@ public class ContactInfoActivity extends Activity implements View.OnClickListene
                     if (!fields.isEmpty()) {
                         NIMClient.getService(UserService.class).updateUserInfo(fields)
                                 .setCallback(new RequestCallbackWrapper<Void>() {
-
                                     @Override
                                     public void onResult(int code, Void result, Throwable exception) {
                                         Toast.makeText(ContactInfoActivity.this, "用户信息设置完成", Toast.LENGTH_SHORT).show();
@@ -206,13 +218,6 @@ public class ContactInfoActivity extends Activity implements View.OnClickListene
                     }
 
                 }
-                finish();
-                break;
-            case R.id.chat:
-                Intent intent = new Intent(ContactInfoActivity.this, ChatActivity.class);
-                intent.putExtra("curAccount",curAccount);
-                intent.putExtra("curUsername",mNickname);
-                startActivity(intent);
                 break;
         }
     }

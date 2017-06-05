@@ -1,6 +1,8 @@
 package com.example.mirry.chat.fragment;
 
+import android.app.AlertDialog;
 import android.app.Fragment;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
@@ -158,14 +160,29 @@ public class MsgFragment extends Fragment implements AdapterView.OnItemClickList
     }
 
     @Override
-    public boolean onItemLongClick(AdapterView<?> parent, View view, int position, long id) {
-        //长按删除最近联系人
-        Msg msg = msgData.get(position);
-        String curAccount = msg.getAccount();
-        NIMClient.getService(MsgService.class).deleteRecentContact2(curAccount, SessionTypeEnum.P2P);
-        msgData.remove(msg);
-        adapter.notifyDataSetChanged();
-        return false;
+    public boolean onItemLongClick(AdapterView<?> parent, View view, final int position, long id) {
+        new AlertDialog.Builder(mActivity)
+                .setTitle("提示")
+                .setMessage("删除该消息")
+                .setPositiveButton("确定", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        //长按删除最近联系人
+                        Msg msg = msgData.get(position);
+                        String curAccount = msg.getAccount();
+                        NIMClient.getService(MsgService.class).deleteRecentContact2(curAccount, SessionTypeEnum.P2P);
+                        msgData.remove(msg);
+                        adapter.notifyDataSetChanged();
+                    }
+                })
+                .setNegativeButton("取消", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+
+                    }
+                }).show();
+
+        return true;
     }
 
     @Override

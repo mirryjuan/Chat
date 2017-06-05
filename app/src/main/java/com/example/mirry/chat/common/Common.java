@@ -26,4 +26,12 @@ public class Common {
     public static final int MSG_LOCATION = 4;
     public static final int MSG_AUDIO = 5;
     public static final int MSG_VIDEO = 6;
+
+
+    public static final int REQUEST_CAMERA_PERM = 101;
+    public static final int REQUEST_CODE = 103;
+    public static final int REQUEST_IMAGE = 104;
+
+    public static final int CALL_VOICE = 800;
+    public static final int CALL_CAMERA = 801;
 }

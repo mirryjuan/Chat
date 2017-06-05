@@ -101,7 +101,7 @@ public class NewFriendAdapter extends BaseAdapter {
                         holder.status.setVisibility(View.VISIBLE);
                         holder.status.setText("已添加");
                         // TODO: 2017/3/19 加入通讯录
-                        Intent intent = new Intent();
+                        Intent intent = new Intent("myBroadcastReceiver");
                         intent.setAction(Common.ADD);
                         intent.putExtra("account",friendAccount);
                         context.sendBroadcast(intent);

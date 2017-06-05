@@ -4,9 +4,6 @@ import android.content.Context;
 import android.graphics.Typeface;
 import android.util.AttributeSet;
 import android.widget.TextView;
-
-import com.example.mirry.chat.activity.FriendInfoActivity;
-
 /**
  * Created by Mirry on 2017/3/5.
  */

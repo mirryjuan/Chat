@@ -16,12 +16,12 @@ import io.dcloud.feature.internal.sdk.SDK;
  */
 
 public class WebappModeListener implements ICore.ICoreStatusListener {
-    Activity activity;
-    View splashView = null;
-    ViewGroup rootView;
-    IApp app = null;
-    ProgressDialog pd = null;
-    String mAppId = "";
+    private Activity activity;
+    private View splashView = null;
+    private ViewGroup rootView;
+    private IApp app = null;
+//    private ProgressDialog pd = null;
+    private String mAppId = "";
 
     public WebappModeListener(Activity activity, ViewGroup rootView, String mAppId) {
         this.activity = activity;
@@ -50,8 +50,6 @@ public class WebappModeListener implements ICore.ICoreStatusListener {
             // 设置Webview事件监听，可在监监听内获取WebIvew加载内容的进度
             @Override
             public Object onCallBack(int pType, Object pArgs) {
-                app.obtainWebAppRootView().obtainMainView().setHorizontalScrollBarEnabled(false);
-                app.obtainWebAppRootView().obtainMainView().setVerticalScrollBarEnabled(false);
                 switch (pType) {
                     case IWebviewStateListener.ON_WEBVIEW_READY:
                         // WebApp准备加载事件

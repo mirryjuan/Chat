@@ -34,7 +34,7 @@ public class SettingsActivity extends Activity implements View.OnClickListener {
     @InjectView(R.id.head)
     CircleImageView head;
     @InjectView(R.id.nickname)
-    EditText nickname;
+    TextView nickname;
     @InjectView(R.id.account)
     TextView account;
     @InjectView(R.id.editPwd)
@@ -105,7 +105,7 @@ public class SettingsActivity extends Activity implements View.OnClickListener {
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.back:
-                updateDataAndBack();
+                finish();
                 break;
             case R.id.head:
                 Toast.makeText(this, "更换头像", Toast.LENGTH_SHORT).show();
@@ -121,27 +121,5 @@ public class SettingsActivity extends Activity implements View.OnClickListener {
             default:
                 break;
         }
-    }
-
-    @Override
-    public void onBackPressed() {
-        updateDataAndBack();
-    }
-
-    private void updateDataAndBack() {
-        String curNick = nickname.getText().toString().trim();
-        if (!curNick.equals(mNickname)) {
-            Map<UserInfoFieldEnum, Object> fields = new HashMap<>(1);
-            fields.put(UserInfoFieldEnum.Name, curNick);
-            NIMClient.getService(UserService.class).updateUserInfo(fields)
-                    .setCallback(new RequestCallbackWrapper<Void>() {
-
-                        @Override
-                        public void onResult(int code, Void result, Throwable exception) {
-                            Toast.makeText(SettingsActivity.this, "用户信息设置完成", Toast.LENGTH_SHORT).show();
-                        }
-                    });
-        }
-        finish();
     }
 }

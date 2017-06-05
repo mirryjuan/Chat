@@ -14,6 +14,7 @@ import com.example.mirry.chat.activity.MainActivity;
 import com.example.mirry.chat.activity.SettingsActivity;
 import com.example.mirry.chat.utils.PreferencesUtil;
 import com.example.mirry.chat.utils.SystemUtil;
+import com.example.zxing.activity.ZXingLibrary;
 import com.iflytek.cloud.SpeechConstant;
 import com.iflytek.cloud.SpeechUtility;
 import com.netease.nimlib.sdk.NIMClient;
@@ -36,8 +37,10 @@ public class NimApplication extends Application {
         super.onCreate();
         NimApplication.context = getApplicationContext();
         NIMClient.init(this, loginInfo(), options());
+        // 初始化语音识别
         SpeechUtility.createUtility(context, SpeechConstant.APPID +"=5909d23e");
-
+        //初始化二维码扫描
+        ZXingLibrary.initDisplayOpinion(this);
         if (inMainProcess(context)) {
             // 1、UI相关初始化操作
             // 2、相关Service调用

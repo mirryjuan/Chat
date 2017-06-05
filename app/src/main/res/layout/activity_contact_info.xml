@@ -34,6 +34,17 @@
             android:textColor="@color/white"
             android:layout_centerInParent="true" />
 
+        <com.example.mirry.chat.view.IconFontTextView
+            android:id="@+id/done"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/img_accomplish"
+            android:textSize="16sp"
+            android:padding="5dp"
+            android:textColor="@color/white"
+            android:layout_alignParentRight="true"
+            android:layout_centerVertical="true"/>
+
     </RelativeLayout>
 
     <RelativeLayout
