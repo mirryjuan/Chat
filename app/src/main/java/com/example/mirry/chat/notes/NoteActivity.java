@@ -213,20 +213,9 @@ public class NoteActivity extends Activity {
         adapter = new MyAdapter(this,cursor);
         lv.setAdapter(adapter);
     }
-//处理主页面的后退事件
+
     @Override
     public void onBackPressed() {
-        if (lastClickTime<=0){
-            Toast.makeText(NoteActivity.this, "再按一次后退键退出应用", Toast.LENGTH_SHORT).show();
-            lastClickTime =System.currentTimeMillis();
-        }else{
-            long currentTime = System.currentTimeMillis();
-            if (currentTime-lastClickTime<1000){
-                finish();//退出应用
-            }else{
-                Toast.makeText(NoteActivity.this, "再按一次后退键退出应用", Toast.LENGTH_SHORT).show();
-                lastClickTime = currentTime;
-            }
-        }
+        finish();
     }
 }

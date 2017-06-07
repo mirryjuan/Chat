@@ -40,8 +40,6 @@ public class MeFragment extends Fragment implements View.OnClickListener {
     TextView nickname;
     @InjectView(R.id.settings)
     Button settings;
-    @InjectView(R.id.gallery)
-    Button gallery;
     @InjectView(R.id.share)
     Button share;
     @InjectView(R.id.exit)
@@ -77,7 +75,6 @@ public class MeFragment extends Fragment implements View.OnClickListener {
         settings.setOnClickListener(this);
         userInfo.setOnClickListener(this);
 
-        gallery.setOnClickListener(this);
         share.setOnClickListener(this);
 
         exit.setOnClickListener(this);
@@ -112,9 +109,6 @@ public class MeFragment extends Fragment implements View.OnClickListener {
                 intent.putExtra("account", mAccount);
                 startActivity(intent);
                 break;
-            case R.id.gallery:
-                openGallery();
-                break;
             case R.id.settings:
                 startActivity(new Intent(mActivity,SettingsActivity.class));
                 break;
@@ -129,10 +123,6 @@ public class MeFragment extends Fragment implements View.OnClickListener {
             default:
                 break;
         }
-    }
-
-    private void openGallery() {
-        Toast.makeText(mActivity, "打开相册，暂未实现", Toast.LENGTH_SHORT).show();
     }
 
     @Override

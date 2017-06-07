@@ -66,11 +66,12 @@
 
 
     <LinearLayout
+        android:id="@+id/textmsg"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
         android:padding="3dp"
-        android:visibility="gone">
+        android:visibility="visible">
 
         <EditText
             android:id="@+id/msg"

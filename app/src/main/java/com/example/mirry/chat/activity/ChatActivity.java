@@ -1,18 +1,24 @@
 package com.example.mirry.chat.activity;
 
+import android.Manifest;
 import android.animation.ObjectAnimator;
 import android.animation.PropertyValuesHolder;
-import android.app.Activity;
+import android.content.ComponentName;
 import android.content.Intent;
+import android.content.pm.PackageManager;
+import android.net.Uri;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
+import android.support.v4.app.ActivityCompat;
+import android.support.v4.content.ContextCompat;
 import android.text.Editable;
 import android.text.TextWatcher;
-import android.util.Log;
 import android.view.View;
 import android.view.Window;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -21,8 +27,11 @@ import com.example.mirry.chat.R;
 import com.example.mirry.chat.adapter.ChatAdapter;
 import com.example.mirry.chat.bean.Friend;
 import com.example.mirry.chat.bean.Me;
+import com.example.mirry.chat.common.Common;
+import com.example.mirry.chat.service.IflyService;
 import com.example.mirry.chat.utils.PreferencesUtil;
 import com.example.mirry.chat.view.IconFontTextView;
+import com.example.zxing.activity.CaptureActivity;
 import com.netease.nimlib.sdk.NIMClient;
 import com.netease.nimlib.sdk.Observer;
 import com.netease.nimlib.sdk.RequestCallback;
@@ -39,13 +48,12 @@ import com.oguzdev.circularfloatingactionmenu.library.SubActionButton;
 import org.apache.commons.lang3.StringUtils;
 
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 
 import butterknife.ButterKnife;
 import butterknife.InjectView;
 
-public class ChatActivity extends BaseActivity implements View.OnClickListener, TextWatcher {
+public class ChatActivity extends BaseActivity implements View.OnClickListener, TextWatcher, IflyService.OnRecordFinishListener {
 
     @InjectView(R.id.back)
     IconFontTextView back;
@@ -59,6 +67,8 @@ public class ChatActivity extends BaseActivity implements View.OnClickListener, 
     EditText msg;
     @InjectView(R.id.send)
     Button send;
+    @InjectView(R.id.textmsg)
+    LinearLayout textmsg;
     private ChatAdapter adapter = null;
     private static final int TYPE_ME = 0;
     private static final int TYPE_FRIEND = 1;
@@ -83,9 +93,9 @@ public class ChatActivity extends BaseActivity implements View.OnClickListener, 
                 public void onEvent(List<IMMessage> messages) {
                     for (IMMessage message : messages) {
                         Friend friend = null;
-                        if(!message.getFromNick().equals("")){
+                        if (!message.getFromNick().equals("")) {
                             friend = new Friend(message.getFromNick());
-                        }else{
+                        } else {
                             friend = new Friend(message.getFromAccount());
                         }
                         friend.setMsg(message.getContent());
@@ -191,7 +201,7 @@ public class ChatActivity extends BaseActivity implements View.OnClickListener, 
             @Override
             public void onClick(View v) {
                 actionMenu.close(true);
-                Toast.makeText(ChatActivity.this, "111", Toast.LENGTH_SHORT).show();
+                textmsg.setVisibility(View.VISIBLE);
             }
         });
 
@@ -199,7 +209,7 @@ public class ChatActivity extends BaseActivity implements View.OnClickListener, 
             @Override
             public void onClick(View v) {
                 actionMenu.close(true);
-                Toast.makeText(ChatActivity.this, "222", Toast.LENGTH_SHORT).show();
+                openVoice();
             }
         });
 
@@ -221,65 +231,65 @@ public class ChatActivity extends BaseActivity implements View.OnClickListener, 
     }
 
     private void initData() {
-        mAccount = PreferencesUtil.getString(ChatActivity.this,"config","account","");
+        mAccount = PreferencesUtil.getString(ChatActivity.this, "config", "account", "");
         Intent intent = getIntent();
         curAccount = intent.getStringExtra("curAccount");
         curUsername = intent.getStringExtra("curUsername");
 
-        if(curUsername.equals("")){
+        if (curUsername.equals("")) {
             username.setText(curAccount);
-        }else{
+        } else {
             username.setText(curUsername);
         }
 
-        NIMClient.getService(MsgService.class).setChattingAccount(curAccount,SessionTypeEnum.P2P);
+        NIMClient.getService(MsgService.class).setChattingAccount(curAccount, SessionTypeEnum.P2P);
 
-        if(isNetConnected){
+        if (isNetConnected) {
             list.clear();
-            long time = System.currentTimeMillis()+10000;
+            long time = System.currentTimeMillis() + 10000;
             NIMClient.getService(MsgService.class).queryMessageListEx(
                     MessageBuilder.createEmptyMessage(curAccount, SessionTypeEnum.P2P, time),
                     QueryDirectionEnum.QUERY_OLD, LIMIT, true)
                     .setCallback(new RequestCallback<List<IMMessage>>() {
-                @Override
-                public void onSuccess(List<IMMessage> allMessages) {
-                    for (IMMessage message :allMessages) {
-                        String account = message.getFromAccount();
-                        String content = message.getContent();
-                        if(account.equals(curAccount)){
-                            Friend friend = null;
-                            if(!message.getFromNick().equals("")){
-                                friend = new Friend(message.getFromNick());
-                            }else{
-                                friend = new Friend(account);
+                        @Override
+                        public void onSuccess(List<IMMessage> allMessages) {
+                            for (IMMessage message : allMessages) {
+                                String account = message.getFromAccount();
+                                String content = message.getContent();
+                                if (account.equals(curAccount)) {
+                                    Friend friend = null;
+                                    if (!message.getFromNick().equals("")) {
+                                        friend = new Friend(message.getFromNick());
+                                    } else {
+                                        friend = new Friend(account);
+                                    }
+
+                                    friend.setMsg(content);
+                                    friend.setType(TYPE_FRIEND);
+                                    list.add(friend);
+                                } else if (account.equals(mAccount)) {
+                                    Me me = new Me();
+                                    me.setMsg(content);
+                                    me.setType(TYPE_ME);
+                                    list.add(me);
+                                }
                             }
-
-                            friend.setMsg(content);
-                            friend.setType(TYPE_FRIEND);
-                            list.add(friend);
-                        }else if(account.equals(mAccount)){
-                            Me me = new Me();
-                            me.setMsg(content);
-                            me.setType(TYPE_ME);
-                            list.add(me);
+                            if (adapter != null) {
+                                adapter.notifyDataSetChanged();
+                            }
                         }
-                    }
-                    if(adapter != null){
-                        adapter.notifyDataSetChanged();
-                    }
-                }
 
-                @Override
-                public void onFailed(int code) {
+                        @Override
+                        public void onFailed(int code) {
 
-                }
+                        }
 
-                @Override
-                public void onException(Throwable exception) {
+                        @Override
+                        public void onException(Throwable exception) {
 
-                }
-            });
-        }else{
+                        }
+                    });
+        } else {
             // TODO: 2017/4/21 加载本地消息
         }
     }
@@ -291,14 +301,36 @@ public class ChatActivity extends BaseActivity implements View.OnClickListener, 
                 this.finish();
                 break;
             case R.id.userinfo:
-                Intent intent = new Intent(ChatActivity.this,ContactInfoActivity.class);
-                intent.putExtra("account",curAccount);
+                Intent intent = new Intent(ChatActivity.this, ContactInfoActivity.class);
+                intent.putExtra("account", curAccount);
                 startActivity(intent);
                 break;
             case R.id.send:
                 sendMsg(curAccount);
                 break;
         }
+    }
+
+    private void openVoice() {
+        //检查权限
+        if (ContextCompat.checkSelfPermission(this, Manifest.permission.RECORD_AUDIO)
+                != PackageManager.PERMISSION_GRANTED) {
+            //进入到这里代表没有权限.
+            if(ActivityCompat.shouldShowRequestPermissionRationale(this,Manifest.permission.RECORD_AUDIO)){
+                //已经禁止提示了
+                Toast.makeText(ChatActivity.this, "您已禁止该权限，需要重新开启。", Toast.LENGTH_SHORT).show();
+            }else{
+                ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.RECORD_AUDIO}, Common.CALL_VOICE);
+            }
+        } else {
+            initIflyService();
+        }
+    }
+
+    private void initIflyService() {
+        IflyService iflyService = new IflyService(ChatActivity.this);
+        iflyService.getResultOnline();
+        iflyService.setListener(this);
     }
 
     private void sendMsg(String id) {
@@ -367,8 +399,37 @@ public class ChatActivity extends BaseActivity implements View.OnClickListener, 
     @Override
     public void onNetChange(int netType) {
         isNetConnected = isNetConnect(netType);
-        if(isNetConnected){
+        if (isNetConnected) {
             // TODO: 2017/4/21 刷新消息列表
+        }
+    }
+
+    @Override
+    public void onRecordFinish(String result) {
+        textmsg.setVisibility(View.VISIBLE);
+        msg.setText(result);
+    }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+        switch (requestCode){
+            case Common.CALL_VOICE:
+                if(grantResults.length >0 &&grantResults[0]==PackageManager.PERMISSION_GRANTED){
+                    //用户同意授权
+                    initIflyService();
+                }else{
+                    //用户拒绝授权
+//                    Toast.makeText(this, "您已拒绝录音权限，语音识别不可用", Toast.LENGTH_SHORT).show();
+                    Intent intent = new Intent("android.settings.APPLICATION_DETAILS_SETTINGS");
+
+                    String pkg = "com.android.settings";
+                    String cls = "com.android.settings.applications.InstalledAppDetails";
+
+                    intent.setComponent(new ComponentName(pkg, cls));
+                    intent.setData(Uri.parse("package:" + getPackageName()));
+                    startActivity(intent);
+                }
+                break;
         }
     }
 }
