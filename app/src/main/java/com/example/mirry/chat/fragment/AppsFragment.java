@@ -83,8 +83,8 @@ public class AppsFragment extends Fragment implements View.OnClickListener {
             case R.id.record:
 //                intent.putExtra("item","record");
 //                startActivity(intent);
-                Toast.makeText(mActivity, "暂未实现", Toast.LENGTH_SHORT).show();
-//                startActivity(new Intent(mActivity,NoteActivity.class));
+//                Toast.makeText(mActivity, "暂未实现", Toast.LENGTH_SHORT).show();
+                startActivity(new Intent(mActivity,NoteActivity.class));
                 break;
             case R.id.news:
                 intent.putExtra("item","news");

@@ -35,6 +35,7 @@ import com.example.mirry.chat.fragment.AppsFragment;
 import com.example.mirry.chat.fragment.ContactFragment;
 import com.example.mirry.chat.fragment.MeFragment;
 import com.example.mirry.chat.fragment.MsgFragment;
+import com.example.mirry.chat.notes.NoteActivity;
 import com.example.mirry.chat.service.IflyService;
 import com.example.mirry.chat.utils.DrawableUtil;
 import com.example.mirry.chat.utils.ImageUtil;
@@ -426,23 +427,17 @@ public class MainActivity extends BaseActivity implements RadioGroup.OnCheckedCh
              }
 
             if(text.contains(getResources().getString(R.string.voice_scan))){
-                intent = new Intent(MainActivity.this,AppsActivity.class);
-                intent.putExtra("item","scan");
-                startActivity(intent);
+                openCamera();
                 return;
             }
 
             if(text.contains(getResources().getString(R.string.voice_robot))){
-                intent = new Intent(MainActivity.this,AppsActivity.class);
-                intent.putExtra("item","robot");
-                startActivity(intent);
+                startActivity(new Intent(MainActivity.this,RobotActivity.class));
                 return;
             }
 
             if(text.contains(getResources().getString(R.string.voice_record))){
-                intent = new Intent(MainActivity.this,AppsActivity.class);
-                intent.putExtra("item","record");
-                startActivity(intent);
+                startActivity(new Intent(MainActivity.this,NoteActivity.class));
                 return;
             }
 
@@ -643,4 +638,6 @@ public class MainActivity extends BaseActivity implements RadioGroup.OnCheckedCh
                 break;
         }
     }
+
+
 }

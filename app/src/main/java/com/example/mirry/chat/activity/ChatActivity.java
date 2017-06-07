@@ -1,5 +1,7 @@
 package com.example.mirry.chat.activity;
 
+import android.animation.ObjectAnimator;
+import android.animation.PropertyValuesHolder;
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
@@ -10,6 +12,7 @@ import android.view.View;
 import android.view.Window;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -29,6 +32,9 @@ import com.netease.nimlib.sdk.msg.MsgServiceObserve;
 import com.netease.nimlib.sdk.msg.constant.SessionTypeEnum;
 import com.netease.nimlib.sdk.msg.model.IMMessage;
 import com.netease.nimlib.sdk.msg.model.QueryDirectionEnum;
+import com.oguzdev.circularfloatingactionmenu.library.FloatingActionButton;
+import com.oguzdev.circularfloatingactionmenu.library.FloatingActionMenu;
+import com.oguzdev.circularfloatingactionmenu.library.SubActionButton;
 
 import org.apache.commons.lang3.StringUtils;
 
@@ -47,8 +53,6 @@ public class ChatActivity extends BaseActivity implements View.OnClickListener, 
     TextView username;
     @InjectView(R.id.userinfo)
     IconFontTextView userinfo;
-    @InjectView(R.id.add)
-    IconFontTextView add;
     @InjectView(R.id.chatList)
     ListView chatList;
     @InjectView(R.id.msg)
@@ -59,6 +63,13 @@ public class ChatActivity extends BaseActivity implements View.OnClickListener, 
     private static final int TYPE_ME = 0;
     private static final int TYPE_FRIEND = 1;
     private static final int LIMIT = 50;
+
+    private SubActionButton type_text;
+    private SubActionButton type_voice_text;
+    private SubActionButton type_pic;
+    private SubActionButton type_guess;
+    private FloatingActionMenu actionMenu;
+
 
     private String curAccount;
     private String curUsername;
@@ -92,11 +103,11 @@ public class ChatActivity extends BaseActivity implements View.OnClickListener, 
         setContentView(R.layout.activity_chat);
         ButterKnife.inject(this);
 
+        initView();
         initData();
 
         back.setOnClickListener(this);
         userinfo.setOnClickListener(this);
-        add.setOnClickListener(this);
         send.setOnClickListener(this);
 
         msg.addTextChangedListener(this);
@@ -108,6 +119,105 @@ public class ChatActivity extends BaseActivity implements View.OnClickListener, 
         //true表示注册消息接收观察者
         NIMClient.getService(MsgServiceObserve.class)
                 .observeReceiveMessage(incomingMessageObserver, true);
+    }
+
+    private void initView() {
+        final ImageView add = new ImageView(this);
+        add.setImageResource(R.drawable.menu_add);
+
+        FloatingActionButton actionButton = new FloatingActionButton.Builder(this)
+                .setContentView(add)
+                .build();
+
+
+        SubActionButton.Builder itemBuilder = new SubActionButton.Builder(this);
+// repeat many times:
+        ImageView itemIcon = new ImageView(this);
+        itemIcon.setImageDrawable(getResources().getDrawable(R.mipmap.ic_launcher));
+        type_text = itemBuilder.setContentView(itemIcon).build();
+
+        ImageView itemIcon2 = new ImageView(this);
+        itemIcon2.setImageDrawable(getResources().getDrawable(R.drawable.voice));
+        type_voice_text = itemBuilder.setContentView(itemIcon2).build();
+
+        ImageView itemIcon3 = new ImageView(this);
+        itemIcon3.setImageDrawable(getResources().getDrawable(R.drawable.picture));
+        type_pic = itemBuilder.setContentView(itemIcon3).build();
+
+        ImageView itemIcon4 = new ImageView(this);
+        itemIcon4.setImageDrawable(getResources().getDrawable(R.mipmap.ic_launcher));
+        type_guess = itemBuilder.setContentView(itemIcon4).build();
+
+        actionMenu = new FloatingActionMenu.Builder(this)
+                .addSubActionView(type_text)
+                .addSubActionView(type_voice_text)
+                .addSubActionView(type_pic)
+                .addSubActionView(type_guess)
+                .attachTo(actionButton)
+                .build();
+
+        actionMenu.setStateChangeListener(new FloatingActionMenu.MenuStateChangeListener() {
+
+            @Override
+            public void onMenuOpened(FloatingActionMenu menu) {
+                // 逆时针旋转90°
+                add.setRotation(0);
+                PropertyValuesHolder pvhR = PropertyValuesHolder.ofFloat(
+                        View.ROTATION, -90);
+
+                ObjectAnimator animation = ObjectAnimator
+                        .ofPropertyValuesHolder(add, pvhR);
+                animation.start();
+            }
+
+            @Override
+            public void onMenuClosed(FloatingActionMenu menu) {
+                // 顺时针旋转90°
+                add.setRotation(-90);
+                PropertyValuesHolder pvhR = PropertyValuesHolder.ofFloat(
+                        View.ROTATION, 0);
+                ObjectAnimator animation = ObjectAnimator
+                        .ofPropertyValuesHolder(add, pvhR);
+                animation.start();
+
+            }
+        });
+
+        setButtonsClickListener();
+    }
+
+    private void setButtonsClickListener() {
+        type_text.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                actionMenu.close(true);
+                Toast.makeText(ChatActivity.this, "111", Toast.LENGTH_SHORT).show();
+            }
+        });
+
+        type_voice_text.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                actionMenu.close(true);
+                Toast.makeText(ChatActivity.this, "222", Toast.LENGTH_SHORT).show();
+            }
+        });
+
+        type_pic.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                actionMenu.close(true);
+                Toast.makeText(ChatActivity.this, "333", Toast.LENGTH_SHORT).show();
+            }
+        });
+
+        type_guess.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                actionMenu.close(true);
+                Toast.makeText(ChatActivity.this, "444", Toast.LENGTH_SHORT).show();
+            }
+        });
     }
 
     private void initData() {
@@ -184,8 +294,6 @@ public class ChatActivity extends BaseActivity implements View.OnClickListener, 
                 Intent intent = new Intent(ChatActivity.this,ContactInfoActivity.class);
                 intent.putExtra("account",curAccount);
                 startActivity(intent);
-                break;
-            case R.id.add:
                 break;
             case R.id.send:
                 sendMsg(curAccount);

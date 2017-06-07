@@ -15,6 +15,16 @@
                          for(var i = 0; i < data.result.data.length; i++){
                              laytpl(gettpl).render(data.result.data[i], function(html){
                                  document.getElementById('container').appendChild(str2DOMElement(html));
+
+                                 var more = data.result.data[i].uniquekey+"_more";
+                                 document.getElementById(more).addEventListener('tap',function(){
+                                     alert("more");
+                                 },false);
+
+                                 var share = data.result.data[i].uniquekey+"_share";
+                                 document.getElementById(share).addEventListener('tap',function(){
+                                     alert("share");
+                                 },false);
                              });
                          }
                     }

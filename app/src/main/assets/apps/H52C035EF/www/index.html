@@ -18,8 +18,8 @@
                 <div class="mui-card-content-inner"><p>{{d.date}}</p></div>
             </div>
             <div class="mui-card-footer">
-                <a class="mui-card-link">Share</a>
-                <a class="mui-card-link">Read more</a>
+                <a id="{{d.uniquekey}}_share" class="mui-card-link">分享</a>
+                <a id="{{d.uniquekey}}_more" class="mui-card-link">更多...</a>
             </div>
         </div>
     </script>
@@ -38,10 +38,7 @@
                     <p>{{d.realtime.weather.info}}</p>
                 </div>
             </div>
-            <div class="mui-card-footer">
-                <a id="{{d.realtime.city_code}}_{{d.realtime.date}}_future" class="mui-card-link">未来七天天气</a>
-                <a id="{{d.realtime.city_code}}_{{d.realtime.date}}_update" class="mui-card-link">更新实时天气</a>
-            </div>
+            <div id="weatherChart" style="width:auto;"></div>
         </div>
     </script>
 
@@ -65,6 +62,7 @@
 	<script type="text/javascript" src="js/mui.min.js"></script>
     <script type="text/javascript" src="js/jquery-1.11.1.min.js"></script>
     <script type="text/javascript" src="js/laytpl.js"></script>
+    <script type="text/javascript" src="js/echarts.min.js"></script>
     <script type="text/javascript" src="js/util.js"></script>
 	<script type="text/javascript" src="js/apps.js"></script>
 </body>
