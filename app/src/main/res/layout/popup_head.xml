@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:background="@color/bgBlue">
+
+    <Button
+        android:id="@+id/camera"
+        android:layout_width="match_parent"
+        android:layout_height="40dp"
+        style="@style/popupTheme"
+        android:text="@string/camera"
+        android:gravity="center"
+        android:textColor="@color/black"
+        android:layout_margin="4dp"
+        android:background="@color/white"/>
+
+    <Button
+        android:id="@+id/select"
+        android:layout_width="match_parent"
+        android:layout_height="40dp"
+        style="@style/popupTheme"
+        android:text="@string/select"
+        android:gravity="center"
+        android:textColor="@color/black"
+        android:layout_margin="4dp"
+        android:background="@color/white"/>
+
+    <Button
+        android:id="@+id/cancel"
+        android:layout_width="match_parent"
+        android:layout_height="40dp"
+        style="@style/popupTheme"
+        android:text="@string/cancel"
+        android:gravity="center"
+        android:layout_margin="4dp"
+        android:background="@color/darkBlue"/>
+
+</LinearLayout>

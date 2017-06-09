@@ -15,20 +15,17 @@
                          for(var i = 0; i < data.result.data.length; i++){
                              laytpl(gettpl).render(data.result.data[i], function(html){
                                  document.getElementById('container').appendChild(str2DOMElement(html));
-
-                                 var more = data.result.data[i].uniquekey+"_more";
-                                 document.getElementById(more).addEventListener('tap',function(){
-                                     alert("more");
-                                     mui.openWindow({
-                                         url: data.result.data[i].url,
-                                     });
-                                 },false);
-
-                                 var share = data.result.data[i].uniquekey+"_share";
-                                 document.getElementById(share).addEventListener('tap',function(){
-                                     alert("share");
-                                 },false);
                              });
+
+                             var more = data.result.data[i].url+"_more";
+                             document.getElementById(more).addEventListener('tap',function(c){
+                                 startUrl(this.id);
+                             },false);
+
+                             var share = data.result.data[i].url+"_share";
+                             document.getElementById(share).addEventListener('tap',function(){
+                                 alert("share");
+                             },false);
                          }
                     }
                 }
@@ -36,3 +33,13 @@
         );
 	});
 })(mui);
+
+var $j = jQuery.noConflict();
+
+
+function startUrl(mId){
+    var pagePath = mId.split("_")[0];
+    if (!!pagePath) {
+        window.location.href = pagePath;
+    }
+}

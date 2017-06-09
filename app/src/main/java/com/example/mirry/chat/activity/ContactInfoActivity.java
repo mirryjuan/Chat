@@ -4,11 +4,16 @@ import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
+import android.view.Gravity;
+import android.view.MotionEvent;
 import android.view.View;
+import android.view.ViewGroup;
 import android.view.Window;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.PopupWindow;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -67,6 +72,8 @@ public class ContactInfoActivity extends Activity implements View.OnClickListene
     private Map<UserInfoFieldEnum, Object> fields;
     private Boolean saved = false;
 
+    private PopupWindow popupWindow;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -85,6 +92,7 @@ public class ContactInfoActivity extends Activity implements View.OnClickListene
 
         initData(isMe);
 
+        head.setOnClickListener(this);
         delete.setOnClickListener(this);
         back.setOnClickListener(this);
         done.setOnClickListener(this);
@@ -164,6 +172,11 @@ public class ContactInfoActivity extends Activity implements View.OnClickListene
     @Override
     public void onClick(View v) {
         switch (v.getId()) {
+            case R.id.head:
+                if(isMe){
+                    showPopupWindow();
+                }
+                break;
             case R.id.delete:
                 NIMClient.getService(FriendService.class).deleteFriend(curAccount)
                         .setCallback(new RequestCallback<Void>() {
@@ -253,5 +266,65 @@ public class ContactInfoActivity extends Activity implements View.OnClickListene
         if (!curBirthday.equals(mBirthday)) {
             fields.put(UserInfoFieldEnum.BIRTHDAY, curBirthday);
         }
+    }
+
+    private void showPopupWindow() {
+        final View popupView = View.inflate(ContactInfoActivity.this, R.layout.popup_head, null);
+        Button camera = (Button) popupView.findViewById(R.id.camera);
+        Button select = (Button) popupView.findViewById(R.id.select);
+        Button cancel = (Button) popupView.findViewById(R.id.cancel);
+
+        camera.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if(popupWindow.isShowing()){
+                    popupWindow.dismiss();
+                }
+                openCamera();
+            }
+        });
+        select.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if(popupWindow.isShowing()){
+                    popupWindow.dismiss();
+                }
+                selectPic();
+            }
+        });
+
+        cancel.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if(popupWindow.isShowing()){
+                    popupWindow.dismiss();
+                }
+            }
+        });
+
+        popupWindow = new PopupWindow(popupView, ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT, true);
+        popupWindow.setContentView(popupView);
+        popupWindow.setAnimationStyle(R.anim.anim_popup);  //设置加载动画
+
+        //点击非PopupWindow区域，PopupWindow会消失的
+        popupWindow.setTouchable(true);
+        popupWindow.setTouchInterceptor(new View.OnTouchListener() {
+            @Override
+            public boolean onTouch(View v, MotionEvent event) {
+                return false;       // 如果返回true，touch事件将被拦截
+            }
+        });
+
+        popupWindow.setBackgroundDrawable(new ColorDrawable(0x00000000));    //要为popWindow设置一个背景才有效
+
+        popupWindow.showAtLocation(head, Gravity.BOTTOM,0,0);
+    }
+
+    private void openCamera() {
+        Toast.makeText(this, "拍照", Toast.LENGTH_SHORT).show();
+    }
+
+    private void selectPic() {
+        Toast.makeText(this, "相册", Toast.LENGTH_SHORT).show();
     }
 }

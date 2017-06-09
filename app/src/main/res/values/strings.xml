@@ -60,6 +60,10 @@
     <string name="delete">删除好友</string>
     <string name="detail">查看资料</string>
 
+    <!--更换头像界面popupWindow-->
+    <string name="camera">拍照</string>
+    <string name="select">从相册选择</string>
+
     <!--联系人信息界面-->
     <string name="newFriend">新朋友</string>
     <string name="accid">账号</string>

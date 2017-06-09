@@ -41,21 +41,6 @@ function getJsPath(args){
     return basePath + subPath;
 }
 
-//function getPagePath(args){
-//    var appsPath = {
-//        "001": "apps/html/scan.html",
-//        "002": "apps/html/robot.html",
-//        "003": "apps/html/record.html",
-//        "004": "apps/html/news.html",
-//        "005": "apps/html/weather.html",
-//        "006": "apps/html/joke.html"
-//    }
-//    var basePath = "file:///android_asset/apps/H52C035EF/www/";
-//    var subPath = appsPath[args];
-//    return basePath + subPath + " #content";
-//}
-
-
 function getTitle(args){
     var title = {
         "001" : "扫一扫",
