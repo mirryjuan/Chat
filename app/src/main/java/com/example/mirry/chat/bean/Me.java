@@ -1,5 +1,9 @@
 package com.example.mirry.chat.bean;
 
+import android.widget.ImageView;
+
+import java.io.File;
+
 /**
  * Created by Mirry on 2017/3/8.
  */
@@ -9,6 +13,7 @@ public class Me {
     private String id;
     private int type;
     private String msg;
+    private File img;
 
     public int getType() {
         return type;
@@ -42,4 +47,11 @@ public class Me {
         this.name = name;
     }
 
+    public File getImg() {
+        return img;
+    }
+
+    public void setImg(File img) {
+        this.img = img;
+    }
 }

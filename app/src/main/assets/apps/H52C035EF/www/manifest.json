@@ -101,7 +101,10 @@
         },
         "NativeObj":{
         	"description": "原生对象"
-        }
+        },
+		"Share": {
+			"description": "分享"
+		}
 	},
 	"plus": {
 		"splashscreen": {

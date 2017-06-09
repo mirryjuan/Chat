@@ -19,6 +19,9 @@
                                  var more = data.result.data[i].uniquekey+"_more";
                                  document.getElementById(more).addEventListener('tap',function(){
                                      alert("more");
+                                     mui.openWindow({
+                                         url: data.result.data[i].url,
+                                     });
                                  },false);
 
                                  var share = data.result.data[i].uniquekey+"_share";

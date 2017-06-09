@@ -1,14 +1,21 @@
 package com.example.mirry.chat.notes;
 
+import android.Manifest;
 import android.animation.ObjectAnimator;
 import android.animation.PropertyValuesHolder;
 import android.app.Activity;
 import android.app.AlertDialog;
+import android.content.ComponentName;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
+import android.net.Uri;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
+import android.support.v4.app.ActivityCompat;
+import android.support.v4.content.ContextCompat;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.Button;
@@ -18,6 +25,9 @@ import android.widget.Toast;
 
 import com.example.mirry.chat.R;
 import com.example.mirry.chat.activity.ChatActivity;
+import com.example.mirry.chat.activity.MainActivity;
+import com.example.mirry.chat.common.Common;
+import com.example.zxing.activity.CaptureActivity;
 import com.oguzdev.circularfloatingactionmenu.library.FloatingActionButton;
 import com.oguzdev.circularfloatingactionmenu.library.FloatingActionMenu;
 import com.oguzdev.circularfloatingactionmenu.library.SubActionButton;
@@ -38,6 +48,7 @@ public class NoteActivity extends Activity {
     private SubActionButton type_audio;
     private SubActionButton type_video;
     private FloatingActionMenu actionMenu;
+    private String flag;
 
     @Override
     protected void onResume() {
@@ -134,9 +145,8 @@ public class NoteActivity extends Activity {
             @Override
             public void onClick(View v) {
                 actionMenu.close(true);
-                Toast.makeText(NoteActivity.this, "图片", Toast.LENGTH_SHORT).show();
-                i.putExtra("flag","1");
-                startActivity(i);
+                flag = "2";
+                openCamera();
             }
         });
 
@@ -144,9 +154,8 @@ public class NoteActivity extends Activity {
             @Override
             public void onClick(View v) {
                 actionMenu.close(true);
-                Toast.makeText(NoteActivity.this, "音频", Toast.LENGTH_SHORT).show();
-                i.putExtra("flag","1");
-                startActivity(i);
+                flag = "3";
+                openVoice();
             }
         });
 
@@ -154,23 +163,48 @@ public class NoteActivity extends Activity {
             @Override
             public void onClick(View v) {
                 actionMenu.close(true);
-                Toast.makeText(NoteActivity.this, "视频", Toast.LENGTH_SHORT).show();
-                i.putExtra("flag","1");
-                startActivity(i);
+                flag = "4";
+                openCamera();
             }
         });
     }
 
+    private void openCamera() {
+        //检查权限
+        if (ContextCompat.checkSelfPermission(this, Manifest.permission.CAMERA)
+                != PackageManager.PERMISSION_GRANTED) {
+            //进入到这里代表没有权限.
+            if(ActivityCompat.shouldShowRequestPermissionRationale(this,Manifest.permission.CAMERA)){
+                //已经禁止提示了
+                Toast.makeText(NoteActivity.this, "您已禁止该权限，需要重新开启。", Toast.LENGTH_SHORT).show();
+            }else{
+                ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.CAMERA}, Common.CALL_CAMERA);
+            }
+        } else {
+            i.putExtra("flag",flag);
+            startActivity(i);
+        }
+    }
+
+    private void openVoice() {
+        //检查权限
+        if (ContextCompat.checkSelfPermission(this, Manifest.permission.RECORD_AUDIO)
+                != PackageManager.PERMISSION_GRANTED) {
+            //进入到这里代表没有权限.
+            if(ActivityCompat.shouldShowRequestPermissionRationale(this,Manifest.permission.RECORD_AUDIO)){
+                //已经禁止提示了
+                Toast.makeText(NoteActivity.this, "您已禁止该权限，需要重新开启。", Toast.LENGTH_SHORT).show();
+            }else{
+                ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.RECORD_AUDIO}, Common.CALL_VOICE);
+            }
+        } else {
+            i.putExtra("flag",flag);
+            startActivity(i);
+        }
+    }
+
     public void initView(){
         lv = (ListView) findViewById(R.id.list);
-//        textbtn = (Button) findViewById(R.id.text);
-//        imgbtn = (Button) findViewById(R.id.img);
-//        videobtn = (Button) findViewById(R.id.video);
-//        audiobtn = (Button) findViewById(R.id.audio);
-//        textbtn.setOnClickListener(this);
-//        imgbtn.setOnClickListener(this);
-//        videobtn.setOnClickListener(this);
-//        audiobtn.setOnClickListener(this);
         notesDB = new NotesDB(this);
         lv.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
@@ -217,5 +251,47 @@ public class NoteActivity extends Activity {
     @Override
     public void onBackPressed() {
         finish();
+    }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+        switch (requestCode){
+            case Common.CALL_VOICE:
+                if(grantResults.length >0 &&grantResults[0]==PackageManager.PERMISSION_GRANTED){
+                    //用户同意授权
+                    i.putExtra("flag",flag);
+                    startActivity(i);
+                }else{
+                    //用户拒绝授权
+//                    Toast.makeText(this, "您已拒绝录音权限，语音识别不可用", Toast.LENGTH_SHORT).show();
+                    Intent intent = new Intent("android.settings.APPLICATION_DETAILS_SETTINGS");
+
+                    String pkg = "com.android.settings";
+                    String cls = "com.android.settings.applications.InstalledAppDetails";
+
+                    intent.setComponent(new ComponentName(pkg, cls));
+                    intent.setData(Uri.parse("package:" + getPackageName()));
+                    startActivity(intent);
+                }
+                break;
+            case Common.CALL_CAMERA:
+                if(grantResults.length >0 &&grantResults[0]==PackageManager.PERMISSION_GRANTED){
+                    //用户同意授权
+                    i.putExtra("flag",flag);
+                    startActivity(i);
+                }else{
+                    //用户拒绝授权
+//                    Toast.makeText(this, "您已拒绝相机权限，扫一扫不可用", Toast.LENGTH_SHORT).show();
+                    Intent intent = new Intent("android.settings.APPLICATION_DETAILS_SETTINGS");
+
+                    String pkg = "com.android.settings";
+                    String cls = "com.android.settings.applications.InstalledAppDetails";
+
+                    intent.setComponent(new ComponentName(pkg, cls));
+                    intent.setData(Uri.parse("package:" + getPackageName()));
+                    startActivity(intent);
+                }
+                break;
+        }
     }
 }

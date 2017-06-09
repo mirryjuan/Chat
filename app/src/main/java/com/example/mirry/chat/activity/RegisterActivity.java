@@ -211,7 +211,7 @@ public class RegisterActivity extends BaseActivity implements View.OnClickListen
                             password.setText("");
                         } else if (code.equals("200")) {
                             Toast.makeText(RegisterActivity.this, "注册成功", Toast.LENGTH_SHORT).show();
-                            insertIntoDatabase();    //插入本地数据库
+//                            insertIntoDatabase();    //插入本地数据库
                             Intent intent = new Intent(RegisterActivity.this, InfoSetActivity.class);
                             intent.putExtra("accid", mAccid);
                             startActivity(intent);

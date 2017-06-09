@@ -16,13 +16,14 @@
                                 document.getElementById('container').appendChild(str2DOMElement(html));
                             });
 
-                            var weatherChart = echarts.init(document.getElementById('weatherChart'));
+                            var charts = document.getElementById('weatherChart');
+                            var weatherChart = echarts.init(charts);
                             var future = data.result.weather;
 
                             var weeks = [];
                             var tempHight = [];
                             var tempLow = [];
-                            for(var i = 0; i < future.lenght; i++){
+                            for(var i = 0; i < future.length; i++){
                                 weeks.push("周"+ future[i].week);
                                 tempHight.push(future[i].info.day[2]);
                                 tempLow.push(future[i].info.night[2]);

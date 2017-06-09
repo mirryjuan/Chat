@@ -265,15 +265,15 @@ public class MainActivity extends BaseActivity implements RadioGroup.OnCheckedCh
         List<SystemMessageType> types = new ArrayList<>();
         types.add(SystemMessageType.AddFriend);
 
-        // 查询“添加好友”类型的系统通知
-        List<SystemMessage> temps = NIMClient.getService(SystemMessageService.class)
-                .querySystemMessageByTypeBlock(types, 0, LOAD_MESSAGE_COUNT);
-        for (SystemMessage temp:temps) {
-            Map<String,String> newFriendInfo = new HashMap<>();
-            newFriendInfo.put("account",temp.getFromAccount());
-            newFriendInfo.put("content",temp.getContent());
-            newFriendList.add(newFriendInfo);
-        }
+//        // 查询“添加好友”类型的系统通知
+//        List<SystemMessage> temps = NIMClient.getService(SystemMessageService.class)
+//                .querySystemMessageByTypeBlock(types, 0, LOAD_MESSAGE_COUNT);
+//        for (SystemMessage temp:temps) {
+//            Map<String,String> newFriendInfo = new HashMap<>();
+//            newFriendInfo.put("account",temp.getFromAccount());
+//            newFriendInfo.put("content",temp.getContent());
+//            newFriendList.add(newFriendInfo);
+//        }
 
         //查询最近联系人列表
         NIMClient.getService(MsgService.class).queryRecentContacts()
@@ -625,7 +625,6 @@ public class MainActivity extends BaseActivity implements RadioGroup.OnCheckedCh
                     startActivityForResult(new Intent(MainActivity.this, CaptureActivity.class), Common.REQUEST_CODE);
                 }else{
                     //用户拒绝授权
-//                    Toast.makeText(this, "您已拒绝相机权限，扫一扫不可用", Toast.LENGTH_SHORT).show();
                     Intent intent = new Intent("android.settings.APPLICATION_DETAILS_SETTINGS");
 
                     String pkg = "com.android.settings";

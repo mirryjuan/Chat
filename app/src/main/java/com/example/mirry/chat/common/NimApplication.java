@@ -88,7 +88,7 @@ public class NimApplication extends Application {
 
             @Override
             public int getDefaultIconResId() {
-                return R.drawable.head;
+                return R.mipmap.icon;
             }
 
             @Override

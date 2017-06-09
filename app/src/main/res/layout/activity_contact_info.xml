@@ -75,20 +75,6 @@
             android:layout_toEndOf="@+id/head" />
 
         <EditText
-            android:id="@+id/note"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:textSize="20sp"
-            android:textColor="@color/darkGray"
-            android:maxLines="1"
-            android:ellipsize="end"
-            android:padding="5dp"
-            android:background="@null"
-            android:layout_toRightOf="@id/head"
-            android:layout_toEndOf="@+id/head"
-            android:layout_below="@+id/nickname" />
-
-        <EditText
             android:id="@+id/account"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"

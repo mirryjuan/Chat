@@ -6,19 +6,27 @@ import android.app.Fragment;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
 import android.text.TextUtils;
+import android.view.Gravity;
 import android.view.LayoutInflater;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
+import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.ListView;
+import android.widget.PopupWindow;
 import android.widget.Toast;
 
 import com.example.mirry.chat.activity.ChatActivity;
+import com.example.mirry.chat.activity.ContactInfoActivity;
+import com.example.mirry.chat.activity.LoginActivity;
+import com.example.mirry.chat.adapter.AllUsersAdapter;
 import com.example.mirry.chat.common.Common;
 import com.example.mirry.chat.R;
 import com.example.mirry.chat.activity.MainActivity;
@@ -57,6 +65,7 @@ public class ContactFragment extends Fragment implements AdapterView.OnItemClick
     private List<NimUserInfo> users;
 
     private AddBroadcastReceiver receiver;
+    private PopupWindow popupWindow;
 
     private Handler handler = new Handler() {
         @Override
@@ -117,7 +126,7 @@ public class ContactFragment extends Fragment implements AdapterView.OnItemClick
             }
         });
 
-        fillAndSortData(friendList);
+//        fillAndSortData(friendList);
         adapter = new ContactAdapter(mActivity,friendList);
         contactList.setAdapter(adapter);
         contactList.setEmptyView(emptyView);
@@ -126,7 +135,16 @@ public class ContactFragment extends Fragment implements AdapterView.OnItemClick
         return view;
     }
 
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        fillAndSortData(friendList);
+        adapter.notifyDataSetChanged();
+    }
+
     private void fillAndSortData(List<Friend> friendList) {
+        friendList.clear();
         // 获取所有好友帐号
         accounts = NIMClient.getService(FriendService.class).getFriendAccounts();
         if(accounts.size() != 0){
@@ -162,10 +180,10 @@ public class ContactFragment extends Fragment implements AdapterView.OnItemClick
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.addFriend:
-                List<SystemMessageType> types = new ArrayList<>();
-                types.add(SystemMessageType.AddFriend);
-                // 将“添加好友”类型的系统通知设为已读
-                NIMClient.getService(SystemMessageService.class).resetSystemMessageUnreadCount();
+//                List<SystemMessageType> types = new ArrayList<>();
+//                types.add(SystemMessageType.AddFriend);
+//                // 将“添加好友”类型的系统通知设为已读
+//                NIMClient.getService(SystemMessageService.class).resetSystemMessageUnreadCount();
 
                 Intent intent = new Intent(mActivity, NewFriendActivity.class);
                 intent.putExtra("newFriend", (Serializable) newFriendList);
@@ -178,6 +196,58 @@ public class ContactFragment extends Fragment implements AdapterView.OnItemClick
 
     @Override
     public boolean onItemLongClick(AdapterView<?> parent, View view, final int position, long id) {
+        showPopupWindow(position);
+        return true;
+    }
+
+    private void showPopupWindow(final int position) {
+        View popupView = View.inflate(mActivity, R.layout.popup_contact, null);
+        Button detail = (Button) popupView.findViewById(R.id.detail);
+        Button delete = (Button) popupView.findViewById(R.id.delete);
+
+        detail.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if(popupWindow.isShowing()){
+                    popupWindow.dismiss();
+                }
+                String curAccount = friendList.get(position).getAccount();
+                Intent intent = new Intent(mActivity, ContactInfoActivity.class);
+                intent.putExtra("account", curAccount);
+                startActivity(intent);
+            }
+        });
+        delete.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if(popupWindow.isShowing()){
+                    popupWindow.dismiss();
+                }
+                deleteFriends(position);
+            }
+        });
+
+        popupWindow = new PopupWindow(popupView, ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT, true);
+        popupWindow.setContentView(popupView);
+        popupWindow.setAnimationStyle(R.anim.anim_popup);  //设置加载动画
+
+        //点击非PopupWindow区域，PopupWindow会消失的
+        popupWindow.setTouchable(true);
+        popupWindow.setTouchInterceptor(new View.OnTouchListener() {
+            @Override
+            public boolean onTouch(View v, MotionEvent event) {
+                return false;       // 如果返回true，touch事件将被拦截
+            }
+        });
+
+        popupWindow.setBackgroundDrawable(new ColorDrawable(0x00000000));    //要为popWindow设置一个背景才有效
+
+        popupWindow.showAtLocation(contactList, Gravity.BOTTOM,0,0);
+    }
+
+
+
+    public void deleteFriends(final int position){
         new AlertDialog.Builder(mActivity)
                 .setTitle("提示")
                 .setMessage("是否删除好友？")
@@ -213,8 +283,8 @@ public class ContactFragment extends Fragment implements AdapterView.OnItemClick
 
                     }
                 }).show();
-        return true;
     }
+
 
     @Override
     public void onDestroy() {

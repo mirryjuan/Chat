@@ -21,9 +21,11 @@ import com.example.mirry.chat.R;
 import com.example.mirry.chat.activity.LoginActivity;
 import com.example.mirry.chat.activity.MainActivity;
 import com.example.mirry.chat.activity.SettingsActivity;
+import com.example.mirry.chat.utils.NimUserInfoCache;
 import com.example.mirry.chat.utils.PreferencesUtil;
 import com.example.mirry.chat.view.CircleImageView;
 import com.netease.nimlib.sdk.NIMClient;
+import com.netease.nimlib.sdk.RequestCallback;
 import com.netease.nimlib.sdk.auth.AuthService;
 import com.netease.nimlib.sdk.uinfo.UserService;
 import com.netease.nimlib.sdk.uinfo.model.NimUserInfo;
@@ -84,19 +86,41 @@ public class MeFragment extends Fragment implements View.OnClickListener {
     private void initUserData() {
         String account = PreferencesUtil.getString(mActivity, "config", "account", "");
         queryUserData(account);
-        // TODO: 2017/4/2 设置头像
-        nickname.setText(mNickname);
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        queryUserData(mAccount);
     }
 
     private void queryUserData(String account) {
-        NimUserInfo mInfo = NIMClient.getService(UserService.class).getUserInfo(account);
-        if(mInfo != null){
-            mAccount = mInfo.getAccount();
-            mNickname = mInfo.getName();
-            mSex = mInfo.getGenderEnum().getValue();
-            mPhone = mInfo.getMobile();
-            mBirthday = mInfo.getBirthday();
-        }
+//        NimUserInfo mInfo = NIMClient.getService(UserService.class).getUserInfo(account);
+        NimUserInfoCache.getInstance().getUserInfoFromRemote(account, new RequestCallback<NimUserInfo>() {
+            @Override
+            public void onSuccess(NimUserInfo nimUserInfo) {
+                if(nimUserInfo != null){
+                    mAccount = nimUserInfo.getAccount();
+                    mNickname = nimUserInfo.getName();
+                    mSex = nimUserInfo.getGenderEnum().getValue();
+                    mPhone = nimUserInfo.getMobile();
+                    mBirthday = nimUserInfo.getBirthday();
+
+                    // TODO: 2017/4/2 设置头像
+                    nickname.setText(mNickname);
+                }
+            }
+
+            @Override
+            public void onFailed(int code) {
+
+            }
+
+            @Override
+            public void onException(Throwable exception) {
+
+            }
+        });
     }
 
     @Override

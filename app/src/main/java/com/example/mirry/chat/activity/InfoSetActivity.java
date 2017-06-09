@@ -86,24 +86,14 @@ public class InfoSetActivity extends Activity implements View.OnClickListener, R
         mPhone = phone.getText().toString();
         switch (v.getId()) {
             case R.id.next:
-                if(mPhone.equals("")){
-                    Toast.makeText(this, "手机号码不能为空", Toast.LENGTH_SHORT).show();
-                }else{
-                    updateRemoteData(mNickname, mBirthday, mPhone);
-                }
+                updateRemoteData(mNickname, mBirthday, mPhone);
                 finish();
                 break;
             case R.id.accomplish:
-                if(mPhone.equals("")){
-                    Toast.makeText(this, "手机号码不能为空", Toast.LENGTH_SHORT).show();
-                }else{
-                    //更新本地数据库信息
-                    updateDatabaseInfo(mNickname, mBirthday, mPhone);
-                    //更新服务器用户信息
-                    updateRemoteData(mNickname, mBirthday, mPhone);
-                }
-
-                finish();
+                //更新本地数据库信息
+//                updateDatabaseInfo(mNickname, mBirthday, mPhone);
+                //更新服务器用户信息
+                updateRemoteData(mNickname, mBirthday, mPhone);
                 break;
         }
     }
@@ -126,15 +116,20 @@ public class InfoSetActivity extends Activity implements View.OnClickListener, R
         // TODO: 2017/4/12 头像
         fields.put(UserInfoFieldEnum.Name, mNickname);
         fields.put(UserInfoFieldEnum.GENDER, mSex);
-        fields.put(UserInfoFieldEnum.BIRTHDAY, mBirthday);
-        fields.put(UserInfoFieldEnum.MOBILE, mPhone);
+        if(mBirthday != null && !mBirthday.equals("")){
+            fields.put(UserInfoFieldEnum.BIRTHDAY, mBirthday);
+        }
+
+        if(mPhone != null && !mPhone.equals("")){
+            fields.put(UserInfoFieldEnum.MOBILE, mPhone);
+        }
         NIMClient.getService(UserService.class).updateUserInfo(fields)
                 .setCallback(new RequestCallbackWrapper<Void>() {
 
                     @Override
                     public void onResult(int code, Void result, Throwable exception) {
-                        Log.e("code",""+code);
-                        Toast.makeText(InfoSetActivity.this, "信息更新成功", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(InfoSetActivity.this, "用户信息设置完成", Toast.LENGTH_SHORT).show();
+                        finish();
                     }
                 });
     }

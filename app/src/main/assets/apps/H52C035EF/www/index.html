@@ -28,17 +28,17 @@
     <script id="weatherTemp" type="text/html">
         <div class="mui-card">
             <div class="mui-card-header">
-                <div id="{{d.realtime.city_code}}_{{d.realtime.date}}" class="mui-media-body">
-                    {{d.realtime.city_name}}
+                <div id="{{d.realtime.city_code}}_{{d.realtime.date}}" class="mui-media-body" style="font-size: 16px;">
+                    &nbsp;{{d.realtime.city_name}}&nbsp;&nbsp;| &nbsp;&nbsp;{{d.realtime.date}}&nbsp;
                 </div>
             </div>
             <div class="mui-card-content" id="{{d.realtime.city_code}}_{{d.realtime.date}}_weather">
                 <div class="mui-card-content-inner" style="text-align: center;">
-                    <p style="color: #333;">{{d.realtime.weather.temperature}}℃</p>
-                    <p>{{d.realtime.weather.info}}</p>
+                    <p style="color: #333;font-size:20px;">{{d.realtime.weather.temperature}}℃</p>
+                    <p style="font-size:16px;">{{d.realtime.weather.info}} &nbsp;&nbsp;| &nbsp;&nbsp;{{d.realtime.wind.direct}}{{d.realtime.wind.power}}</p>
                 </div>
             </div>
-            <div id="weatherChart" style="width:auto;"></div>
+            <div id="weatherChart" style="width: auto;height:400px;"></div>
         </div>
     </script>
 

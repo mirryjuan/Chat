@@ -91,6 +91,16 @@ public class NewFriendAdapter extends BaseAdapter {
                 holder.line.setVisibility(View.VISIBLE);
                 holder.addInfo.setVisibility(View.VISIBLE);
                 holder.content.setText(info.get("content")==null?"":info.get("content").toString());
+
+                boolean isMyFriend = NIMClient.getService(FriendService.class).isMyFriend(info.get("account").toString());
+                if(isMyFriend){
+                    holder.add.setVisibility(View.GONE);
+                    holder.status.setVisibility(View.VISIBLE);
+                    holder.status.setText("已添加");
+                }else{
+                    holder.add.setVisibility(View.VISIBLE);
+                    holder.status.setVisibility(View.GONE);
+                }
                 holder.add.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
@@ -101,10 +111,6 @@ public class NewFriendAdapter extends BaseAdapter {
                         holder.status.setVisibility(View.VISIBLE);
                         holder.status.setText("已添加");
                         // TODO: 2017/3/19 加入通讯录
-                        Intent intent = new Intent("myBroadcastReceiver");
-                        intent.setAction(Common.ADD);
-                        intent.putExtra("account",friendAccount);
-                        context.sendBroadcast(intent);
                     }
                 });
             }else{

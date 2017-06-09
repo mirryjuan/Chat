@@ -56,6 +56,10 @@
     <!--聊天界面-->
     <string name="send">发送</string>
 
+    <!--联系人界面popupWindow-->
+    <string name="delete">删除好友</string>
+    <string name="detail">查看资料</string>
+
     <!--联系人信息界面-->
     <string name="newFriend">新朋友</string>
     <string name="accid">账号</string>

@@ -159,7 +159,9 @@ public class FriendInfoActivity extends Activity implements View.OnClickListener
                 break;
             case R.id.sendMsg:
                 Intent intent = new Intent(FriendInfoActivity.this, ChatActivity.class);
-                intent.putExtra("info", (Serializable) info);
+//                intent.putExtra("info", (Serializable) info);
+                intent.putExtra("curAccount",info.get("account").toString());
+                intent.putExtra("curUsername",info.get("nickname").toString());
                 startActivity(intent);
                 break;
             case R.id.refuse:

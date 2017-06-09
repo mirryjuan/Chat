@@ -32,12 +32,16 @@ import com.example.mirry.chat.service.IflyService;
 import com.example.mirry.chat.utils.PreferencesUtil;
 import com.example.mirry.chat.view.IconFontTextView;
 import com.example.zxing.activity.CaptureActivity;
+import com.netease.nimlib.sdk.AbortableFuture;
 import com.netease.nimlib.sdk.NIMClient;
 import com.netease.nimlib.sdk.Observer;
 import com.netease.nimlib.sdk.RequestCallback;
 import com.netease.nimlib.sdk.msg.MessageBuilder;
 import com.netease.nimlib.sdk.msg.MsgService;
 import com.netease.nimlib.sdk.msg.MsgServiceObserve;
+import com.netease.nimlib.sdk.msg.attachment.ImageAttachment;
+import com.netease.nimlib.sdk.msg.attachment.MsgAttachment;
+import com.netease.nimlib.sdk.msg.constant.MsgTypeEnum;
 import com.netease.nimlib.sdk.msg.constant.SessionTypeEnum;
 import com.netease.nimlib.sdk.msg.model.IMMessage;
 import com.netease.nimlib.sdk.msg.model.QueryDirectionEnum;
@@ -47,6 +51,7 @@ import com.oguzdev.circularfloatingactionmenu.library.SubActionButton;
 
 import org.apache.commons.lang3.StringUtils;
 
+import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -98,7 +103,13 @@ public class ChatActivity extends BaseActivity implements View.OnClickListener, 
                         } else {
                             friend = new Friend(message.getFromAccount());
                         }
-                        friend.setMsg(message.getContent());
+                        if(message.getMsgType().equals(MsgTypeEnum.text)){
+                            friend.setMsg(message.getContent());
+                        }else if(message.getMsgType().equals(MsgTypeEnum.image)){
+
+
+                        }
+
                         friend.setType(TYPE_FRIEND);
                         list.add(friend);
                         adapter.notifyDataSetChanged();
@@ -298,6 +309,7 @@ public class ChatActivity extends BaseActivity implements View.OnClickListener, 
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.back:
+                NIMClient.getService(MsgService.class).setChattingAccount(MsgService.MSG_CHATTING_ACCOUNT_NONE, SessionTypeEnum.None);
                 this.finish();
                 break;
             case R.id.userinfo:
@@ -331,6 +343,38 @@ public class ChatActivity extends BaseActivity implements View.OnClickListener, 
         IflyService iflyService = new IflyService(ChatActivity.this);
         iflyService.getResultOnline();
         iflyService.setListener(this);
+    }
+
+    private void sendImg(String id, File file){
+        IMMessage message = MessageBuilder.createImageMessage(
+                id,
+                SessionTypeEnum.P2P,
+                file, // 图片文件对象
+                null // 文件显示名字
+        );
+
+        Me me = new Me();
+        me.setImg(file);
+        me.setType(TYPE_ME);
+        list.add(me);
+        adapter.notifyDataSetChanged();
+
+        NIMClient.getService(MsgService.class).sendMessage(message,false).setCallback(new RequestCallback<Void>() {
+            @Override
+            public void onSuccess(Void param) {
+
+            }
+
+            @Override
+            public void onFailed(int code) {
+                Toast.makeText(ChatActivity.this, "发送失败", Toast.LENGTH_SHORT).show();
+            }
+
+            @Override
+            public void onException(Throwable exception) {
+
+            }
+        });
     }
 
     private void sendMsg(String id) {
@@ -431,5 +475,11 @@ public class ChatActivity extends BaseActivity implements View.OnClickListener, 
                 }
                 break;
         }
+    }
+
+    @Override
+    public void onBackPressed() {
+        NIMClient.getService(MsgService.class).setChattingAccount(MsgService.MSG_CHATTING_ACCOUNT_NONE, SessionTypeEnum.None);
+        finish();
     }
 }

@@ -1,6 +1,8 @@
 package com.example.mirry.chat.activity;
 
 import android.app.Activity;
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
@@ -35,8 +37,6 @@ public class ContactInfoActivity extends Activity implements View.OnClickListene
     CircleImageView head;
     @InjectView(R.id.nickname)
     EditText nickname;
-    @InjectView(R.id.note)
-    EditText note;
     @InjectView(R.id.info_phone)
     EditText phoneInfo;
     @InjectView(R.id.info_birthday)
@@ -64,6 +64,8 @@ public class ContactInfoActivity extends Activity implements View.OnClickListene
     private String mBirthday;
     private String mAccount;
     private Boolean isMe;
+    private Map<UserInfoFieldEnum, Object> fields;
+    private Boolean saved = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -93,13 +95,13 @@ public class ContactInfoActivity extends Activity implements View.OnClickListene
         if (isMe) {
             title.setText("个人信息");
             delete.setVisibility(View.GONE);
-            note.setVisibility(View.GONE);
             account.setVisibility(View.VISIBLE);
             chat.setVisibility(View.GONE);
+            done.setVisibility(View.VISIBLE);
         } else {
             title.setText("好友信息");
-            note.setVisibility(View.VISIBLE);
-            account.setVisibility(View.GONE);
+            account.setVisibility(View.VISIBLE);
+            done.setVisibility(View.GONE);
             boolean isMyFriend = NIMClient.getService(FriendService.class).isMyFriend(curAccount);
             if (isMyFriend) {
                 delete.setVisibility(View.VISIBLE);
@@ -117,6 +119,7 @@ public class ContactInfoActivity extends Activity implements View.OnClickListene
             mPhone = mInfo.getMobile();
             mBirthday = mInfo.getBirthday();
 
+            account.setText(curAccount);
             if (mNickname == null || mNickname.equals("")) {
                 nickname.setText(curAccount);
             } else {
@@ -182,7 +185,33 @@ public class ContactInfoActivity extends Activity implements View.OnClickListene
                         });
                 break;
             case R.id.back:
-                finish();
+                checkEdit();
+                if(!fields.isEmpty()&&!saved){
+                    new AlertDialog.Builder(ContactInfoActivity.this)
+                            .setTitle("提示")
+                            .setMessage("个人信息已修改，是否保存？")
+                            .setPositiveButton("保存", new DialogInterface.OnClickListener() {
+                                @Override
+                                public void onClick(DialogInterface dialog, int which) {
+                                    NIMClient.getService(UserService.class).updateUserInfo(fields)
+                                            .setCallback(new RequestCallbackWrapper<Void>() {
+                                                @Override
+                                                public void onResult(int code, Void result, Throwable exception) {
+                                                    Toast.makeText(ContactInfoActivity.this, "用户信息设置完成", Toast.LENGTH_SHORT).show();
+                                                    finish();
+                                                }
+                                            });
+                                }
+                            })
+                            .setNegativeButton("取消", new DialogInterface.OnClickListener() {
+                                @Override
+                                public void onClick(DialogInterface dialog, int which) {
+                                    finish();
+                                }
+                            }).show();
+                }else{
+                    finish();
+                }
                 break;
             case R.id.chat:
                 Intent intent = new Intent(ContactInfoActivity.this, ChatActivity.class);
@@ -192,26 +221,13 @@ public class ContactInfoActivity extends Activity implements View.OnClickListene
                 break;
             case R.id.done:
                 if (isMe) {
-                    String curNick = nickname.getText().toString().trim();
-                    String curPhone = phoneInfo.getText().toString().trim();
-                    String curBirthday = birthdayInfo.getText().toString().trim();
-
-                    Map<UserInfoFieldEnum, Object> fields = new HashMap<>(1);
-                    if (!curNick.equals(mNickname)) {
-                        fields.put(UserInfoFieldEnum.Name, curNick);
-                    }
-                    if (!curPhone.equals(mPhone)) {
-                        fields.put(UserInfoFieldEnum.MOBILE, curNick);
-                    }
-                    if (!curBirthday.equals(mBirthday)) {
-                        fields.put(UserInfoFieldEnum.BIRTHDAY, curNick);
-                    }
-
+                    checkEdit();
                     if (!fields.isEmpty()) {
                         NIMClient.getService(UserService.class).updateUserInfo(fields)
                                 .setCallback(new RequestCallbackWrapper<Void>() {
                                     @Override
                                     public void onResult(int code, Void result, Throwable exception) {
+                                        saved = true;
                                         Toast.makeText(ContactInfoActivity.this, "用户信息设置完成", Toast.LENGTH_SHORT).show();
                                     }
                                 });
@@ -219,6 +235,23 @@ public class ContactInfoActivity extends Activity implements View.OnClickListene
 
                 }
                 break;
+        }
+    }
+
+    private void checkEdit() {
+        String curNick = nickname.getText().toString().trim();
+        String curPhone = phoneInfo.getText().toString().trim();
+        String curBirthday = birthdayInfo.getText().toString().trim();
+
+        fields = new HashMap<>(1);
+        if (!curNick.equals(mNickname)) {
+            fields.put(UserInfoFieldEnum.Name, curNick);
+        }
+        if (!curPhone.equals(mPhone)) {
+            fields.put(UserInfoFieldEnum.MOBILE, curPhone);
+        }
+        if (!curBirthday.equals(mBirthday)) {
+            fields.put(UserInfoFieldEnum.BIRTHDAY, curBirthday);
         }
     }
 }
