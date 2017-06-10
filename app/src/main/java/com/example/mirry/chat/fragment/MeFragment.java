@@ -180,11 +180,12 @@ public class MeFragment extends Fragment implements View.OnClickListener {
         Cursor cursor = db.query(NotesDBHelper.TABLE_NAME, new String[]{NotesDBHelper.PATH}, null, null, null, null, null);
         while (cursor.moveToNext()){
             String path = cursor.getString(cursor.getColumnIndex(NotesDBHelper.PATH));
-            if(path != null){
+            if(!path.equals("null")){
                 imgUrls.add(path);
             }
         }
-
+        cursor.close();
+        db.close();
     }
 
     @Override
