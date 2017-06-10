@@ -13,6 +13,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.mirry.chat.R;
+import com.example.mirry.chat.utils.HeadUtil;
 import com.example.mirry.chat.utils.PreferencesUtil;
 import com.example.mirry.chat.view.CircleImageView;
 import com.example.mirry.chat.view.IconFontTextView;
@@ -51,6 +52,7 @@ public class SettingsActivity extends Activity implements View.OnClickListener {
     private String mAccount;
     private Boolean mVoice;
     private Boolean mVibration;
+    private String mHead;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -87,6 +89,12 @@ public class SettingsActivity extends Activity implements View.OnClickListener {
         NimUserInfo mInfo = NIMClient.getService(UserService.class).getUserInfo(mAccount);
         if (mInfo != null) {
             mNickname = mInfo.getName();
+            mHead =   mInfo.getAvatar();
+
+            if(mHead != null && !mHead.equals("")){
+                HeadUtil.setHead(head,mHead);
+            }
+
             if (mNickname == null || mNickname.equals("")) {
                 nickname.setText(mAccount);
             } else {

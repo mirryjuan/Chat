@@ -12,7 +12,10 @@ import android.widget.TextView;
 
 import com.example.mirry.chat.R;
 import com.example.mirry.chat.bean.ChatMessage;
+import com.example.mirry.chat.utils.HeadUtil;
 import com.example.mirry.chat.view.CircleImageView;
+
+import static com.example.mirry.chat.R.id.msg;
 
 
 public class ChatMessageAdapter extends BaseAdapter
@@ -75,14 +78,14 @@ public class ChatMessageAdapter extends BaseAdapter
 						false);
 				viewHolder = new ViewHolder();
 				viewHolder.head = (CircleImageView) convertView.findViewById(R.id.head);
-				viewHolder.msg = (TextView) convertView.findViewById(R.id.msg);
+				viewHolder.msg = (TextView) convertView.findViewById(msg);
 			} else
 			{
 				convertView = mInflater.inflate(R.layout.item_msg_me, parent,
 						false);
 				viewHolder = new ViewHolder();
 				viewHolder.head = (CircleImageView) convertView.findViewById(R.id.head);
-				viewHolder.msg = (TextView) convertView.findViewById(R.id.msg);
+				viewHolder.msg = (TextView) convertView.findViewById(msg);
 			}
 			convertView.setTag(viewHolder);
 		} else
@@ -90,6 +93,11 @@ public class ChatMessageAdapter extends BaseAdapter
 			viewHolder = (ViewHolder) convertView.getTag();
 		}
 		// 设置数据
+		if(getItemViewType(position) != 0){
+			if(chatMessage.getHead() != null && !chatMessage.getHead().equals("")){
+				HeadUtil.setHead(viewHolder.head,chatMessage.getHead());
+			}
+		}
 		viewHolder.msg.setText(chatMessage.getMsg());
 		return convertView;
 	}

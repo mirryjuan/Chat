@@ -27,6 +27,8 @@ import com.netease.nimlib.sdk.RequestCallbackWrapper;
 import com.netease.nimlib.sdk.msg.MsgService;
 import com.netease.nimlib.sdk.msg.constant.SessionTypeEnum;
 import com.netease.nimlib.sdk.msg.model.RecentContact;
+import com.netease.nimlib.sdk.uinfo.UserService;
+import com.netease.nimlib.sdk.uinfo.model.NimUserInfo;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -145,9 +147,19 @@ public class MsgFragment extends Fragment implements AdapterView.OnItemClickList
 
         message.setMsg(content);
         message.setCount(count);
+
+        message.setHead(queryUserHeadUrl(account));
         msgData.add(message);
     }
 
+    private String queryUserHeadUrl(String account){
+        String url = "";
+        NimUserInfo mInfo = NIMClient.getService(UserService.class).getUserInfo(account);
+        if(mInfo != null){
+            url = mInfo.getAvatar();
+        }
+        return url;
+    }
     @Override
     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
         Msg msg = msgData.get(position);

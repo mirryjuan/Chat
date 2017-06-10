@@ -11,6 +11,7 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.drawable.ColorDrawable;
 import android.net.Uri;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Environment;
 import android.provider.MediaStore;
@@ -31,19 +32,27 @@ import android.widget.Toast;
 
 import com.example.mirry.chat.R;
 import com.example.mirry.chat.common.Common;
+import com.example.mirry.chat.utils.HeadUtil;
 import com.example.mirry.chat.utils.PreferencesUtil;
 import com.example.mirry.chat.view.CircleImageView;
 import com.example.mirry.chat.view.IconFontTextView;
 import com.example.zxing.activity.CaptureActivity;
+import com.netease.nimlib.sdk.AbortableFuture;
 import com.netease.nimlib.sdk.NIMClient;
 import com.netease.nimlib.sdk.RequestCallback;
 import com.netease.nimlib.sdk.RequestCallbackWrapper;
 import com.netease.nimlib.sdk.friend.FriendService;
+import com.netease.nimlib.sdk.nos.NosService;
 import com.netease.nimlib.sdk.uinfo.UserService;
 import com.netease.nimlib.sdk.uinfo.constant.UserInfoFieldEnum;
 import com.netease.nimlib.sdk.uinfo.model.NimUserInfo;
 
 import java.io.File;
+import java.io.IOException;
+import java.io.InputStream;
+import java.net.HttpURLConnection;
+import java.net.MalformedURLException;
+import java.net.URL;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.HashMap;
@@ -80,6 +89,7 @@ public class ContactInfoActivity extends Activity implements View.OnClickListene
     IconFontTextView done;
     private String curAccount;
     private String mNickname;
+    private String mHead;
     private int mSex;
     private String mPhone;
     private String mBirthday;
@@ -91,7 +101,8 @@ public class ContactInfoActivity extends Activity implements View.OnClickListene
     private PopupWindow popupWindow;
     private Uri imageUri;
     private int flag;
-    private File phoneFile;
+    private File file;
+    private String curImgUrl;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -143,6 +154,7 @@ public class ContactInfoActivity extends Activity implements View.OnClickListene
         if (mInfo != null) {
             mNickname = mInfo.getName();
             mSex = mInfo.getGenderEnum().getValue();
+            mHead = mInfo.getAvatar();
             mPhone = mInfo.getMobile();
             mBirthday = mInfo.getBirthday();
 
@@ -152,6 +164,11 @@ public class ContactInfoActivity extends Activity implements View.OnClickListene
             } else {
                 nickname.setText(mNickname);
             }
+
+            if(mHead != null && !mHead.equals("")){
+                HeadUtil.setHead(head,mHead);
+            }
+
             if (isMe) {
                 phone.setVisibility(View.VISIBLE);
                 birthday.setVisibility(View.VISIBLE);
@@ -285,6 +302,12 @@ public class ContactInfoActivity extends Activity implements View.OnClickListene
         if (!curBirthday.equals(mBirthday)) {
             fields.put(UserInfoFieldEnum.BIRTHDAY, curBirthday);
         }
+
+        if(curImgUrl != null && !curImgUrl.equals(mHead)){
+            mHead = curImgUrl;
+            fields.put(UserInfoFieldEnum.AVATAR, curImgUrl);
+        }
+
     }
 
     private void showPopupWindow() {
@@ -345,9 +368,9 @@ public class ContactInfoActivity extends Activity implements View.OnClickListene
         Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
         // 判断存储卡是否可用，存储照片文件
         if (hasSdcard()) {
-            phoneFile = new File(Environment.getExternalStorageDirectory()+"/"+
+            file = new File(Environment.getExternalStorageDirectory()+"/"+
                     getTime()+".jpg");
-            imageUri = Uri.fromFile(phoneFile);
+            imageUri = Uri.fromFile(file);
             intent.putExtra(MediaStore.EXTRA_OUTPUT, imageUri);
             startActivityForResult(intent, Common.CAMERA);
         }else{
@@ -387,8 +410,8 @@ public class ContactInfoActivity extends Activity implements View.OnClickListene
                         /**
                          * 该uri是上一个Activity返回的
                          */
-                        Uri uri = data.getData();
-                        cropPhoto(uri);
+                        imageUri = data.getData();
+                        cropPhoto(imageUri);
                     } catch (Exception e) {
                         Toast.makeText(this,"头像更换失败",Toast.LENGTH_SHORT).show();
                     }
@@ -408,11 +431,33 @@ public class ContactInfoActivity extends Activity implements View.OnClickListene
         super.onActivityResult(requestCode,resultCode,data);
     }
 
+    private void uploadHeadUrl() {
+         File file = new File(imageUri.getPath());
+         NIMClient.getService(NosService.class).upload(file, null).setCallback(new RequestCallback() {
+             @Override
+             public void onSuccess(Object param) {
+                 System.out.println(param);
+                 curImgUrl = param.toString();
+             }
+
+             @Override
+             public void onFailed(int code) {
+
+             }
+
+             @Override
+             public void onException(Throwable exception) {
+
+             }
+         });
+    }
+
     private void setImageToHeadView(Intent intent) {
         Bundle extras = intent.getExtras();
         if (extras != null) {
             Bitmap photo = extras.getParcelable("data");
             head.setImageBitmap(photo);
+            uploadHeadUrl();
         }
     }
 

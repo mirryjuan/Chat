@@ -38,6 +38,7 @@ import com.example.mirry.chat.fragment.MsgFragment;
 import com.example.mirry.chat.notes.NoteActivity;
 import com.example.mirry.chat.service.IflyService;
 import com.example.mirry.chat.utils.DrawableUtil;
+import com.example.mirry.chat.utils.HeadUtil;
 import com.example.mirry.chat.utils.ImageUtil;
 import com.example.mirry.chat.utils.PreferencesUtil;
 import com.example.mirry.chat.view.CircleImageView;
@@ -217,6 +218,7 @@ public class MainActivity extends BaseActivity implements RadioGroup.OnCheckedCh
     private Bundle msgBundle;
     private Bundle contactBundle;
     private String mAccount;
+    private String mHead;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -237,7 +239,7 @@ public class MainActivity extends BaseActivity implements RadioGroup.OnCheckedCh
 
         FragmentManager fragmentManager = getFragmentManager();
         FragmentTransaction transaction = fragmentManager.beginTransaction();
-        transaction.replace(R.id.fl_left_menu,new MeFragment());
+        transaction.replace(R.id.fl_left_menu,new MeFragment(),"me");
         transaction.commit();
 
         ButterKnife.inject(this);
@@ -261,6 +263,14 @@ public class MainActivity extends BaseActivity implements RadioGroup.OnCheckedCh
     private void initData() {
         mAccount = PreferencesUtil.getString(MainActivity.this,"config","account","");
         tabsGroup.check(R.id.message);
+
+        NimUserInfo mInfo = NIMClient.getService(UserService.class).getUserInfo(mAccount);
+        if(mInfo != null){
+            mHead = mInfo.getAvatar();
+            if(mHead != null && !mHead.equals("")){
+                HeadUtil.setHead(head,mHead);
+            }
+        }
 
         List<SystemMessageType> types = new ArrayList<>();
         types.add(SystemMessageType.AddFriend);

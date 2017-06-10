@@ -9,9 +9,6 @@ import android.graphics.BitmapFactory;
 import android.media.MediaPlayer;
 import android.net.Uri;
 import android.os.Bundle;
-import android.os.Environment;
-import android.view.Menu;
-import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
@@ -19,30 +16,33 @@ import android.widget.TextView;
 import android.widget.VideoView;
 
 import com.example.mirry.chat.R;
+import com.example.mirry.chat.utils.ImageUtil;
+import com.example.mirry.chat.view.IconFontTextView;
 
 import java.io.IOException;
 
 public class SelectAct extends Activity  implements View.OnClickListener,MediaPlayer.OnCompletionListener {
-    private Button s_delete,s_back,s_playRecord,s_pause,s_stop;
+    private Button s_playRecord,s_pause,s_stop;
+    private IconFontTextView s_delete,s_back;
     private ImageView s_img;
     private VideoView s_video;
     private TextView s_tv;
-    private NotesDB notesDB;
+    private NotesDBHelper notesDB;
     private SQLiteDatabase dbWriter;
     private MediaPlayer mediaPlayer=null;
     @Override
     protected void onCreate(Bundle savedInstanceState){
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_select);
-        s_delete = (Button) findViewById(R.id.s_delete);
-        s_back = (Button) findViewById(R.id.back);
+        s_delete = (IconFontTextView) findViewById(R.id.s_delete);
+        s_back = (IconFontTextView) findViewById(R.id.back);
         s_img = (ImageView) findViewById(R.id.s_img);
         s_video = (VideoView) findViewById(R.id.s_video);
         s_tv = (TextView) findViewById(R.id.s_tv);
         s_playRecord = (Button) findViewById(R.id.s_playRecord);
         s_pause = (Button) findViewById(R.id.s_pause);
         s_stop = (Button) findViewById(R.id.s_stop);
-        notesDB = new NotesDB(this);
+        notesDB = new NotesDBHelper(this);
 //        获得可写数据库
         dbWriter = notesDB.getWritableDatabase();
 //        为音频控制的三个按钮添加单击事件响应
@@ -53,18 +53,18 @@ public class SelectAct extends Activity  implements View.OnClickListener,MediaPl
 //        为返回和删除按钮添加单击事件响应
         s_back.setOnClickListener(this);
         s_delete.setOnClickListener(this);
-        if (getIntent().getStringExtra(NotesDB.PATH).equals("null")){
+        if (getIntent().getStringExtra(NotesDBHelper.PATH).equals("null")){
             s_img.setVisibility(View.GONE);
         }else{
             s_img.setVisibility(View.VISIBLE);
         }
-        if (getIntent().getStringExtra(NotesDB.VIDEO).equals("null")){
+        if (getIntent().getStringExtra(NotesDBHelper.VIDEO).equals("null")){
             s_video.setVisibility(View.GONE);
         }else{
             s_video.setVisibility(View.VISIBLE);
         }
 //        判断是否有添加音频
-        if (getIntent().getStringExtra(NotesDB.AUDIO).equals("null")){
+        if (getIntent().getStringExtra(NotesDBHelper.AUDIO).equals("null")){
             s_playRecord.setVisibility(View.GONE);
             s_pause.setVisibility(View.GONE);
             s_stop.setVisibility(View.GONE);
@@ -73,11 +73,12 @@ public class SelectAct extends Activity  implements View.OnClickListener,MediaPl
             s_pause.setVisibility(View.VISIBLE);
             s_stop.setVisibility(View.VISIBLE);
         }
-        s_tv.setText(getIntent().getStringExtra(NotesDB.CONTENT));
-        Bitmap bitmap = BitmapFactory.decodeFile(getIntent().getStringExtra(NotesDB.PATH));
-        s_img.setImageBitmap(bitmap);
+        s_tv.setText(getIntent().getStringExtra(NotesDBHelper.CONTENT));
+        Bitmap imageThumbnail = ImageUtil.getImageThumbnail(getIntent().getStringExtra(NotesDBHelper.PATH), 200, 200);
+        //Bitmap bitmap = BitmapFactory.decodeFile(getIntent().getStringExtra(NotesDBHelper.PATH));
+        s_img.setImageBitmap(imageThumbnail);
 //        设置视频URI
-        s_video.setVideoURI(Uri.parse(getIntent().getStringExtra(NotesDB.VIDEO)));
+        s_video.setVideoURI(Uri.parse(getIntent().getStringExtra(NotesDBHelper.VIDEO)));
         s_video.start();
     }
 
@@ -109,7 +110,7 @@ public class SelectAct extends Activity  implements View.OnClickListener,MediaPl
                     mediaPlayer = new MediaPlayer();
                     mediaPlayer.setOnCompletionListener(this);
                     try {
-                        mediaPlayer.setDataSource(getIntent().getStringExtra(NotesDB.AUDIO));
+                        mediaPlayer.setDataSource(getIntent().getStringExtra(NotesDBHelper.AUDIO));
                         mediaPlayer.prepare();
                         mediaPlayer.start();
                     } catch (IOException e) {
@@ -158,7 +159,7 @@ public class SelectAct extends Activity  implements View.OnClickListener,MediaPl
 
 //用于删除记录
     public void delete(){
-        dbWriter.delete(NotesDB.TABLE_NAME, "_id=" + getIntent().getIntExtra(NotesDB.ID, 0), null);
+        dbWriter.delete(NotesDBHelper.TABLE_NAME, "_id=" + getIntent().getIntExtra(NotesDBHelper.ID, 0), null);
     }
 
     @Override

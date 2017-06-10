@@ -8,6 +8,15 @@ public class ChatMessage
 	private String msg;
 	private Type type;
 	private Date date;
+	private String head;
+
+	public String getHead() {
+		return head;
+	}
+
+	public void setHead(String head) {
+		this.head = head;
+	}
 
 	public enum Type
 	{

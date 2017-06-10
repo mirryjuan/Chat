@@ -9,6 +9,7 @@ public class Msg {
     private String username;
     private int count;
     private String msg;
+    private String head;
 
     public String getAccount() {
         return account;
@@ -40,5 +41,13 @@ public class Msg {
 
     public void setMsg(String msg) {
         this.msg = msg;
+    }
+
+    public String getHead() {
+        return head;
+    }
+
+    public void setHead(String head) {
+        this.head = head;
     }
 }

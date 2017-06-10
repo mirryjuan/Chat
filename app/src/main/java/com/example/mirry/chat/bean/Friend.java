@@ -14,6 +14,7 @@ public class Friend implements Comparable<Friend>{
     private int type;
     private String msg;
     private String alias;
+    private String head;
 
     public String getAccount() {
         return account;
@@ -80,5 +81,13 @@ public class Friend implements Comparable<Friend>{
     @Override
     public int compareTo(Friend another) {
         return this.getPinyin().compareTo(another.getPinyin());
+    }
+
+    public String getHead() {
+        return head;
+    }
+
+    public void setHead(String head) {
+        this.head = head;
     }
 }

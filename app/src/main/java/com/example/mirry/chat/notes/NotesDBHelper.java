@@ -7,7 +7,7 @@ import android.database.sqlite.SQLiteOpenHelper;
 /**
  * Created by Administrator on 2016/1/22.
  */
-public class NotesDB extends SQLiteOpenHelper {
+public class NotesDBHelper extends SQLiteOpenHelper {
     public static final String TABLE_NAME = "notes";
     public static final String CONTENT = "content";
     public static final String PATH = "path";
@@ -15,7 +15,7 @@ public class NotesDB extends SQLiteOpenHelper {
     public static final String AUDIO = "audio";
     public static final String ID = "_id";
     public static final String TIME = "time";
-    public NotesDB(Context context) {
+    public NotesDBHelper(Context context) {
         super(context,"notes", null, 1);
     }
 

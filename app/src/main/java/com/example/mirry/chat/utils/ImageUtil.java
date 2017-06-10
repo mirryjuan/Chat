@@ -20,6 +20,9 @@ import android.annotation.TargetApi;
 import android.content.ContentUris;
 import android.content.Context;
 import android.database.Cursor;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.media.ThumbnailUtils;
 import android.net.Uri;
 import android.os.Environment;
 import android.provider.DocumentsContract;
@@ -135,5 +138,44 @@ public class ImageUtil {
      */
     public static boolean isGooglePhotosUri(Uri uri) {
         return "com.google.android.apps.photos.content".equals(uri.getAuthority());
+    }
+
+    //    该方法用于获取图片缩略图
+    public static Bitmap getImageThumbnail(String uri, int width, int height){
+        Bitmap bitmap  = null;
+//        加载图像尺寸,而不是图像本身
+        BitmapFactory.Options options = new BitmapFactory.Options();
+        options.inJustDecodeBounds = true;
+        bitmap = BitmapFactory.decodeFile(uri,options);
+        options.inJustDecodeBounds = false;
+        int beWidth = options.outWidth/width;
+        int beHeight = options.outHeight/height;
+        int be = 1;
+        if (beWidth<beHeight){
+//            若宽度比例更大则根据宽度进行缩放
+            be = beWidth;
+        }else{
+//            若高度比例更大则根据高度进行缩放
+            be = beHeight;
+        }
+        if (be<=0){
+            be = 1;
+        }
+//        设定缩放比例
+        options.inSampleSize = be;
+//        重新获取缩略图之后的图片
+        bitmap = BitmapFactory.decodeFile(uri,options);
+//        ThumbnailUtils.extractThumbnail()方法用于提取缩略图
+//        ThumbnailUtils.OPTIONS_RECYCLE_INPUT常量表示应该回收extractThumbnail(Bitmap, int, int, int)
+//          输入源图片(第一个参数)，除非输出图片就是输入图片。
+        bitmap = ThumbnailUtils.extractThumbnail(bitmap,width,height,ThumbnailUtils.OPTIONS_RECYCLE_INPUT);
+        return bitmap;
+    }
+
+    private static Bitmap getVideoThumbnail(String uri,int width,int height,int kind){
+        Bitmap bitmap = null;
+        bitmap = ThumbnailUtils.createVideoThumbnail(uri,kind);
+        bitmap = ThumbnailUtils.extractThumbnail(bitmap,width,height,ThumbnailUtils.OPTIONS_RECYCLE_INPUT);
+        return bitmap;
     }
 }

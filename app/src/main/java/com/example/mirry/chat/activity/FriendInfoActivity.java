@@ -15,6 +15,7 @@ import android.widget.Toast;
 
 import com.example.mirry.chat.R;
 import com.example.mirry.chat.common.Common;
+import com.example.mirry.chat.utils.HeadUtil;
 import com.example.mirry.chat.utils.PreferencesUtil;
 import com.example.mirry.chat.view.CenterDialog;
 import com.example.mirry.chat.view.CircleImageView;
@@ -95,9 +96,9 @@ public class FriendInfoActivity extends Activity implements View.OnClickListener
     }
 
     private void initData() {
-//            if(info.get("head") != null){
-//                head.setImageResource((Integer)info.get("head"));
-//            }
+        if(info.get("head") != null && !(info.get("head").toString().equals(""))){
+            HeadUtil.setHead(head,info.get("head").toString());
+        }
         mAccount = PreferencesUtil.getString(FriendInfoActivity.this,"config","account","");
         friendAccount = info.get("account").toString();
         nickName.setText(info.get("nickname") == null ? "" : info.get("nickname").toString());

@@ -19,7 +19,11 @@ import com.example.mirry.chat.R;
 import com.example.mirry.chat.adapter.ChatMessageAdapter;
 import com.example.mirry.chat.bean.ChatMessage;
 import com.example.mirry.chat.utils.HttpUtils;
+import com.example.mirry.chat.utils.PreferencesUtil;
 import com.example.mirry.chat.view.IconFontTextView;
+import com.netease.nimlib.sdk.NIMClient;
+import com.netease.nimlib.sdk.uinfo.UserService;
+import com.netease.nimlib.sdk.uinfo.model.NimUserInfo;
 
 import org.apache.commons.lang3.StringUtils;
 
@@ -58,6 +62,7 @@ public class RobotActivity extends Activity implements TextWatcher {
 
     };
     private IconFontTextView add;
+    private String headUrl;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -93,6 +98,7 @@ public class RobotActivity extends Activity implements TextWatcher {
                 toMessage.setDate(new Date());
                 toMessage.setMsg(toMsg);
                 toMessage.setType(ChatMessage.Type.OUTCOMING);
+                toMessage.setHead(headUrl);
                 mData.add(toMessage);
                 mAdapter.notifyDataSetChanged();
                 mMsgs.setSelection(mData.size() - 1);
@@ -119,6 +125,11 @@ public class RobotActivity extends Activity implements TextWatcher {
         mData.add(new ChatMessage("你好, 我是机器人小微", ChatMessage.Type.INCOMING, new Date()));
         mAdapter = new ChatMessageAdapter(this, mData);
         mMsgs.setAdapter(mAdapter);
+        String account = PreferencesUtil.getString(RobotActivity.this, "config", "account", "");
+        NimUserInfo mInfo = NIMClient.getService(UserService.class).getUserInfo(account);
+        if(mInfo != null){
+            headUrl = mInfo.getAvatar();
+        }
     }
 
     @Override

@@ -13,6 +13,7 @@ public class Me {
     private String id;
     private int type;
     private String msg;
+    private String head;
 
     public int getType() {
         return type;
@@ -44,5 +45,13 @@ public class Me {
 
     public void setName(String name) {
         this.name = name;
+    }
+
+    public String getHead() {
+        return head;
+    }
+
+    public void setHead(String head) {
+        this.head = head;
     }
 }

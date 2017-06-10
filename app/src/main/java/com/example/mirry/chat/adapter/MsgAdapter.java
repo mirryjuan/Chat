@@ -8,6 +8,7 @@ import android.widget.TextView;
 
 import com.example.mirry.chat.R;
 import com.example.mirry.chat.bean.Msg;
+import com.example.mirry.chat.utils.HeadUtil;
 import com.example.mirry.chat.view.CircleImageView;
 
 import java.util.List;
@@ -57,7 +58,10 @@ public class MsgAdapter extends BaseAdapter {
         }
 
         Msg msg = mData.get(position);
-        holder.head.setImageResource(R.drawable.head);
+//        holder.head.setImageResource(R.drawable.head);
+        if(msg.getHead() != null && !msg.getHead().equals("")){
+            HeadUtil.setHead(holder.head,msg.getHead());
+        }
         holder.username.setText(msg.getUsername());
         holder.msg.setText(msg.getMsg());
         if(msg.getCount() == 0){

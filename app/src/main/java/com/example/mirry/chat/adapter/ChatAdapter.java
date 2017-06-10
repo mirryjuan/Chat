@@ -13,6 +13,7 @@ import android.widget.TextView;
 import com.example.mirry.chat.R;
 import com.example.mirry.chat.bean.Friend;
 import com.example.mirry.chat.bean.Me;
+import com.example.mirry.chat.utils.HeadUtil;
 import com.example.mirry.chat.view.CircleImageView;
 
 import java.util.List;
@@ -87,12 +88,18 @@ public class ChatAdapter extends BaseAdapter {
             case TYPE_ME:
                 Me me = (Me) obj;
                 if(me != null){
+                    if(me.getHead() != null && !me.getHead().equals("")){
+                        HeadUtil.setHead(holderMe.head,me.getHead());
+                    }
                     holderMe.msg.setText(me.getMsg());
                 }
                 break;
             case TYPE_FRIEND:
                 Friend friend = (Friend) obj;
                 if(friend != null){
+                    if(friend.getHead() != null && !friend.getHead().equals("")){
+                        HeadUtil.setHead(holderFriend.head, friend.getHead());
+                    }
                     holderFriend.msg.setText(friend.getMsg());
                 }
                 break;

@@ -1,6 +1,9 @@
 package com.example.mirry.chat.activity;
 
 import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.media.ThumbnailUtils;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -12,16 +15,20 @@ import android.widget.GridView;
 import android.widget.ImageView;
 
 import com.example.mirry.chat.R;
+import com.example.mirry.chat.utils.ImageUtil;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public class GalleryActivity extends AppCompatActivity implements AdapterView.OnItemClickListener {
     private GridView mGridView;
-    private int[] imgIds;
+    private ArrayList<String> imgUrls = null;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_gallery);
-        imgIds = getIntent().getIntArrayExtra("imgIds");
+        imgUrls = getIntent().getStringArrayListExtra("imgUrls");
         mGridView = (GridView) findViewById(R.id.gridView1);
         mGridView.setAdapter(new GridAdapter());
         mGridView.setOnItemClickListener(this);
@@ -33,12 +40,12 @@ public class GalleryActivity extends AppCompatActivity implements AdapterView.On
 
         @Override
         public int getCount() {
-            return imgIds.length;
+            return imgUrls.size();
         }
 
         @Override
         public Object getItem(int position) {
-            return imgIds[position];
+            return imgUrls.get(position);
         }
 
         @Override
@@ -58,8 +65,8 @@ public class GalleryActivity extends AppCompatActivity implements AdapterView.On
                 viewHolder = (ViewHolder) convertView.getTag();
             }
 
-            viewHolder.imageView.setImageResource(imgIds[position]);
-
+            String url = imgUrls.get(position);
+            viewHolder.imageView.setImageBitmap(ImageUtil.getImageThumbnail(url,200,200));
             return convertView;
         }
 
@@ -76,7 +83,7 @@ public class GalleryActivity extends AppCompatActivity implements AdapterView.On
                             long id) {
         Intent intent = new Intent();
         intent.putExtra("position", position);
-        intent.putExtra("imgIds", imgIds);
+        intent.putStringArrayListExtra("imgUrls",imgUrls);
         intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
         intent.setClass(getApplication(), ShowPhotoActivity.class);
         startActivity(intent);

@@ -1,6 +1,8 @@
 package com.example.mirry.chat.activity;
 
 import android.app.Activity;
+import android.graphics.drawable.BitmapDrawable;
+import android.net.Uri;
 import android.view.ViewGroup;
 import android.widget.RelativeLayout.LayoutParams;
 import android.os.Bundle;
@@ -14,6 +16,9 @@ import android.widget.Toast;
 import android.widget.ViewSwitcher;
 
 import com.example.mirry.chat.R;
+import com.example.mirry.chat.utils.ImageUtil;
+
+import java.util.ArrayList;
 
 public class ShowPhotoActivity extends Activity implements ViewSwitcher.ViewFactory, View.OnTouchListener {
     /**
@@ -23,7 +28,7 @@ public class ShowPhotoActivity extends Activity implements ViewSwitcher.ViewFact
     /**
      * 图片id数组
      */
-    private int[] imgIds;
+    private ArrayList<String> imgUrls;
     /**
      * 当前选中的图片id序号
      */
@@ -45,7 +50,7 @@ public class ShowPhotoActivity extends Activity implements ViewSwitcher.ViewFact
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.show_photo);
-        imgIds = getIntent().getIntArrayExtra("imgIds");
+        imgUrls = getIntent().getStringArrayListExtra("imgUrls");
         //实例化ImageSwitcher
         mImageSwitcher  = (ImageSwitcher) findViewById(R.id.imageSwitcher1);
         //设置Factory
@@ -55,8 +60,8 @@ public class ShowPhotoActivity extends Activity implements ViewSwitcher.ViewFact
 
         linearLayout = (LinearLayout) findViewById(R.id.viewGroup);
 
-        tips = new ImageView[imgIds.length];
-        for(int i=0; i<imgIds.length; i++){
+        tips = new ImageView[imgUrls.size()];
+        for(int i=0; i<imgUrls.size(); i++){
             ImageView mImageView = new ImageView(this);
             tips[i] = mImageView;
             LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(new ViewGroup.LayoutParams(LayoutParams.WRAP_CONTENT,
@@ -70,7 +75,9 @@ public class ShowPhotoActivity extends Activity implements ViewSwitcher.ViewFact
 
         //这个我是从上一个界面传过来的，上一个界面是一个GridView
         currentPosition = getIntent().getIntExtra("position", 0);
-        mImageSwitcher.setImageResource(imgIds[currentPosition]);
+        //mImageSwitcher.setImageURI(Uri.parse(imgUrls.get(currentPosition)));
+        BitmapDrawable drawable = new BitmapDrawable(ImageUtil.getImageThumbnail(imgUrls.get(currentPosition),200,200));
+        mImageSwitcher.setImageDrawable(drawable);
 
         setImageBackground(currentPosition);
 
@@ -116,7 +123,9 @@ public class ShowPhotoActivity extends Activity implements ViewSwitcher.ViewFact
                         mImageSwitcher.setInAnimation(AnimationUtils.loadAnimation(getApplication(), R.anim.left_in));
                         mImageSwitcher.setOutAnimation(AnimationUtils.loadAnimation(getApplication(), R.anim.right_out));
                         currentPosition --;
-                        mImageSwitcher.setImageResource(imgIds[currentPosition % imgIds.length]);
+                       // mImageSwitcher.setImageURI(Uri.parse(imgUrls.get(currentPosition % imgUrls.size())));
+                        BitmapDrawable drawable = new BitmapDrawable(ImageUtil.getImageThumbnail(imgUrls.get(currentPosition%imgUrls.size()),200,200));
+                        mImageSwitcher.setImageDrawable(drawable);
                         setImageBackground(currentPosition);
                     }else{
                         Toast.makeText(getApplication(), "已经是第一张", Toast.LENGTH_SHORT).show();
@@ -124,11 +133,13 @@ public class ShowPhotoActivity extends Activity implements ViewSwitcher.ViewFact
                 }
 
                 if(lastX < downX){
-                    if(currentPosition < imgIds.length - 1){
+                    if(currentPosition < imgUrls.size()-1){
                         mImageSwitcher.setInAnimation(AnimationUtils.loadAnimation(getApplication(), R.anim.right_in));
                         mImageSwitcher.setOutAnimation(AnimationUtils.loadAnimation(getApplication(), R.anim.lift_out));
                         currentPosition ++ ;
-                        mImageSwitcher.setImageResource(imgIds[currentPosition]);
+                       // mImageSwitcher.setImageURI(Uri.parse(imgUrls.get(currentPosition)));
+                        BitmapDrawable drawable = new BitmapDrawable(ImageUtil.getImageThumbnail(imgUrls.get(currentPosition),200,200));
+                        mImageSwitcher.setImageDrawable(drawable);
                         setImageBackground(currentPosition);
                     }else{
                         Toast.makeText(getApplication(), "到了最后一张", Toast.LENGTH_SHORT).show();

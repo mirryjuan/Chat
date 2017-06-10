@@ -46,6 +46,8 @@ import com.netease.nimlib.sdk.msg.constant.MsgTypeEnum;
 import com.netease.nimlib.sdk.msg.constant.SessionTypeEnum;
 import com.netease.nimlib.sdk.msg.model.IMMessage;
 import com.netease.nimlib.sdk.msg.model.QueryDirectionEnum;
+import com.netease.nimlib.sdk.uinfo.UserService;
+import com.netease.nimlib.sdk.uinfo.model.NimUserInfo;
 import com.oguzdev.circularfloatingactionmenu.library.FloatingActionButton;
 import com.oguzdev.circularfloatingactionmenu.library.FloatingActionMenu;
 import com.oguzdev.circularfloatingactionmenu.library.SubActionButton;
@@ -104,6 +106,7 @@ public class ChatActivity extends BaseActivity implements View.OnClickListener, 
                         }
                         friend.setMsg(message.getContent());
                         friend.setType(TYPE_FRIEND);
+                        friend.setHead(queryUserHeadUrl(message.getFromAccount()));
                         list.add(friend);
                         adapter.notifyDataSetChanged();
                     }
@@ -133,6 +136,15 @@ public class ChatActivity extends BaseActivity implements View.OnClickListener, 
         //true表示注册消息接收观察者
         NIMClient.getService(MsgServiceObserve.class)
                 .observeReceiveMessage(incomingMessageObserver, true);
+    }
+
+    private String queryUserHeadUrl(String account){
+        String url = "";
+        NimUserInfo mInfo = NIMClient.getService(UserService.class).getUserInfo(account);
+        if(mInfo != null){
+            url = mInfo.getAvatar();
+        }
+        return url;
     }
 
     private void initView() {
@@ -252,11 +264,13 @@ public class ChatActivity extends BaseActivity implements View.OnClickListener, 
 
                                     friend.setMsg(content);
                                     friend.setType(TYPE_FRIEND);
+                                    friend.setHead(queryUserHeadUrl(account));
                                     list.add(friend);
                                 } else if (account.equals(mAccount)) {
                                     Me me = new Me();
                                     me.setMsg(content);
                                     me.setType(TYPE_ME);
+                                    me.setHead(queryUserHeadUrl(mAccount));
                                     list.add(me);
                                 }
                             }
@@ -331,6 +345,7 @@ public class ChatActivity extends BaseActivity implements View.OnClickListener, 
         Me me = new Me();
         me.setMsg(content);
         me.setType(TYPE_ME);
+        me.setHead(queryUserHeadUrl(mAccount));
         list.add(me);
         adapter.notifyDataSetChanged();
 

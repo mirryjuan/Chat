@@ -12,6 +12,7 @@ import android.widget.TextView;
 
 import com.example.mirry.chat.R;
 import com.example.mirry.chat.common.Common;
+import com.example.mirry.chat.utils.HeadUtil;
 import com.example.mirry.chat.view.CircleImageView;
 import com.netease.nimlib.sdk.NIMClient;
 import com.netease.nimlib.sdk.friend.FriendService;
@@ -74,9 +75,9 @@ public class NewFriendAdapter extends BaseAdapter {
 
         final Map<String,Object> info = mData.get(position);
         if (info != null) {
-//            if(info.get("head") != null){
-//                holder.head.setImageResource((Integer)info.get("head"));
-//            }
+            if(info.get("head") != null && !info.get("head").equals("")){
+                HeadUtil.setHead(holder.head, info.get("head").toString());
+            }
             holder.nickname.setText(info.get("nickname")==null?"":info.get("nickname").toString());
             holder.account.setText(info.get("account")==null?"":info.get("account").toString());
             if(info.get("sex").equals(GenderEnum.FEMALE)){

@@ -3,6 +3,8 @@ package com.example.mirry.chat.fragment;
 
 import android.app.Fragment;
 import android.content.Intent;
+import android.database.Cursor;
+import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -19,6 +21,8 @@ import com.example.mirry.chat.activity.MainActivity;
 import com.example.mirry.chat.activity.SettingsActivity;
 import com.example.mirry.chat.activity.ShareActivity;
 import com.example.mirry.chat.common.Common;
+import com.example.mirry.chat.notes.NotesDBHelper;
+import com.example.mirry.chat.utils.HeadUtil;
 import com.example.mirry.chat.utils.NimUserInfoCache;
 import com.example.mirry.chat.utils.PreferencesUtil;
 import com.example.mirry.chat.view.CircleImageView;
@@ -27,6 +31,8 @@ import com.netease.nimlib.sdk.RequestCallback;
 import com.netease.nimlib.sdk.auth.AuthService;
 import com.netease.nimlib.sdk.uinfo.model.NimUserInfo;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Map;
 
 import butterknife.ButterKnife;
@@ -56,7 +62,8 @@ public class MeFragment extends Fragment implements View.OnClickListener {
 
     private Map<String, Object> mInfo = null;
 
-    private int[] imgIds = null;
+    private ArrayList<String> imgUrls = new ArrayList<>();
+    private String mHead;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -96,7 +103,7 @@ public class MeFragment extends Fragment implements View.OnClickListener {
         queryUserData(mAccount);
     }
 
-    private void queryUserData(String account) {
+    public void queryUserData(String account) {
 //        NimUserInfo mInfo = NIMClient.getService(UserService.class).getUserInfo(account);
         NimUserInfoCache.getInstance().getUserInfoFromRemote(account, new RequestCallback<NimUserInfo>() {
             @Override
@@ -107,8 +114,12 @@ public class MeFragment extends Fragment implements View.OnClickListener {
                     mSex = nimUserInfo.getGenderEnum().getValue();
                     mPhone = nimUserInfo.getMobile();
                     mBirthday = nimUserInfo.getBirthday();
+                    mHead = nimUserInfo.getAvatar();
 
-                    // TODO: 2017/4/2 设置头像
+                    if(mHead != null && !mHead.equals("")){
+                        HeadUtil.setHead(head, mHead);
+                    }
+
                     if (mNickname == null || mNickname.equals("")) {
                         nickname.setText(mAccount);
                     } else {
@@ -143,7 +154,7 @@ public class MeFragment extends Fragment implements View.OnClickListener {
             case R.id.gallery:
                 getPicRes();
                 Intent intentImg = new Intent(mActivity, GalleryActivity.class);
-                intentImg.putExtra("imgIds",imgIds);
+                intentImg.putStringArrayListExtra("imgUrls",imgUrls);
                 startActivity(intentImg);
                 break;
             case R.id.settings:
@@ -163,18 +174,17 @@ public class MeFragment extends Fragment implements View.OnClickListener {
     }
 
     private void getPicRes() {
-        imgIds = new int[]{
-                R.drawable.pic1,
-                R.drawable.pic2,
-                R.drawable.pic3,
-                R.drawable.pic4,
-                R.drawable.pic5,
-                R.drawable.pic6,
-                R.drawable.pic7,
-                R.drawable.pic8,
-                R.drawable.pic10,
-                R.drawable.pic11
-        };
+        imgUrls.clear();
+        NotesDBHelper helper = new NotesDBHelper(mActivity);
+        SQLiteDatabase db = helper.getReadableDatabase();
+        Cursor cursor = db.query(NotesDBHelper.TABLE_NAME, new String[]{NotesDBHelper.PATH}, null, null, null, null, null);
+        while (cursor.moveToNext()){
+            String path = cursor.getString(cursor.getColumnIndex(NotesDBHelper.PATH));
+            if(path != null){
+                imgUrls.add(path);
+            }
+        }
+
     }
 
     @Override

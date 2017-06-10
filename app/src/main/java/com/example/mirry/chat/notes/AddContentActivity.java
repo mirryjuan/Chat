@@ -20,6 +20,7 @@ import android.widget.Toast;
 import android.widget.VideoView;
 
 import com.example.mirry.chat.R;
+import com.example.mirry.chat.utils.ImageUtil;
 import com.example.mirry.chat.view.IconFontTextView;
 
 import java.io.File;
@@ -33,7 +34,7 @@ public class AddContentActivity extends Activity implements View.OnClickListener
     private EditText ettext;
     private ImageView c_img;
     private VideoView v_video;
-    private NotesDB notesDB;
+    private NotesDBHelper notesDB;
     private SQLiteDatabase dbWriter;
     private File phoneFile,videoFile;
     private File recordAudioFile = null;
@@ -65,7 +66,7 @@ public class AddContentActivity extends Activity implements View.OnClickListener
         btnDelete.setOnClickListener(this);
         savebtn.setOnClickListener(this);
         cancelbtn.setOnClickListener(this);
-        notesDB = new NotesDB(this);
+        notesDB = new NotesDBHelper(this);
         dbWriter = notesDB.getWritableDatabase();
 //        初始化视图
         initView();
@@ -140,12 +141,12 @@ public class AddContentActivity extends Activity implements View.OnClickListener
 
     public void addDB(){
         ContentValues cv = new ContentValues();
-        cv.put(NotesDB.CONTENT,ettext.getText().toString());
-        cv.put(NotesDB.TIME,getTime());
-        cv.put(NotesDB.PATH,phoneFile+"");
-        cv.put(NotesDB.VIDEO,videoFile+"");
-        cv.put(NotesDB.AUDIO, recordAudioFile + "");
-        dbWriter.insert(NotesDB.TABLE_NAME,null,cv);
+        cv.put(NotesDBHelper.CONTENT,ettext.getText().toString());
+        cv.put(NotesDBHelper.TIME,getTime());
+        cv.put(NotesDBHelper.PATH,phoneFile+"");
+        cv.put(NotesDBHelper.VIDEO,videoFile+"");
+        cv.put(NotesDBHelper.AUDIO, recordAudioFile + "");
+        dbWriter.insert(NotesDBHelper.TABLE_NAME,null,cv);
     }
 
     private String getTime(){
@@ -210,8 +211,9 @@ public class AddContentActivity extends Activity implements View.OnClickListener
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         if (requestCode == 1){
-            Bitmap bitmap = BitmapFactory.decodeFile(phoneFile.getAbsolutePath());
-            c_img.setImageBitmap(bitmap);
+            //Bitmap bitmap = BitmapFactory.decodeFile(phoneFile.getAbsolutePath());
+            Bitmap imageThumbnail = ImageUtil.getImageThumbnail(phoneFile.getAbsolutePath(), 200, 200);
+            c_img.setImageBitmap(imageThumbnail);
         }
         if (requestCode == 2){
             v_video.setVideoURI(Uri.fromFile(videoFile));

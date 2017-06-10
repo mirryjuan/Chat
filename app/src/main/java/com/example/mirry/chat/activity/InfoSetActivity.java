@@ -1,17 +1,32 @@
 package com.example.mirry.chat.activity;
 
+import android.Manifest;
 import android.app.Activity;
+import android.content.ComponentName;
 import android.content.ContentValues;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.database.sqlite.SQLiteDatabase;
+import android.graphics.Bitmap;
+import android.graphics.drawable.ColorDrawable;
+import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.os.Environment;
+import android.provider.MediaStore;
 import android.provider.Settings;
+import android.support.annotation.NonNull;
+import android.support.v4.app.ActivityCompat;
+import android.support.v4.content.ContextCompat;
 import android.util.Log;
+import android.view.Gravity;
+import android.view.MotionEvent;
 import android.view.View;
+import android.view.ViewGroup;
 import android.view.Window;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.PopupWindow;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.TextView;
@@ -23,7 +38,9 @@ import com.example.mirry.chat.common.MyOpenHelper;
 import com.example.mirry.chat.R;
 import com.example.mirry.chat.view.CircleImageView;
 import com.netease.nimlib.sdk.NIMClient;
+import com.netease.nimlib.sdk.RequestCallback;
 import com.netease.nimlib.sdk.RequestCallbackWrapper;
+import com.netease.nimlib.sdk.nos.NosService;
 import com.netease.nimlib.sdk.uinfo.UserService;
 import com.netease.nimlib.sdk.uinfo.constant.UserInfoFieldEnum;
 
@@ -38,8 +55,10 @@ import org.apache.http.util.EntityUtils;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.io.File;
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
@@ -53,8 +72,6 @@ import butterknife.InjectView;
 
 public class InfoSetActivity extends Activity implements View.OnClickListener, RadioGroup.OnCheckedChangeListener {
 
-    @InjectView(R.id.head)
-    CircleImageView head;
     @InjectView(R.id.nickname)
     EditText nickname;
     @InjectView(R.id.male)
@@ -77,6 +94,12 @@ public class InfoSetActivity extends Activity implements View.OnClickListener, R
     private String mBirthday;
     private String mPhone;
 
+    private PopupWindow popupWindow;
+    private Uri imageUri;
+    private int flag;
+    private File file;
+    private String curImgUrl;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -95,7 +118,6 @@ public class InfoSetActivity extends Activity implements View.OnClickListener, R
     }
 
     private void initData() {
-        // TODO: 2017/4/2 设置默认头像
         nickname.setText(accid);   //昵称默认为账号
         sex.check(R.id.male);      //性别默认选中 "男"
     }
@@ -107,14 +129,12 @@ public class InfoSetActivity extends Activity implements View.OnClickListener, R
         mPhone = phone.getText().toString();
         switch (v.getId()) {
             case R.id.next:
-                updateRemoteData(mNickname, mBirthday, mPhone);
                 finish();
                 break;
             case R.id.accomplish:
 //                //更新本地数据库信息
 //                updateDatabaseInfo(mNickname, mBirthday, mPhone);
 //                //更新服务器用户信息
-//                updateRemoteData(mNickname, mBirthday, mPhone);
                 doUpdate(accid,mNickname,mBirthday,mPhone);
                 break;
         }
@@ -124,7 +144,6 @@ public class InfoSetActivity extends Activity implements View.OnClickListener, R
         MyOpenHelper helper = new MyOpenHelper(InfoSetActivity.this);
         SQLiteDatabase db = helper.getWritableDatabase();
         ContentValues values = new ContentValues();
-        // TODO: 2017/4/12 头像
         values.put("nickname",mNickname);
         values.put("sex",mSex);
         values.put("birthday",mBirthday);
@@ -133,27 +152,7 @@ public class InfoSetActivity extends Activity implements View.OnClickListener, R
         db.close();
     }
 
-    private void updateRemoteData(String mNickname, String mBirthday, String mPhone) {
-        Map<UserInfoFieldEnum, Object> fields = new HashMap<>(1);
-        // TODO: 2017/4/12 头像
-        fields.put(UserInfoFieldEnum.Name, mNickname);
-        fields.put(UserInfoFieldEnum.GENDER, mSex);
-        fields.put(UserInfoFieldEnum.BIRTHDAY, mBirthday);
-        fields.put(UserInfoFieldEnum.MOBILE, mPhone);
-        NIMClient.getService(UserService.class).updateUserInfo(fields)
-                .setCallback(new RequestCallbackWrapper<Void>() {
-
-                    @Override
-                    public void onResult(int code, Void result, Throwable exception) {
-                        Log.e("code",""+code);
-                        Toast.makeText(InfoSetActivity.this, "信息更新成功", Toast.LENGTH_SHORT).show();
-                        finish();
-                    }
-                });
-    }
-
-
-    public void doUpdate(String accid, String mNickname, String mBirthday, String mPhone){
+    public void doUpdate(String accid,String mNickname, String mBirthday, String mPhone){
         AsyncTask<String, Integer, String> asyncTask = new AsyncTask<String, Integer, String>() {
             @Override
             protected void onPostExecute(String resultStr) {
@@ -209,7 +208,7 @@ public class InfoSetActivity extends Activity implements View.OnClickListener, R
                 nvps.add(new BasicNameValuePair("name", params[1]));
                 nvps.add(new BasicNameValuePair("birth", params[2]));
                 nvps.add(new BasicNameValuePair("mobile", params[3]));
-//                nvps.add(new BasicNameValuePair("gender", params[4]));
+//                nvps.add(new BasicNameValuePair("gender", params[5]));
                 try {
                     httpPost.setEntity(new UrlEncodedFormEntity(nvps, "utf-8"));
                     // 执行请求

@@ -18,17 +18,13 @@ import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
 import android.view.View;
 import android.widget.AdapterView;
-import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.Toast;
 
 import com.example.mirry.chat.R;
-import com.example.mirry.chat.activity.ChatActivity;
-import com.example.mirry.chat.activity.MainActivity;
 import com.example.mirry.chat.common.Common;
 import com.example.mirry.chat.view.IconFontTextView;
-import com.example.zxing.activity.CaptureActivity;
 import com.oguzdev.circularfloatingactionmenu.library.FloatingActionButton;
 import com.oguzdev.circularfloatingactionmenu.library.FloatingActionMenu;
 import com.oguzdev.circularfloatingactionmenu.library.SubActionButton;
@@ -39,7 +35,7 @@ public class NoteActivity extends Activity {
     private ListView lv;
     private Intent i;
     private MyAdapter adapter;
-    private NotesDB notesDB;
+    private NotesDBHelper notesDB;
     private SQLiteDatabase dbReader,dbWriter;
     private Cursor cursor;
 
@@ -214,19 +210,19 @@ public class NoteActivity extends Activity {
                 finish();
             }
         });
-        notesDB = new NotesDB(this);
+        notesDB = new NotesDBHelper(this);
         lv.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 cursor.moveToPosition(position);
                 Intent i = new Intent(NoteActivity.this,SelectAct.class);
-                i.putExtra(NotesDB.ID,cursor.getInt(cursor.getColumnIndex(NotesDB.ID)));
-                i.putExtra(NotesDB.CONTENT,cursor.getString(cursor.getColumnIndex(NotesDB.CONTENT)));
-                i.putExtra(NotesDB.TIME,cursor.getString(cursor.getColumnIndex(NotesDB.TIME)));
+                i.putExtra(NotesDBHelper.ID,cursor.getInt(cursor.getColumnIndex(NotesDBHelper.ID)));
+                i.putExtra(NotesDBHelper.CONTENT,cursor.getString(cursor.getColumnIndex(NotesDBHelper.CONTENT)));
+                i.putExtra(NotesDBHelper.TIME,cursor.getString(cursor.getColumnIndex(NotesDBHelper.TIME)));
 //                获取图片和视频路径
-                i.putExtra(NotesDB.PATH,cursor.getString(cursor.getColumnIndex(NotesDB.PATH)));
-                i.putExtra(NotesDB.VIDEO,cursor.getString(cursor.getColumnIndex(NotesDB.VIDEO)));
-                i.putExtra(NotesDB.AUDIO,cursor.getString(cursor.getColumnIndex(NotesDB.AUDIO)));
+                i.putExtra(NotesDBHelper.PATH,cursor.getString(cursor.getColumnIndex(NotesDBHelper.PATH)));
+                i.putExtra(NotesDBHelper.VIDEO,cursor.getString(cursor.getColumnIndex(NotesDBHelper.VIDEO)));
+                i.putExtra(NotesDBHelper.AUDIO,cursor.getString(cursor.getColumnIndex(NotesDBHelper.AUDIO)));
                 startActivity(i);
             }
         });
@@ -240,7 +236,7 @@ public class NoteActivity extends Activity {
                 new AlertDialog.Builder(NoteActivity.this).setMessage("确定删除该记录么?").setPositiveButton("确定删除", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
-                        dbWriter.delete(NotesDB.TABLE_NAME, "_id=?", new String[]{"" + itemId});
+                        dbWriter.delete(NotesDBHelper.TABLE_NAME, "_id=?", new String[]{"" + itemId});
                         Toast.makeText(NoteActivity.this, "删除成功", Toast.LENGTH_SHORT).show();
                         selectDB();
                     }
@@ -252,7 +248,7 @@ public class NoteActivity extends Activity {
     }
 
     public void selectDB(){
-        cursor = dbReader.query(NotesDB.TABLE_NAME,null,null,null,null,null,null);
+        cursor = dbReader.query(NotesDBHelper.TABLE_NAME,null,null,null,null,null,null);
         adapter = new MyAdapter(this,cursor);
         lv.setAdapter(adapter);
     }
