@@ -1,10 +1,13 @@
 package com.example.mirry.chat.adapter;
 
 import android.content.Context;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.example.mirry.chat.R;
@@ -84,7 +87,7 @@ public class ChatAdapter extends BaseAdapter {
             case TYPE_ME:
                 Me me = (Me) obj;
                 if(me != null){
-                   holderMe.msg.setText(me.getMsg());
+                    holderMe.msg.setText(me.getMsg());
                 }
                 break;
             case TYPE_FRIEND:
@@ -126,4 +129,5 @@ public class ChatAdapter extends BaseAdapter {
     public int getViewTypeCount() {
         return 2;
     }
+
 }

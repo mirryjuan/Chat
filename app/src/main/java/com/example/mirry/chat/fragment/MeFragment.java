@@ -3,8 +3,6 @@ package com.example.mirry.chat.fragment;
 
 import android.app.Fragment;
 import android.content.Intent;
-import android.database.Cursor;
-import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -12,22 +10,21 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.TextView;
-import android.widget.Toast;
 
-import com.example.mirry.chat.activity.ContactInfoActivity;
-import com.example.mirry.chat.activity.ShareActivity;
-import com.example.mirry.chat.common.Common;
 import com.example.mirry.chat.R;
+import com.example.mirry.chat.activity.ContactInfoActivity;
+import com.example.mirry.chat.activity.GalleryActivity;
 import com.example.mirry.chat.activity.LoginActivity;
 import com.example.mirry.chat.activity.MainActivity;
 import com.example.mirry.chat.activity.SettingsActivity;
+import com.example.mirry.chat.activity.ShareActivity;
+import com.example.mirry.chat.common.Common;
 import com.example.mirry.chat.utils.NimUserInfoCache;
 import com.example.mirry.chat.utils.PreferencesUtil;
 import com.example.mirry.chat.view.CircleImageView;
 import com.netease.nimlib.sdk.NIMClient;
 import com.netease.nimlib.sdk.RequestCallback;
 import com.netease.nimlib.sdk.auth.AuthService;
-import com.netease.nimlib.sdk.uinfo.UserService;
 import com.netease.nimlib.sdk.uinfo.model.NimUserInfo;
 
 import java.util.Map;
@@ -48,6 +45,8 @@ public class MeFragment extends Fragment implements View.OnClickListener {
     Button exit;
     @InjectView(R.id.info_user)
     LinearLayout userInfo;
+    @InjectView(R.id.gallery)
+    Button gallery;
     private MainActivity mActivity;
     private String mNickname = "";
     private int mSex = Common.MALE;
@@ -55,7 +54,9 @@ public class MeFragment extends Fragment implements View.OnClickListener {
     private String mPhone = "";
     private String mBirthday = "";
 
-    private Map<String,Object> mInfo = null;
+    private Map<String, Object> mInfo = null;
+
+    private int[] imgIds = null;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -73,6 +74,7 @@ public class MeFragment extends Fragment implements View.OnClickListener {
         initUserData();
 
         head.setOnClickListener(this);
+        gallery.setOnClickListener(this);
         nickname.setOnClickListener(this);
         settings.setOnClickListener(this);
         userInfo.setOnClickListener(this);
@@ -99,7 +101,7 @@ public class MeFragment extends Fragment implements View.OnClickListener {
         NimUserInfoCache.getInstance().getUserInfoFromRemote(account, new RequestCallback<NimUserInfo>() {
             @Override
             public void onSuccess(NimUserInfo nimUserInfo) {
-                if(nimUserInfo != null){
+                if (nimUserInfo != null) {
                     mAccount = nimUserInfo.getAccount();
                     mNickname = nimUserInfo.getName();
                     mSex = nimUserInfo.getGenderEnum().getValue();
@@ -107,7 +109,12 @@ public class MeFragment extends Fragment implements View.OnClickListener {
                     mBirthday = nimUserInfo.getBirthday();
 
                     // TODO: 2017/4/2 设置头像
-                    nickname.setText(mNickname);
+                    if (mNickname == null || mNickname.equals("")) {
+                        nickname.setText(mAccount);
+                    } else {
+                        nickname.setText(mNickname);
+                    }
+
                 }
             }
 
@@ -133,8 +140,14 @@ public class MeFragment extends Fragment implements View.OnClickListener {
                 intent.putExtra("account", mAccount);
                 startActivity(intent);
                 break;
+            case R.id.gallery:
+                getPicRes();
+                Intent intentImg = new Intent(mActivity, GalleryActivity.class);
+                intentImg.putExtra("imgIds",imgIds);
+                startActivity(intentImg);
+                break;
             case R.id.settings:
-                startActivity(new Intent(mActivity,SettingsActivity.class));
+                startActivity(new Intent(mActivity, SettingsActivity.class));
                 break;
             case R.id.share:
                 startActivity(new Intent(mActivity, ShareActivity.class));
@@ -147,6 +160,21 @@ public class MeFragment extends Fragment implements View.OnClickListener {
             default:
                 break;
         }
+    }
+
+    private void getPicRes() {
+        imgIds = new int[]{
+                R.drawable.pic1,
+                R.drawable.pic2,
+                R.drawable.pic3,
+                R.drawable.pic4,
+                R.drawable.pic5,
+                R.drawable.pic6,
+                R.drawable.pic7,
+                R.drawable.pic8,
+                R.drawable.pic10,
+                R.drawable.pic11
+        };
     }
 
     @Override

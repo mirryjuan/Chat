@@ -146,5 +146,6 @@
 
     <item name="Tag_Me" type="id"></item>
     <item name="Tag_Friend" type="id"></item>
+    <string name="title_activity_galerry">GalerryActivity</string>
 
 </resources>

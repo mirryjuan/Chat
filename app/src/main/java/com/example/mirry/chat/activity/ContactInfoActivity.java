@@ -1,11 +1,22 @@
 package com.example.mirry.chat.activity;
 
+import android.Manifest;
 import android.app.Activity;
 import android.app.AlertDialog;
+import android.content.ComponentName;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.pm.PackageManager;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.graphics.drawable.ColorDrawable;
+import android.net.Uri;
 import android.os.Bundle;
+import android.os.Environment;
+import android.provider.MediaStore;
+import android.support.annotation.NonNull;
+import android.support.v4.app.ActivityCompat;
+import android.support.v4.content.ContextCompat;
 import android.view.Gravity;
 import android.view.MotionEvent;
 import android.view.View;
@@ -19,9 +30,11 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.mirry.chat.R;
+import com.example.mirry.chat.common.Common;
 import com.example.mirry.chat.utils.PreferencesUtil;
 import com.example.mirry.chat.view.CircleImageView;
 import com.example.mirry.chat.view.IconFontTextView;
+import com.example.zxing.activity.CaptureActivity;
 import com.netease.nimlib.sdk.NIMClient;
 import com.netease.nimlib.sdk.RequestCallback;
 import com.netease.nimlib.sdk.RequestCallbackWrapper;
@@ -30,6 +43,9 @@ import com.netease.nimlib.sdk.uinfo.UserService;
 import com.netease.nimlib.sdk.uinfo.constant.UserInfoFieldEnum;
 import com.netease.nimlib.sdk.uinfo.model.NimUserInfo;
 
+import java.io.File;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -73,6 +89,9 @@ public class ContactInfoActivity extends Activity implements View.OnClickListene
     private Boolean saved = false;
 
     private PopupWindow popupWindow;
+    private Uri imageUri;
+    private int flag;
+    private File phoneFile;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -280,7 +299,8 @@ public class ContactInfoActivity extends Activity implements View.OnClickListene
                 if(popupWindow.isShowing()){
                     popupWindow.dismiss();
                 }
-                openCamera();
+                flag = Common.CAMERA;
+                requestPermission();
             }
         });
         select.setOnClickListener(new View.OnClickListener() {
@@ -289,7 +309,8 @@ public class ContactInfoActivity extends Activity implements View.OnClickListene
                 if(popupWindow.isShowing()){
                     popupWindow.dismiss();
                 }
-                selectPic();
+                flag = Common.PHOTO;
+                requestPermission();
             }
         });
 
@@ -321,10 +342,148 @@ public class ContactInfoActivity extends Activity implements View.OnClickListene
     }
 
     private void openCamera() {
-        Toast.makeText(this, "拍照", Toast.LENGTH_SHORT).show();
+        Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+        // 判断存储卡是否可用，存储照片文件
+        if (hasSdcard()) {
+            phoneFile = new File(Environment.getExternalStorageDirectory()+"/"+
+                    getTime()+".jpg");
+            imageUri = Uri.fromFile(phoneFile);
+            intent.putExtra(MediaStore.EXTRA_OUTPUT, imageUri);
+            startActivityForResult(intent, Common.CAMERA);
+        }else{
+            Toast.makeText(this, "没有内存卡", Toast.LENGTH_SHORT).show();
+        }
     }
 
     private void selectPic() {
-        Toast.makeText(this, "相册", Toast.LENGTH_SHORT).show();
+        Intent intent1 = new Intent(Intent.ACTION_PICK, null);
+        intent1.setDataAndType(MediaStore.Images.Media.EXTERNAL_CONTENT_URI, "image/*");
+        startActivityForResult(intent1, Common.PHOTO);
+    }
+
+    private String getTime(){
+        SimpleDateFormat format = new SimpleDateFormat("yyyy年MM月dd日HH时mm分ss秒");
+        Date date = new Date();
+        return format.format(date);
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        switch (requestCode){
+            case Common.CAMERA:
+                if(resultCode == RESULT_OK){
+                    try {
+                        cropPhoto(imageUri);
+                    } catch (Exception e) {
+                        Toast.makeText(this,"头像更换失败",Toast.LENGTH_SHORT).show();
+                    }
+                }else{
+                    Toast.makeText(this,"头像更换失败",Toast.LENGTH_SHORT).show();
+                }
+                break;
+            case Common.PHOTO:
+                if (resultCode == RESULT_OK) {
+                    try {
+                        /**
+                         * 该uri是上一个Activity返回的
+                         */
+                        Uri uri = data.getData();
+                        cropPhoto(uri);
+                    } catch (Exception e) {
+                        Toast.makeText(this,"头像更换失败",Toast.LENGTH_SHORT).show();
+                    }
+                }
+                else{
+                    Toast.makeText(this,"头像更换失败",Toast.LENGTH_SHORT).show();
+                }
+                break;
+            case Common.CROP_PHOTO:
+                if(data != null){
+                    setImageToHeadView(data);
+                }
+                break;
+            default:
+                break;
+        }
+        super.onActivityResult(requestCode,resultCode,data);
+    }
+
+    private void setImageToHeadView(Intent intent) {
+        Bundle extras = intent.getExtras();
+        if (extras != null) {
+            Bitmap photo = extras.getParcelable("data");
+            head.setImageBitmap(photo);
+        }
+    }
+
+    public void requestPermission(){
+        //检查权限
+        if (ContextCompat.checkSelfPermission(this, Manifest.permission.CAMERA)
+                != PackageManager.PERMISSION_GRANTED) {
+            //进入到这里代表没有权限.
+            if(ActivityCompat.shouldShowRequestPermissionRationale(this,Manifest.permission.CAMERA)){
+                //已经禁止提示了
+                Toast.makeText(ContactInfoActivity.this, "您已禁止该权限，需要重新开启。", Toast.LENGTH_SHORT).show();
+            }else{
+                ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.CAMERA}, Common.CALL_CAMERA);
+            }
+        } else {
+            if(flag == Common.CAMERA){
+                openCamera();
+            }else if(flag == Common.PHOTO){
+                selectPic();
+            }
+        }
+    }
+
+    public void cropPhoto(Uri uri) {
+        Intent intent = new Intent("com.android.camera.action.CROP");
+        intent.setDataAndType(uri, "image/*");
+        intent.putExtra("crop", "true");
+        // aspectX aspectY 是宽高的比例
+        intent.putExtra("aspectX", 1);
+        intent.putExtra("aspectY", 1);
+        // outputX outputY 是裁剪图片宽高
+        intent.putExtra("outputX", 150);
+        intent.putExtra("outputY", 150);
+        intent.putExtra("return-data", true);
+        startActivityForResult(intent, Common.CROP_PHOTO);
+    }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+        switch (requestCode){
+            case Common.CALL_CAMERA:
+                if(grantResults.length >0 &&grantResults[0]==PackageManager.PERMISSION_GRANTED){
+                    //用户同意授权
+                    if(flag == Common.CAMERA){
+                        openCamera();
+                    }else if(flag == Common.PHOTO){
+                        selectPic();
+                    }
+                }else{
+                    //用户拒绝授权
+                    Intent intent = new Intent("android.settings.APPLICATION_DETAILS_SETTINGS");
+
+                    String pkg = "com.android.settings";
+                    String cls = "com.android.settings.applications.InstalledAppDetails";
+
+                    intent.setComponent(new ComponentName(pkg, cls));
+                    intent.setData(Uri.parse("package:" + getPackageName()));
+                    startActivity(intent);
+                }
+                break;
+        }
+    }
+
+
+    public static boolean hasSdcard() {
+        String state = Environment.getExternalStorageState();
+        if (state.equals(Environment.MEDIA_MOUNTED)) {
+            // 有存储的SDCard
+            return true;
+        } else {
+            return false;
+        }
     }
 }

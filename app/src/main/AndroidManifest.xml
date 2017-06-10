@@ -158,6 +158,12 @@
             android:name=".notes.NoteActivity"
             android:launchMode="singleTask"
             android:screenOrientation="portrait" />
+
+        <activity
+            android:name=".notes.SelectAct"
+            android:launchMode="singleTask"
+            android:screenOrientation="portrait" />
+
         <activity
             android:name=".notes.AddContentActivity"
             android:launchMode="singleTask"
@@ -183,11 +189,10 @@
                 <action android:name="android.net.conn.CONNECTIVITY_CHANGE" />
             </intent-filter>
         </receiver>
-
         <receiver android:name=".service.AddBroadcastReceiver">
-            <intent-filter
-                android:priority="999">
+            <intent-filter android:priority="999">
                 <action android:name="myBroadcastReceiver" />
+
                 <category android:name="android.intent.category.DEFAULT" />
             </intent-filter>
         </receiver>
@@ -234,7 +239,9 @@
             android:name="com.netease.cosine.target.receiver"
             android:value="com.netease.nimlib.service.NimReceiver" />
 
-        <activity android:name=".activity.ShareActivity"></activity>
+        <activity android:name=".activity.ShareActivity" />
+        <activity android:name=".activity.ShowPhotoActivity" />
+        <activity android:name=".activity.GalleryActivity"></activity>
     </application>
 
 </manifest>

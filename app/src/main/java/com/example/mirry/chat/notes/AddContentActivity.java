@@ -20,6 +20,7 @@ import android.widget.Toast;
 import android.widget.VideoView;
 
 import com.example.mirry.chat.R;
+import com.example.mirry.chat.view.IconFontTextView;
 
 import java.io.File;
 import java.io.IOException;
@@ -38,7 +39,7 @@ public class AddContentActivity extends Activity implements View.OnClickListener
     private File recordAudioFile = null;
     private MediaRecorder mediaRecorder;
     private MediaPlayer mediaPlayer;
-
+    private IconFontTextView back;
 
 
     @Override
@@ -47,6 +48,7 @@ public class AddContentActivity extends Activity implements View.OnClickListener
         setContentView(R.layout.activity_add_content);
 //        获取传来的flag值
         val = getIntent().getStringExtra("flag");
+        back = (IconFontTextView) findViewById(R.id.back);
         savebtn = (Button) findViewById(R.id.save);
         cancelbtn = (Button) findViewById(R.id.cancel);
         ettext = (EditText) findViewById(R.id.ettext);
@@ -56,6 +58,7 @@ public class AddContentActivity extends Activity implements View.OnClickListener
         btnStop = (Button) findViewById(R.id.stop);
         btnPlay = (Button) findViewById(R.id.play);
         btnDelete = (Button) findViewById(R.id.delete);
+        back.setOnClickListener(this);
         btnRecord.setOnClickListener(this);
         btnStop.setOnClickListener(this);
         btnPlay.setOnClickListener(this);
@@ -72,6 +75,9 @@ public class AddContentActivity extends Activity implements View.OnClickListener
     public void onClick(View v) {
         try {
             switch (v.getId()) {
+                case R.id.back:
+                    finish();
+                    break;
                 case R.id.save:
                     addDB();
                     if (mediaPlayer!=null) {

@@ -34,4 +34,9 @@ public class Common {
 
     public static final int CALL_VOICE = 800;
     public static final int CALL_CAMERA = 801;
+
+
+    public static final int CAMERA = 802;
+    public static final int PHOTO = 803;
+    public static final int CROP_PHOTO = 804;
 }

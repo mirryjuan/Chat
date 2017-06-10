@@ -7,12 +7,13 @@ android {
         applicationId "com.example.mirry.chat"
         minSdkVersion 15
         targetSdkVersion 25
+        multiDexEnabled true
         versionCode 1
         versionName "1.0"
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
         ndk {
             //设置支持的SO库架构
-            abiFilters "armeabi-v7a", "x86","arm64-v8a","x86_64"
+            abiFilters "armeabi-v7a", "x86", "arm64-v8a", "x86_64"
         }
     }
     buildTypes {
@@ -36,10 +37,6 @@ dependencies {
         exclude group: 'com.android.support', module: 'support-annotations'
     })
     compile project(':SlidingMenuLibrary')
-    compile 'com.android.support:appcompat-v7:25.1.0'
-    compile 'com.jakewharton:butterknife:5.1.1'
-    compile 'com.android.support:support-v4:25.1.0'
-    testCompile 'junit:junit:4.12'
     compile files('libs/messaging.jar')
     compile files('libs/nineoldandroids-2.4.0.jar')
     compile files('libs/camera.jar')
@@ -54,7 +51,7 @@ dependencies {
     compile files('libs/share-qq.jar')
     compile files('libs/tx_wx.jar')
     compile files('libs/share.jar')
-    compile files('libs/barcode.jar')
+//    compile files('libs/barcode.jar')
     compile files('libs/Msc.jar')
     compile files('libs/pdr.jar')
     compile files('libs/speech.jar')
@@ -63,13 +60,9 @@ dependencies {
     compile files('libs/nativeui.jar')
     compile fileTree(include: '*.jar', dir: 'libs')
     // 基础功能 (必需)
-    compile 'com.netease.nimlib:basesdk:3.3.0'
     // 音视频需要
-    compile 'com.netease.nimlib:avchat:3.3.0'
     // 聊天室需要
-    compile 'com.netease.nimlib:chatroom:3.3.0'
     // 实时会话服务需要
-    compile 'com.netease.nimlib:rts:3.3.0'
     compile files('libs/commons-lang3-3.5.jar')
     compile files('libs/pinyin4j-2.5.0.jar')
     compile files('libs/nopermission.jar')
@@ -82,4 +75,13 @@ dependencies {
     compile files('libs/gson-2.3.1.jar')
     compile project(':zxing')
     compile project(path: ':MenuLibrary')
+    compile 'com.android.support:appcompat-v7:25.2.0'
+    compile 'com.jakewharton:butterknife:5.1.1'
+    compile 'com.android.support:support-v4:25.2.0'
+    compile 'com.netease.nimlib:basesdk:3.3.0'
+    compile 'com.netease.nimlib:avchat:3.3.0'
+    compile 'com.netease.nimlib:chatroom:3.3.0'
+    compile 'com.netease.nimlib:rts:3.3.0'
+    compile 'com.android.support:design:25.2.0'
+    testCompile 'junit:junit:4.12'
 }

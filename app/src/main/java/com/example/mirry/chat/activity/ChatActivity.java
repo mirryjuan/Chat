@@ -8,6 +8,7 @@ import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.net.Uri;
 import android.os.Bundle;
+import android.provider.MediaStore;
 import android.support.annotation.NonNull;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
@@ -81,8 +82,6 @@ public class ChatActivity extends BaseActivity implements View.OnClickListener, 
 
     private SubActionButton type_text;
     private SubActionButton type_voice_text;
-    private SubActionButton type_pic;
-    private SubActionButton type_guess;
     private FloatingActionMenu actionMenu;
 
 
@@ -103,13 +102,7 @@ public class ChatActivity extends BaseActivity implements View.OnClickListener, 
                         } else {
                             friend = new Friend(message.getFromAccount());
                         }
-                        if(message.getMsgType().equals(MsgTypeEnum.text)){
-                            friend.setMsg(message.getContent());
-                        }else if(message.getMsgType().equals(MsgTypeEnum.image)){
-
-
-                        }
-
+                        friend.setMsg(message.getContent());
                         friend.setType(TYPE_FRIEND);
                         list.add(friend);
                         adapter.notifyDataSetChanged();
@@ -161,19 +154,9 @@ public class ChatActivity extends BaseActivity implements View.OnClickListener, 
         itemIcon2.setImageDrawable(getResources().getDrawable(R.drawable.voice));
         type_voice_text = itemBuilder.setContentView(itemIcon2).build();
 
-        ImageView itemIcon3 = new ImageView(this);
-        itemIcon3.setImageDrawable(getResources().getDrawable(R.drawable.picture));
-        type_pic = itemBuilder.setContentView(itemIcon3).build();
-
-        ImageView itemIcon4 = new ImageView(this);
-        itemIcon4.setImageDrawable(getResources().getDrawable(R.mipmap.ic_launcher));
-        type_guess = itemBuilder.setContentView(itemIcon4).build();
-
         actionMenu = new FloatingActionMenu.Builder(this)
                 .addSubActionView(type_text)
                 .addSubActionView(type_voice_text)
-                .addSubActionView(type_pic)
-                .addSubActionView(type_guess)
                 .attachTo(actionButton)
                 .build();
 
@@ -223,22 +206,14 @@ public class ChatActivity extends BaseActivity implements View.OnClickListener, 
                 openVoice();
             }
         });
+    }
 
-        type_pic.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                actionMenu.close(true);
-                Toast.makeText(ChatActivity.this, "333", Toast.LENGTH_SHORT).show();
-            }
-        });
 
-        type_guess.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                actionMenu.close(true);
-                Toast.makeText(ChatActivity.this, "444", Toast.LENGTH_SHORT).show();
-            }
-        });
+
+    private void selectPic(){
+        Intent intent1 = new Intent(Intent.ACTION_PICK, null);
+        intent1.setDataAndType(MediaStore.Images.Media.EXTERNAL_CONTENT_URI, "image/*");
+        startActivityForResult(intent1, Common.PHOTO);
     }
 
     private void initData() {
@@ -343,38 +318,6 @@ public class ChatActivity extends BaseActivity implements View.OnClickListener, 
         IflyService iflyService = new IflyService(ChatActivity.this);
         iflyService.getResultOnline();
         iflyService.setListener(this);
-    }
-
-    private void sendImg(String id, File file){
-        IMMessage message = MessageBuilder.createImageMessage(
-                id,
-                SessionTypeEnum.P2P,
-                file, // 图片文件对象
-                null // 文件显示名字
-        );
-
-        Me me = new Me();
-        me.setImg(file);
-        me.setType(TYPE_ME);
-        list.add(me);
-        adapter.notifyDataSetChanged();
-
-        NIMClient.getService(MsgService.class).sendMessage(message,false).setCallback(new RequestCallback<Void>() {
-            @Override
-            public void onSuccess(Void param) {
-
-            }
-
-            @Override
-            public void onFailed(int code) {
-                Toast.makeText(ChatActivity.this, "发送失败", Toast.LENGTH_SHORT).show();
-            }
-
-            @Override
-            public void onException(Throwable exception) {
-
-            }
-        });
     }
 
     private void sendMsg(String id) {

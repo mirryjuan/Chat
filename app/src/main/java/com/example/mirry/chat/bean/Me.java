@@ -13,7 +13,6 @@ public class Me {
     private String id;
     private int type;
     private String msg;
-    private File img;
 
     public int getType() {
         return type;
@@ -45,13 +44,5 @@ public class Me {
 
     public void setName(String name) {
         this.name = name;
-    }
-
-    public File getImg() {
-        return img;
-    }
-
-    public void setImg(File img) {
-        this.img = img;
     }
 }

@@ -27,6 +27,7 @@ import com.example.mirry.chat.R;
 import com.example.mirry.chat.activity.ChatActivity;
 import com.example.mirry.chat.activity.MainActivity;
 import com.example.mirry.chat.common.Common;
+import com.example.mirry.chat.view.IconFontTextView;
 import com.example.zxing.activity.CaptureActivity;
 import com.oguzdev.circularfloatingactionmenu.library.FloatingActionButton;
 import com.oguzdev.circularfloatingactionmenu.library.FloatingActionMenu;
@@ -49,6 +50,7 @@ public class NoteActivity extends Activity {
     private SubActionButton type_video;
     private FloatingActionMenu actionMenu;
     private String flag;
+    private IconFontTextView back;
 
     @Override
     protected void onResume() {
@@ -205,6 +207,13 @@ public class NoteActivity extends Activity {
 
     public void initView(){
         lv = (ListView) findViewById(R.id.list);
+        back = (IconFontTextView) findViewById(R.id.back);
+        back.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                finish();
+            }
+        });
         notesDB = new NotesDB(this);
         lv.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
