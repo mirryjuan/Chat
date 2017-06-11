@@ -2,7 +2,10 @@ package com.example.mirry.chat.activity;
 
 import android.app.Activity;
 import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.os.Bundle;
+import android.os.Environment;
 import android.view.View;
 import android.view.Window;
 import android.widget.Button;
@@ -24,6 +27,7 @@ import com.netease.nimlib.sdk.uinfo.UserService;
 import com.netease.nimlib.sdk.uinfo.constant.UserInfoFieldEnum;
 import com.netease.nimlib.sdk.uinfo.model.NimUserInfo;
 
+import java.io.File;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -91,8 +95,15 @@ public class SettingsActivity extends Activity implements View.OnClickListener {
             mNickname = mInfo.getName();
             mHead =   mInfo.getAvatar();
 
-            if(mHead != null && !mHead.equals("")){
-                HeadUtil.setHead(head,mHead);
+            String path = Environment.getExternalStorageDirectory().getAbsolutePath()+"/" + mAccount +".jpg";
+            File file = new File(path);
+            if(file.exists()){
+                Bitmap bitmap = BitmapFactory.decodeFile(path);
+                head.setImageBitmap(bitmap);
+            }else{
+                if(mHead != null && !mHead.equals("")){
+                    HeadUtil.setHead(head,mHead);
+                }
             }
 
             if (mNickname == null || mNickname.equals("")) {

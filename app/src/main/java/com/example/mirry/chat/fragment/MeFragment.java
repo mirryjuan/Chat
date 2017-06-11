@@ -5,7 +5,10 @@ import android.app.Fragment;
 import android.content.Intent;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.os.Bundle;
+import android.os.Environment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -31,6 +34,7 @@ import com.netease.nimlib.sdk.RequestCallback;
 import com.netease.nimlib.sdk.auth.AuthService;
 import com.netease.nimlib.sdk.uinfo.model.NimUserInfo;
 
+import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -116,9 +120,17 @@ public class MeFragment extends Fragment implements View.OnClickListener {
                     mBirthday = nimUserInfo.getBirthday();
                     mHead = nimUserInfo.getAvatar();
 
-                    if(mHead != null && !mHead.equals("")){
-                        HeadUtil.setHead(head, mHead);
+                    String path = Environment.getExternalStorageDirectory().getAbsolutePath()+"/" + mAccount +".jpg";
+                    File file = new File(path);
+                    if(file.exists()){
+                        Bitmap bitmap = BitmapFactory.decodeFile(path);
+                        head.setImageBitmap(bitmap);
+                    }else{
+                        if(mHead != null && !mHead.equals("")){
+                            HeadUtil.setHead(head, mHead);
+                        }
                     }
+
 
                     if (mNickname == null || mNickname.equals("")) {
                         nickname.setText(mAccount);

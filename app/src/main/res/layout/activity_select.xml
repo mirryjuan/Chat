@@ -32,12 +32,38 @@
             android:layout_centerInParent="true"/>
 
         <com.example.mirry.chat.view.IconFontTextView
+            android:id="@+id/edit"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:text="@string/img_edit"
+            android:textColor="@color/white"
+            android:textSize="16sp"
+            android:gravity="center_vertical"
+            android:layout_toLeftOf="@+id/s_delete"
+            android:layout_centerVertical="true"
+            android:visibility="visible"
+            android:layout_marginRight="13dp"/>
+
+        <com.example.mirry.chat.view.IconFontTextView
+            android:id="@+id/save"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:text="@string/img_save"
+            android:textColor="@color/white"
+            android:textSize="16sp"
+            android:gravity="center_vertical"
+            android:layout_toLeftOf="@id/s_delete"
+            android:layout_centerVertical="true"
+            android:layout_marginRight="13dp"
+            android:visibility="gone"/>
+
+        <com.example.mirry.chat.view.IconFontTextView
             android:id="@+id/s_delete"
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
             android:text="@string/img_delete"
             android:textColor="@color/white"
-            android:textSize="20sp"
+            android:textSize="16sp"
             android:padding="5dp"
             android:gravity="center_vertical"
             android:layout_alignParentRight="true"
@@ -66,36 +92,54 @@
         android:visibility="gone"
         android:layout_gravity="center_horizontal"
         />
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal">
-        <Button
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="播放音频"
-            android:id="@+id/s_playRecord"
-            android:visibility="gone"
-            android:layout_weight="1"/>
-        <Button
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="暂停播放"
-            android:id="@+id/s_pause"
-            android:visibility="gone"
-            android:layout_weight="1"/>
-        <Button
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="停止"
-            android:id="@+id/s_stop"
-            android:visibility="gone"
-            android:layout_weight="1"/>
-    </LinearLayout>
-    <TextView
+
+    <EditText
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_weight="1"
-        android:id="@+id/s_tv"
-        />
+        android:id="@+id/s_et"
+        android:focusable="false"
+        android:background="@null"
+        android:gravity="top"
+        android:focusableInTouchMode="false"/>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:gravity="center"
+        android:layout_gravity="bottom"
+        android:layout_margin="10dp">
+
+        <Button
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:layout_marginRight="20dp"
+            android:layout_marginLeft="20dp"
+            android:background="@drawable/pause"
+            android:id="@+id/s_pause"
+            android:visibility="gone"
+            android:gravity="center"/>
+
+        <Button
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:layout_marginRight="20dp"
+            android:layout_marginLeft="20dp"
+            android:background="@drawable/play"
+            android:id="@+id/s_playRecord"
+            android:visibility="gone"
+            android:gravity="center"/>
+
+        <Button
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:layout_marginRight="20dp"
+            android:layout_marginLeft="20dp"
+            android:background="@drawable/stop"
+            android:id="@+id/s_stop"
+            android:visibility="gone" />
+    </LinearLayout>
+
+
 </LinearLayout>

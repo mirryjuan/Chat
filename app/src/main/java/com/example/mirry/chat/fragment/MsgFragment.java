@@ -5,6 +5,7 @@ import android.app.Fragment;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.Environment;
 import android.os.Handler;
 import android.os.Message;
 import android.view.LayoutInflater;
@@ -21,6 +22,7 @@ import com.example.mirry.chat.activity.MainActivity;
 import com.example.mirry.chat.adapter.MsgAdapter;
 import com.example.mirry.chat.bean.Msg;
 import com.example.mirry.chat.common.Common;
+import com.example.mirry.chat.utils.HeadUtil;
 import com.example.mirry.chat.utils.PreferencesUtil;
 import com.netease.nimlib.sdk.NIMClient;
 import com.netease.nimlib.sdk.RequestCallbackWrapper;
@@ -30,6 +32,7 @@ import com.netease.nimlib.sdk.msg.model.RecentContact;
 import com.netease.nimlib.sdk.uinfo.UserService;
 import com.netease.nimlib.sdk.uinfo.model.NimUserInfo;
 
+import java.io.File;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -137,6 +140,13 @@ public class MsgFragment extends Fragment implements AdapterView.OnItemClickList
                 break;
             }
         }
+
+        String path = Environment.getExternalStorageDirectory().getAbsolutePath()+"/" + account+".jpg";
+        File file = new File(path);
+        if(!file.exists()){
+            HeadUtil.downloadHeadImg(true, account, queryUserHeadUrl(account));
+        }
+
         Msg message = new Msg();
         message.setAccount(account);
         if(!nickname.equals("")){

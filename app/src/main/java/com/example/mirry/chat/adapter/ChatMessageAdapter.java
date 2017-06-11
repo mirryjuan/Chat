@@ -1,9 +1,13 @@
 package com.example.mirry.chat.adapter;
 
+import java.io.File;
 import java.text.SimpleDateFormat;
 import java.util.List;
 
 import android.content.Context;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.os.Environment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -13,6 +17,7 @@ import android.widget.TextView;
 import com.example.mirry.chat.R;
 import com.example.mirry.chat.bean.ChatMessage;
 import com.example.mirry.chat.utils.HeadUtil;
+import com.example.mirry.chat.utils.PreferencesUtil;
 import com.example.mirry.chat.view.CircleImageView;
 
 import static com.example.mirry.chat.R.id.msg;
@@ -22,11 +27,13 @@ public class ChatMessageAdapter extends BaseAdapter
 {
 	private LayoutInflater mInflater;
 	private List<ChatMessage> mDatas;
+	private String mAccount;
 
 	public ChatMessageAdapter(Context context, List<ChatMessage> mDatas)
 	{
 		mInflater = LayoutInflater.from(context);
 		this.mDatas = mDatas;
+		mAccount = PreferencesUtil.getString(context,"config","account","");
 	}
 
 	@Override
@@ -94,8 +101,15 @@ public class ChatMessageAdapter extends BaseAdapter
 		}
 		// 设置数据
 		if(getItemViewType(position) != 0){
-			if(chatMessage.getHead() != null && !chatMessage.getHead().equals("")){
-				HeadUtil.setHead(viewHolder.head,chatMessage.getHead());
+			String path = Environment.getExternalStorageDirectory().getAbsolutePath()+"/" + mAccount +".jpg";
+			File file = new File(path);
+			if(file.exists()){
+				Bitmap bitmap = BitmapFactory.decodeFile(path);
+				viewHolder.head.setImageBitmap(bitmap);
+			}else{
+				if(chatMessage.getHead() != null && !chatMessage.getHead().equals("")){
+					HeadUtil.setHead(viewHolder.head,chatMessage.getHead());
+				}
 			}
 		}
 		viewHolder.msg.setText(chatMessage.getMsg());

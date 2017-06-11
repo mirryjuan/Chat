@@ -74,7 +74,7 @@ public class NoteActivity extends Activity {
         SubActionButton.Builder itemBuilder = new SubActionButton.Builder(this);
 
         ImageView itemIcon = new ImageView(this);
-        itemIcon.setImageDrawable(getResources().getDrawable(R.mipmap.ic_launcher));
+        itemIcon.setImageDrawable(getResources().getDrawable(R.drawable.edit));
         type_text = itemBuilder.setContentView(itemIcon).build();
 
         ImageView itemIcon2 = new ImageView(this);
@@ -86,7 +86,7 @@ public class NoteActivity extends Activity {
         type_audio = itemBuilder.setContentView(itemIcon3).build();
 
         ImageView itemIcon4 = new ImageView(this);
-        itemIcon4.setImageDrawable(getResources().getDrawable(R.mipmap.ic_launcher));
+        itemIcon4.setImageDrawable(getResources().getDrawable(R.drawable.video));
         type_video = itemBuilder.setContentView(itemIcon4).build();
 
         actionMenu = new FloatingActionMenu.Builder(this)

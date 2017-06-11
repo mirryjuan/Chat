@@ -6,8 +6,11 @@ import android.animation.PropertyValuesHolder;
 import android.content.ComponentName;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.Bundle;
+import android.os.Environment;
 import android.provider.MediaStore;
 import android.support.annotation.NonNull;
 import android.support.v4.app.ActivityCompat;
@@ -104,6 +107,7 @@ public class ChatActivity extends BaseActivity implements View.OnClickListener, 
                         } else {
                             friend = new Friend(message.getFromAccount());
                         }
+                        friend.setAccount(message.getFromAccount());
                         friend.setMsg(message.getContent());
                         friend.setType(TYPE_FRIEND);
                         friend.setHead(queryUserHeadUrl(message.getFromAccount()));
@@ -159,7 +163,7 @@ public class ChatActivity extends BaseActivity implements View.OnClickListener, 
         SubActionButton.Builder itemBuilder = new SubActionButton.Builder(this);
 // repeat many times:
         ImageView itemIcon = new ImageView(this);
-        itemIcon.setImageDrawable(getResources().getDrawable(R.mipmap.ic_launcher));
+        itemIcon.setImageDrawable(getResources().getDrawable(R.drawable.edit));
         type_text = itemBuilder.setContentView(itemIcon).build();
 
         ImageView itemIcon2 = new ImageView(this);
@@ -262,8 +266,10 @@ public class ChatActivity extends BaseActivity implements View.OnClickListener, 
                                         friend = new Friend(account);
                                     }
 
+                                    friend.setAccount(account);
                                     friend.setMsg(content);
                                     friend.setType(TYPE_FRIEND);
+
                                     friend.setHead(queryUserHeadUrl(account));
                                     list.add(friend);
                                 } else if (account.equals(mAccount)) {

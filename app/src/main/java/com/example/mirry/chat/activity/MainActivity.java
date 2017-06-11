@@ -6,11 +6,14 @@ import android.app.FragmentManager;
 import android.app.FragmentTransaction;
 import android.content.ComponentName;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.graphics.drawable.ColorDrawable;
 import android.net.Uri;
 import android.os.Bundle;
+import android.os.Environment;
 import android.os.Handler;
 import android.os.Message;
 import android.support.annotation.NonNull;
@@ -46,7 +49,9 @@ import com.example.zxing.activity.CaptureActivity;
 import com.example.zxing.activity.CodeUtils;
 import com.jeremyfeinstein.slidingmenu.lib.SlidingMenu;
 import com.netease.nimlib.sdk.NIMClient;
+import com.netease.nimlib.sdk.NimStrings;
 import com.netease.nimlib.sdk.Observer;
+import com.netease.nimlib.sdk.RequestCallback;
 import com.netease.nimlib.sdk.RequestCallbackWrapper;
 import com.netease.nimlib.sdk.friend.FriendServiceObserve;
 import com.netease.nimlib.sdk.friend.model.AddFriendNotify;
@@ -59,9 +64,12 @@ import com.netease.nimlib.sdk.msg.SystemMessageService;
 import com.netease.nimlib.sdk.msg.constant.SystemMessageType;
 import com.netease.nimlib.sdk.msg.model.RecentContact;
 import com.netease.nimlib.sdk.msg.model.SystemMessage;
+import com.netease.nimlib.sdk.nos.NosService;
+import com.netease.nimlib.sdk.nos.model.NosThumbParam;
 import com.netease.nimlib.sdk.uinfo.UserService;
 import com.netease.nimlib.sdk.uinfo.model.NimUserInfo;
 
+import java.io.File;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -264,14 +272,6 @@ public class MainActivity extends BaseActivity implements RadioGroup.OnCheckedCh
         mAccount = PreferencesUtil.getString(MainActivity.this,"config","account","");
         tabsGroup.check(R.id.message);
 
-        NimUserInfo mInfo = NIMClient.getService(UserService.class).getUserInfo(mAccount);
-        if(mInfo != null){
-            mHead = mInfo.getAvatar();
-            if(mHead != null && !mHead.equals("")){
-                HeadUtil.setHead(head,mHead);
-            }
-        }
-
         List<SystemMessageType> types = new ArrayList<>();
         types.add(SystemMessageType.AddFriend);
 
@@ -312,6 +312,7 @@ public class MainActivity extends BaseActivity implements RadioGroup.OnCheckedCh
                     }
                 });
     }
+
 
     private void setDefaultFragment() {
         title.setText("消息");
@@ -648,5 +649,25 @@ public class MainActivity extends BaseActivity implements RadioGroup.OnCheckedCh
         }
     }
 
+    @Override
+    protected void onResume() {
+        super.onResume();
+        String path = Environment.getExternalStorageDirectory().getAbsolutePath()+"/" + mAccount +".jpg";
+        File file = new File(path);
+        if(file.exists()){
+            Bitmap bitmap = BitmapFactory.decodeFile(path);
+            head.setImageBitmap(bitmap);
+        }else {
+            NimUserInfo mInfo = NIMClient.getService(UserService.class).getUserInfo(mAccount);
+            if(mInfo != null){
+                mHead = mInfo.getAvatar();
+                if(mHead != null && !mHead.equals("")){
+                    HeadUtil.setHead(head,mHead);
+                }
+            }
+        }
 
+        boolean download = PreferencesUtil.getBoolean(MainActivity.this, "config", "download", true);
+        HeadUtil.downloadHeadImg(download, mAccount, mHead);
+    }
 }

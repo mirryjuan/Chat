@@ -142,6 +142,10 @@
     <string name="img_sex_male">&#xe638;</string>
     <string name="img_refuse">&#xe639;</string>
     <string name="img_joke">&#xe640;</string>
+    <string name="img_cancel">&#xe641;</string>
+    <string name="img_edit">&#xe642;</string>
+    <string name="img_save">&#xe643;</string>
+    <string name="img_video">&#xe644;</string>
 
 
     <item name="Tag_Me" type="id"></item>

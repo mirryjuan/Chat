@@ -4,9 +4,11 @@ import android.Manifest;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.ComponentName;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.drawable.ColorDrawable;
@@ -165,9 +167,17 @@ public class ContactInfoActivity extends Activity implements View.OnClickListene
                 nickname.setText(mNickname);
             }
 
-            if(mHead != null && !mHead.equals("")){
-                HeadUtil.setHead(head,mHead);
+            String path = Environment.getExternalStorageDirectory().getAbsolutePath()+"/" + curAccount +".jpg";
+            File file = new File(path);
+            if(file.exists()){
+                Bitmap bitmap = BitmapFactory.decodeFile(path);
+                head.setImageBitmap(bitmap);
+            }else{
+                if(mHead != null && !mHead.equals("")){
+                    HeadUtil.setHead(head,mHead);
+                }
             }
+
 
             if (isMe) {
                 phone.setVisibility(View.VISIBLE);
@@ -432,12 +442,19 @@ public class ContactInfoActivity extends Activity implements View.OnClickListene
     }
 
     private void uploadHeadUrl() {
-         File file = new File(imageUri.getPath());
+        String imgPath = getRealPathFromURI(ContactInfoActivity.this, imageUri);
+        final File file = new File(imgPath);
          NIMClient.getService(NosService.class).upload(file, null).setCallback(new RequestCallback() {
              @Override
              public void onSuccess(Object param) {
                  System.out.println(param);
                  curImgUrl = param.toString();
+                 String path = Environment.getExternalStorageDirectory().getAbsolutePath()+"/" + mAccount +".jpg";
+                 File headFile = new File(path);
+                 if(headFile.exists()){
+                     headFile.delete();
+                 }
+                 HeadUtil.downloadHeadImg(true,mAccount,curImgUrl);
              }
 
              @Override
@@ -530,5 +547,20 @@ public class ContactInfoActivity extends Activity implements View.OnClickListene
         } else {
             return false;
         }
+    }
+
+    public static String getRealPathFromURI(Context context, Uri contentURI) {
+        String result;
+        Cursor cursor = context.getContentResolver().query(contentURI,
+                new String[]{MediaStore.Images.ImageColumns.DATA},//
+                null, null, null);
+        if (cursor == null) result = contentURI.getPath();
+        else {
+            cursor.moveToFirst();
+            int index = cursor.getColumnIndex(MediaStore.Images.ImageColumns.DATA);
+            result = cursor.getString(index);
+            cursor.close();
+        }
+        return result;
     }
 }

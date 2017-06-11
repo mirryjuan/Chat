@@ -31,6 +31,18 @@
             android:gravity="center_vertical"
             android:layout_centerInParent="true"/>
 
+        <com.example.mirry.chat.view.IconFontTextView
+            android:id="@+id/save"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:text="@string/img_save"
+            android:textColor="@color/white"
+            android:textSize="16sp"
+            android:gravity="center_vertical"
+            android:layout_alignParentRight="true"
+            android:layout_alignParentEnd="true"
+            android:layout_centerVertical="true"/>
+
     </RelativeLayout>
 
         <ImageView
@@ -54,51 +66,51 @@
             android:visibility="gone"
             android:background="@null"
             />
-    <Button
-        android:layout_width="match_parent"
-        android:layout_height="60dp"
-        android:text="开始录制"
-        android:id="@+id/record"
-        />
-    <Button
-        android:layout_width="match_parent"
-        android:layout_height="60dp"
-        android:text="停止录制"
-        android:id="@+id/stop" />
-    <Button
-        android:layout_width="match_parent"
-        android:layout_height="60dp"
-        android:text="播放录音"
-        android:id="@+id/play" />
-    <Button
-        android:layout_width="match_parent"
-        android:layout_height="60dp"
-        android:text="删除录音"
-        android:id="@+id/delete" />
-        <EditText
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:id="@+id/ettext"
-            android:layout_weight="1"
-            android:background="@null"
-            android:gravity="top"
-            android:hint="有了记事本,我再也不会忘记事情了"/>
-    <LinearLayout
+    <EditText
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="horizontal">
-        <Button
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:id="@+id/save"
-        android:text="保存"
-        android:layout_weight="1"/>
-        <Button
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:id="@+id/cancel"
-            android:text="取消"
-            android:layout_weight="1"/>
+        android:id="@+id/ettext"
+        android:layout_weight="1"
+        android:background="@null"
+        android:gravity="top"
+        android:hint="有了记事本,我再也不会忘记事情了"/>
 
+    <LinearLayout
+        android:id="@+id/audio_player"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:gravity="center"
+        android:layout_gravity="bottom"
+        android:layout_margin="10dp"
+        android:visibility="gone">
+
+        <Button
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:layout_marginRight="20dp"
+            android:layout_marginLeft="20dp"
+            android:background="@drawable/pause"
+            android:id="@+id/s_pause"
+            android:gravity="center"
+            android:visibility="gone"/>
+
+        <Button
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:layout_marginRight="20dp"
+            android:layout_marginLeft="20dp"
+            android:background="@drawable/play"
+            android:id="@+id/s_playRecord"
+            android:gravity="center"/>
+
+        <Button
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:layout_marginRight="20dp"
+            android:layout_marginLeft="20dp"
+            android:background="@drawable/stop"
+            android:id="@+id/s_stop"/>
     </LinearLayout>
+
 </LinearLayout>

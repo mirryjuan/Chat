@@ -3,6 +3,7 @@ package com.example.mirry.chat.adapter;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.os.Environment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -11,11 +12,14 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.example.mirry.chat.R;
+import com.example.mirry.chat.activity.MainActivity;
 import com.example.mirry.chat.bean.Friend;
 import com.example.mirry.chat.bean.Me;
 import com.example.mirry.chat.utils.HeadUtil;
+import com.example.mirry.chat.utils.PreferencesUtil;
 import com.example.mirry.chat.view.CircleImageView;
 
+import java.io.File;
 import java.util.List;
 
 /**
@@ -27,11 +31,13 @@ public class ChatAdapter extends BaseAdapter {
     private static final int TYPE_FRIEND = 1;
     private Context mContext;
     private List<Object> mData = null;
+    private String mAccount;
 
 
     public ChatAdapter(Context mContext,List<Object> mData) {
         this.mContext = mContext;
         this.mData = mData;
+        mAccount = PreferencesUtil.getString(mContext,"config","account","");
     }
 
     @Override
@@ -89,7 +95,14 @@ public class ChatAdapter extends BaseAdapter {
                 Me me = (Me) obj;
                 if(me != null){
                     if(me.getHead() != null && !me.getHead().equals("")){
-                        HeadUtil.setHead(holderMe.head,me.getHead());
+                        String path = Environment.getExternalStorageDirectory().getAbsolutePath()+"/" + mAccount +".jpg";
+                        File file = new File(path);
+                        if(file.exists()){
+                            Bitmap bitmap = BitmapFactory.decodeFile(path);
+                            holderMe.head.setImageBitmap(bitmap);
+                        }else{
+                            HeadUtil.setHead(holderMe.head,me.getHead());
+                        }
                     }
                     holderMe.msg.setText(me.getMsg());
                 }
@@ -98,7 +111,14 @@ public class ChatAdapter extends BaseAdapter {
                 Friend friend = (Friend) obj;
                 if(friend != null){
                     if(friend.getHead() != null && !friend.getHead().equals("")){
-                        HeadUtil.setHead(holderFriend.head, friend.getHead());
+                        String path = Environment.getExternalStorageDirectory().getAbsolutePath()+"/" + friend.getAccount() +".jpg";
+                        File file = new File(path);
+                        if(file.exists()){
+                            Bitmap bitmap = BitmapFactory.decodeFile(path);
+                            holderFriend.head.setImageBitmap(bitmap);
+                        }else {
+                            HeadUtil.setHead(holderFriend.head, friend.getHead());
+                        }
                     }
                     holderFriend.msg.setText(friend.getMsg());
                 }

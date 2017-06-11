@@ -22,10 +22,6 @@
                                  startUrl(this.id);
                              },false);
 
-                             var share = data.result.data[i].url+"_share";
-                             document.getElementById(share).addEventListener('tap',function(){
-                                 alert("share");
-                             },false);
                          }
                     }
                 }

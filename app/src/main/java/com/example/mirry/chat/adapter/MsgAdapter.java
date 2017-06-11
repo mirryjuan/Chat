@@ -1,6 +1,9 @@
 package com.example.mirry.chat.adapter;
 
 import android.content.Context;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.os.Environment;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
@@ -10,7 +13,11 @@ import com.example.mirry.chat.R;
 import com.example.mirry.chat.bean.Msg;
 import com.example.mirry.chat.utils.HeadUtil;
 import com.example.mirry.chat.view.CircleImageView;
+import com.netease.nimlib.sdk.NIMClient;
+import com.netease.nimlib.sdk.uinfo.UserService;
+import com.netease.nimlib.sdk.uinfo.model.NimUserInfo;
 
+import java.io.File;
 import java.util.List;
 
 /**
@@ -60,8 +67,16 @@ public class MsgAdapter extends BaseAdapter {
         Msg msg = mData.get(position);
 //        holder.head.setImageResource(R.drawable.head);
         if(msg.getHead() != null && !msg.getHead().equals("")){
-            HeadUtil.setHead(holder.head,msg.getHead());
+            String path = Environment.getExternalStorageDirectory().getAbsolutePath()+"/" + msg.getAccount() +".jpg";
+            File file = new File(path);
+            if(file.exists()){
+                Bitmap bitmap = BitmapFactory.decodeFile(path);
+                holder.head.setImageBitmap(bitmap);
+            }else{
+                HeadUtil.setHead(holder.head,msg.getHead());
+            }
         }
+
         holder.username.setText(msg.getUsername());
         holder.msg.setText(msg.getMsg());
         if(msg.getCount() == 0){

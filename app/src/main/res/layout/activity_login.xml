@@ -45,7 +45,7 @@
                 android:layout_height="match_parent"
                 android:layout_weight="1"
                 android:text="@string/img_delete"
-                android:textSize="24sp"
+                android:textSize="20sp"
                 android:textColor="@color/darkGray"
                 android:gravity="center"
                 android:visibility="gone"/>
@@ -98,7 +98,7 @@
                 android:layout_weight="1"
                 android:layout_gravity="end"
                 android:text="@string/img_delete"
-                android:textSize="24sp"
+                android:textSize="20sp"
                 android:textColor="@color/darkGray"
                 android:gravity="center"
                 android:visibility="gone"/>
