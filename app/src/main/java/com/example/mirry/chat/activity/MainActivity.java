@@ -652,22 +652,25 @@ public class MainActivity extends BaseActivity implements RadioGroup.OnCheckedCh
     @Override
     protected void onResume() {
         super.onResume();
+
+        NimUserInfo mInfo = NIMClient.getService(UserService.class).getUserInfo(mAccount);
+        if(mInfo != null){
+            mHead = mInfo.getAvatar();
+
+        }
+
+        boolean download = PreferencesUtil.getBoolean(MainActivity.this, "config", "download", true);
+        HeadUtil.downloadHeadImg(download, mAccount, mHead);
+
         String path = Environment.getExternalStorageDirectory().getAbsolutePath()+"/" + mAccount +".jpg";
         File file = new File(path);
         if(file.exists()){
             Bitmap bitmap = BitmapFactory.decodeFile(path);
             head.setImageBitmap(bitmap);
         }else {
-            NimUserInfo mInfo = NIMClient.getService(UserService.class).getUserInfo(mAccount);
-            if(mInfo != null){
-                mHead = mInfo.getAvatar();
-                if(mHead != null && !mHead.equals("")){
-                    HeadUtil.setHead(head,mHead);
-                }
+            if(mHead != null && !mHead.equals("")){
+                HeadUtil.setHead(head,mHead);
             }
         }
-
-        boolean download = PreferencesUtil.getBoolean(MainActivity.this, "config", "download", true);
-        HeadUtil.downloadHeadImg(download, mAccount, mHead);
     }
 }
